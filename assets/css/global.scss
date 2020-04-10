@@ -1,5 +1,111 @@
 // customize some Bootstrap variables
-$primary: darken(#428bca, 20%);
+
+/* Color Theme Swatches in RGBA */
+$color-theme_brucke-salzwasser-meer-gk9e9j-1-rgba: rgba(117, 155, 174, 1);
+$color-theme_brucke-salzwasser-meer-gk9e9j-2-rgba: rgba(5, 59, 166, 1);
+$color-theme_brucke-salzwasser-meer-gk9e9j-3-rgba: rgba(31, 100, 191, 1);
+$color-theme_brucke-salzwasser-meer-gk9e9j-4-rgba: rgba(82, 154, 217, 1);
+$color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba: rgba(138, 176, 191, 1);
+
+/* Color Theme Swatches in RGBA */
+$triade-1-rgba: rgba(7, 54, 115, 1);
+$triade-2-rgba: rgba(191, 64, 50, 1);
+$triade-3-rgba: rgba(31, 100, 191, 1);
+$triade-4-rgba: rgba(157, 191, 11, 1);
+$triade-5-rgba: rgba(95, 115, 13, 1);
+
+/* Color Theme Swatches in RGBA */
+$kompliment-2-1-rgba: rgba(9, 55, 115, 1);
+$kompliment-2-2-rgba: rgba(66, 148, 255, 1);
+$kompliment-2-3-rgba: rgba(31, 100, 191, 1);
+$kompliment-2-4-rgba: rgba(115, 75, 0, 1);
+$kompliment-2-5-rgba: rgba(191, 135, 31, 1);
+
+/* Color Theme Swatches in RGBA */
+$zusammengeset-1-rgba: rgba(36, 15, 242, 1);
+$zusammengeset-2-rgba: rgba(54, 50, 89, 1);
+$zusammengeset-3-rgba: rgba(31, 100, 191, 1);
+$zusammengeset-4-rgba: rgba(199, 145, 82, 1);
+$zusammengeset-5-rgba: rgba(242, 104, 15, 1);
+
+
+$body-color: $color-theme_brucke-salzwasser-meer-gk9e9j-2-rgba;
+
+$theme-colors: (
+        "primary": $triade-3-rgba,
+        "danger": $triade-2-rgba,
+        "success": $triade-4-rgba,
+        "info": $kompliment-2-2-rgba,
+        "warning":$zusammengeset-5-rgba,
+);
+
+$border-color: lighten($color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba, 30);
+
+
+.container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Search module */
+#soapy {
+  padding-bottom: 20px !important;
+  background-image: url(../../assets/images/_altmühlsee-gunzenhausen_05885911_high.webp) !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+
+#soapy .container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.soapy-heading, .soapy-sub-heading {
+  color: #fff;
+}
+
+#search-wrapper {
+  border-radius: .25rem;
+  border: $border-color solid 1px;
+  background-color: #fff;
+  padding: 1rem;
+  color: lighten($body-color, 20);
+}
+
+/* Footer */
+#footer .list-group-space{
+  margin: .75rem 0;
+}
+#footer .list-group {
+  padding: 0 !important;
+  border: 0;
+}
+
+#footer .list-group a{
+  border-left: 3px solid map_get($theme-colors, "primary") !important;
+}
+
+
+
+#footer .list-group a {
+
+}
+
+#footer h5 {
+  border-bottom: $border-color solid 1px;
+}
+
+#footer .list-group-item {
+  border-radius: unset;
+  border: none;
+}
+
+#copyright {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  border-top: $border-color solid 1px;
+}
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";

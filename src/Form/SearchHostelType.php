@@ -74,8 +74,7 @@ class SearchHostelType extends AbstractType
                 ],
                 'label'   => 'Entfernung See',
             ])
-            ->add('customer_id')
-            ->add('hostel_name')
+            ->add('advance')
             ->add('submit', SubmitType::class, ['label' => 'Jetzt suchen']);
     }
 

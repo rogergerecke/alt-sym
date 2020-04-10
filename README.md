@@ -1,5 +1,17 @@
-To Production setup
+This repro is only a backup from a website please dont use it.
 
-set the real .env PHP File
+# TO PRODUCTION
+
+Create the real **.env.php** for better performance.
+
+# SETUP
+
+` yarn encore production`
+
 Database Conection
+
 SMTP Conection
+
+.entrypoints.json dosnt exist use
+
+`yarn build`

@@ -6,12 +6,26 @@
 
 {% block body %}
 
+    <!-- Soapy -->
+    <div id="soapy">
+        <div class="container">
+            <div>
+                <h1 class="soapy-heading text-center">Finden Sie den perfekten Gastgeber</h1>
+                <div class="soapy-sub-heading text-center">Suchen Sie den Gastgeber der am besten zu Ihnen passt.</div>
+                {% include('search.html.twig') %}
+            </div>
+        </div>
+    </div>
+    <!-- Soapy #END -->
 
-<div class="row">
-    <h1>{{ heading }}</h1>
+    <!-- Content for Index Page -->
+    <div class="container">
+        <div class="row">
+            <h2> {{ heading }} </h2>
 
-  {{ content|raw }}
-
-</div>
+            {{ content|raw }}
+        </div>
+    </div>
+    <!-- Content for Index Page #END -->
 {% endblock %}
 

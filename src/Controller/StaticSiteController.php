@@ -28,11 +28,11 @@ class StaticSiteController extends AbstractController
     }
 
     /**
-     * @Route("/impressum", name="static_site_impressum")
+     * @Route("/impressum", name="static_site_imprint")
      */
-    public function impressum()
+    public function imprint()
     {
-        $site = $this->repository->findOneBy(['name'=>'Impressum']);
+        $site = $this->repository->findOneBy(['name'=>'Imprint']);
         return $this->render('static_site/index.html.twig', [
             'heading'=>$site->getHeading(),
             'meta_title'=>$site->getMetaTitle(),
@@ -62,6 +62,36 @@ class StaticSiteController extends AbstractController
     public function contact()
     {
         $site = $this->repository->findOneBy(['name'=>'Contact']);
+
+        return $this->render('static_site/index.html.twig', [
+            'heading'=>$site->getHeading(),
+            'meta_title'=>$site->getMetaTitle(),
+            'meta_description'=>$site->getMetaDescription(),
+            'content' => $site->getContent(),
+        ]);
+    }
+
+    /**
+     * @Route("/region", name="static_site_region")
+     */
+    public function region()
+    {
+        $site = $this->repository->findOneBy(['name'=>'Region']);
+
+        return $this->render('static_site/index.html.twig', [
+            'heading'=>$site->getHeading(),
+            'meta_title'=>$site->getMetaTitle(),
+            'meta_description'=>$site->getMetaDescription(),
+            'content' => $site->getContent(),
+        ]);
+    }
+
+    /**
+     * @Route("/freizeit", name="static_site_leisure")
+     */
+    public function leisure()
+    {
+        $site = $this->repository->findOneBy(['name'=>'Leisure']);
 
         return $this->render('static_site/index.html.twig', [
             'heading'=>$site->getHeading(),

@@ -3,8 +3,8 @@
 
 const Encore = require('@symfony/webpack-encore');
 
-const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
-const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
+const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
+const {styles} = require('@ckeditor/ckeditor5-dev-utils');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -19,6 +19,19 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy
     .setManifestKeyPrefix('build/')
+
+    .copyFiles({
+        from: './assets/images',
+
+        // optional target path, relative to the output dir
+        //to: 'images/[path][name].[ext]',
+
+        // if versioning is enabled, add the file hash too
+        to: 'images/[path][name].[hash:8].[ext]',
+
+        // only copy files matching this pattern
+        pattern: /\.(png|jpg|jpeg|svg|webp)$/
+    })
 
     /*
      * ENTRY CONFIG
@@ -60,51 +73,51 @@ Encore
         config.corejs = 3;
     })
 
-// enables Sass/SCSS support
-.addStyleEntry('global', './assets/css/global.scss')
+    // enables Sass/SCSS support
+    .addStyleEntry('global', './assets/css/global.scss')
 
-.enableSassLoader()
+    .enableSassLoader()
 
-// uncomment if you use TypeScript
-//.enableTypeScriptLoader()
+    // uncomment if you use TypeScript
+    //.enableTypeScriptLoader()
 
-// uncomment to get integrity="..." attributes on your script & link tags
-// requires WebpackEncoreBundle 1.4 or higher
-//.enableIntegrityHashes(Encore.isProduction())
+    // uncomment to get integrity="..." attributes on your script & link tags
+    // requires WebpackEncoreBundle 1.4 or higher
+    //.enableIntegrityHashes(Encore.isProduction())
 
-// uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
+    // uncomment if you're having problems with a jQuery plugin
+    //.autoProvidejQuery()
 
-// uncomment if you use API Platform Admin (composer require api-admin)
-//.enableReactPreset()
-//.addEntry('admin', './assets/js/admin.js')
+    // uncomment if you use API Platform Admin (composer require api-admin)
+    //.enableReactPreset()
+    //.addEntry('admin', './assets/js/admin.js')
 
     // ckeditor part include
-.addPlugin( new CKEditorWebpackPlugin( {
-    // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-    language: 'de'
-} ) )
+    .addPlugin(new CKEditorWebpackPlugin({
+        // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
+        language: 'de'
+    }))
 
     // Use raw-loader for CKEditor 5 SVG files.
-    .addRule( {
+    .addRule({
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
         loader: 'raw-loader'
-    } )
+    })
 
     // Configure other image loaders to exclude CKEditor 5 SVG files.
-    .configureLoaderRule( 'images', loader => {
+    .configureLoaderRule('images', loader => {
         loader.exclude = /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/;
-    } )
+    })
 
     // Configure PostCSS loader.
     .addLoader({
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
         loader: 'postcss-loader',
-        options: styles.getPostCssConfig( {
+        options: styles.getPostCssConfig({
             themeImporter: {
                 themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
             }
-        } )
-    } );
+        })
+    });
 
 module.exports = Encore.getWebpackConfig();

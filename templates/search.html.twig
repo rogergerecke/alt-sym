@@ -1,11 +1,67 @@
 {# Yes this is all we need to render a form the logic is in SearchHostelType.php for you #}
 <!-- Card Search -->
-    <div class="card mb-5">
-       <div class="card-header">Suche Gastgeber</div>
-        <div class="card-body">
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+{#   <div class="card mb-5">
+      <div class="card-header">Suche Gastgeber</div>
+       <div class="card-body">
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
+           {{ form_widget(form) }}
+           {{ form_end(form) }}
+       </div>
+   </div>#}
+<!-- Card Search #END -->
+
+<!-- Card Search -->
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
+<div class="row" id="search-wrapper">
+    <div class="col-md-3">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="input-icon field-icon fa"></i>
+            <label>Region</label>
+
+            <span class="destination">
+                Wo möchten Sie hin?</span>
+
+            {{ form_row(form.regions) }}
         </div>
     </div>
-<!-- Card Search #END -->
+
+
+    <div class="col-md-3">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="input-icon field-icon fa"></i>
+            <label>Haustyp</label>
+            <span class="destination">
+                Wie möchten Sie Wohnen?</span>
+        </div>
+        {{ form_row(form.hostel_types) }}
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="input-icon field-icon fa"></i>
+            <label>Gäste</label>
+
+            <span class="destination">
+                Wo möchten Sie hin?</span>
+
+            {{ form_row(form.see_distance) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="input-icon field-icon fa"></i>
+            <label>Region</label>
+
+            <span class="destination">
+                Wo möchten Sie hin?</span>
+
+            {{ form_row(form.advance) }}
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

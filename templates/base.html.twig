@@ -31,53 +31,51 @@
     </header>
     <!-- Header with Navigation #END -->
 
-    <div class="container">
-        <div class="row mt-2">
+
+
 
             <!-- Hostel search form -->
-            {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
-                {# only show search on index and gastgeber page #}
+           {# {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
+                #}{# only show search on index and gastgeber page #}{#
                 <div class="col-md-3">
                     <aside id="search">
-                        {% include('search.html.twig') %}
+
                     </aside>
                 </div>
-            {% endif %}
+            {% endif %}#}
             <!-- Hostel search form #END -->
 
-            <div class="col-md-6">
+
                 <main id="main">
                     {% block body %}
 
                     {% endblock %}
                 </main>
-            </div>
+
 
 
             <!-- Ads -->
-            {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
-                {# only show search on index and gastgeber page #}
+          {#  {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
+                #}{# only show search on index and gastgeber page #}{#
                 <div class="col-md-3">
                     <aside id="ads">
                         {{ include('advertising.html.twig') }}
                         {{ include('wetter.html.twig') }}
                     </aside>
                 </div>
-            {% endif %}
+            {% endif %}#}
             <!-- Ads #END -->
-
-        </div>
-    </div>
 
 </div>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        {% include('footer.html.twig') %}
-    </div>
-</footer>
-<!-- Footer #END -->
+    <!-- Footer -->
+    <footer id="footer">
+            {% include('footer.html.twig') %}
+    </footer>
+    <!-- Footer #END -->
+
+
+
 
 <!-- JAVASCRIPT -->
 <!-- .js at the end -->
