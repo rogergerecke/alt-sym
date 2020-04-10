@@ -8,28 +8,28 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-               <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+               <a class="nav-link" href="{{ path('index') }}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="#">Gastgeber</a>
+               <a class="nav-link" href="{{ path('hostel_view') }}">Gastgeber</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="#">Region</a>
+               <a class="nav-link" href="{{ path('static_site_region') }}">Region</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="#">Freizeit</a>
+               <a class="nav-link" href="{{ path('static_site_leisure') }}">Freizeit</a>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Info
                </a>
                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Premium-Mitgliedschaft</a>
-                  <a class="dropdown-item" href="#">Werbung</a>
-                  <a class="dropdown-item" href="#">Inserat</a>
+                  <a class="dropdown-item" href="{{ path('app_register') }}">Premium-Mitgliedschaft</a>
+                  <a class="dropdown-item" href="{{ path('app_register') }}">Werbung</a>
+                  <a class="dropdown-item" href="{{ path('app_register') }}">Inserat</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Kontakt</a>
-                  <a class="dropdown-item" href="#">Impressum</a>
+                  <a class="dropdown-item" href="{{ path('static_site_contact') }}">Kontakt</a>
+                  <a class="dropdown-item" href="{{ path('static_site_imprint') }}">Impressum</a>
                </div>
             </li>
             <li class="nav-item">

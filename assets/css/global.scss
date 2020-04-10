@@ -28,8 +28,8 @@ $zusammengeset-3-rgba: rgba(31, 100, 191, 1);
 $zusammengeset-4-rgba: rgba(199, 145, 82, 1);
 $zusammengeset-5-rgba: rgba(242, 104, 15, 1);
 
-
-$body-color: $color-theme_brucke-salzwasser-meer-gk9e9j-2-rgba;
+/* Colors */
+$body-color: darken($triade-1-rgba, 10);
 
 $theme-colors: (
         "primary": $triade-3-rgba,
@@ -41,10 +41,38 @@ $theme-colors: (
 
 $border-color: lighten($color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba, 30);
 
+/* Fonts */
+$headings-color: $kompliment-2-1-rgba;
+$headings-font-family: 'Oswald', sans-serif;
+$font-family-sans-serif: 'Roboto Condensed', sans-serif;
+
+h1, .h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3rem;
+}
+
+h5,.h5{
+  font-family: $font-family-sans-serif
+}
+
+
+
+
 
 .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+/* Navigation */
+.navbar {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.nav-item {
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 /* Search module */
@@ -57,8 +85,8 @@ $border-color: lighten($color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba, 30);
 }
 
 #soapy .container {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .soapy-heading, .soapy-sub-heading {
@@ -66,6 +94,7 @@ $border-color: lighten($color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba, 30);
 }
 
 #search-wrapper {
+  margin-top: 2.5rem;
   border-radius: .25rem;
   border: $border-color solid 1px;
   background-color: #fff;
@@ -73,19 +102,23 @@ $border-color: lighten($color-theme_brucke-salzwasser-meer-gk9e9j-5-rgba, 30);
   color: lighten($body-color, 20);
 }
 
+#search-wrapper .col-md-3 {
+  border-right: $border-color solid 1px;
+}
+
 /* Footer */
-#footer .list-group-space{
+#footer .list-group-space {
   margin: .75rem 0;
 }
+
 #footer .list-group {
   padding: 0 !important;
   border: 0;
 }
 
-#footer .list-group a{
+#footer .list-group a {
   border-left: 3px solid map_get($theme-colors, "primary") !important;
 }
-
 
 
 #footer .list-group a {
