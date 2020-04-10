@@ -1,0 +1,11 @@
+{# Yes this is all we need to render a form the logic is in SearchHostelType.php for you #}
+<!-- Card Search -->
+    <div class="card mb-5">
+       <div class="card-header">Suche Gastgeber</div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+<!-- Card Search #END -->

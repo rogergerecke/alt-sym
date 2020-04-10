@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1>Mitglied werden</h1>
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.plainPassword) }}
+        {{ form_row(registrationForm.agreeTerms) }}
+   <p> Indem du auf „Mitglied werden“ klickst, stimmst du unseren <a href="{{ path('static_site_privacy') }}">Datenschutz</a> zu.</p>
+        <input class="btn btn-primary" type="submit" value="Mitglied werden">
+    {{ form_end(registrationForm) }}
+{% endblock %}

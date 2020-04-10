@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="index, follow">
+
+    <meta name="description"
+          content="{% block description %}Welcome!{% endblock %}">
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <!-- Fontawesome Icons -->
+
+    {#<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/ico">#}
+
+    <!-- Dynamic Style -->
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('global') }}
+    {% endblock %}
+
+</head>
+<body id="body">
+<div class="container-fluid">
+
+    <!-- Header with Navigation -->
+    <header class="header">
+        {% include('navigation.html.twig') %}
+    </header>
+    <!-- Header with Navigation #END -->
+
+    <div class="container">
+        <div class="row mt-2">
+
+            <!-- Hostel search form -->
+            {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
+                {# only show search on index and gastgeber page #}
+                <div class="col-md-3">
+                    <aside id="search">
+                        {% include('search.html.twig') %}
+                    </aside>
+                </div>
+            {% endif %}
+            <!-- Hostel search form #END -->
+
+            <div class="col-md-6">
+                <main id="main">
+                    {% block body %}
+
+                    {% endblock %}
+                </main>
+            </div>
+
+
+            <!-- Ads -->
+            {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
+                {# only show search on index and gastgeber page #}
+                <div class="col-md-3">
+                    <aside id="ads">
+                        {{ include('advertising.html.twig') }}
+                        {{ include('wetter.html.twig') }}
+                    </aside>
+                </div>
+            {% endif %}
+            <!-- Ads #END -->
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        {% include('footer.html.twig') %}
+    </div>
+</footer>
+<!-- Footer #END -->
+
+<!-- JAVASCRIPT -->
+<!-- .js at the end -->
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
+</html>

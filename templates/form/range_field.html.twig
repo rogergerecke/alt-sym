@@ -1,0 +1,9 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_widget_simple %}
+    {{ parent() }}
+
+    {% if valueSpan is defined %}
+        <span class="valueSpan"></span>
+    {% endif %}
+{% endblock %}
