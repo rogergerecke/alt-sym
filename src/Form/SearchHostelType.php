@@ -8,6 +8,7 @@ use App\Repository\HostelTypesRepository;
 use App\Repository\RegionsRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -54,7 +55,7 @@ class SearchHostelType extends AbstractType
                     'choices' => [
                         $this->regions->getRegionsForForm(),
                     ],
-                    'label'   => 'Region',
+                    'label'   => false,
                 ]
             )
             ->add(
@@ -64,17 +65,56 @@ class SearchHostelType extends AbstractType
                     'choices' => [
                         $this->hostel_types->getHostelTypesForForm(),
                     ],
-                    'label'   => 'Haustyp',
+                    'label'   => false,
                 ]
             )
-            ->add('see_distance', RangeType::class, [
-                'attr' => [
-                    'min' => 1,
-                    'max' => 10
-                ],
-                'label'   => 'Entfernung See',
-            ])
-            ->add('advance')
+            ->add(
+                'see_distance',
+                RangeType::class,
+                [
+                    'attr'  => [
+                        'min' => 1,
+                        'max' => 10,
+                    ],
+                    'label' => false,
+                ]
+            )
+            ->add(
+                'handicap',
+                CheckboxType::class,
+                [
+                    'label'        => false,
+                    'value'        => '1',
+                    'false_values' => [null],
+                ]
+            )
+            ->add(
+                'bread_service',
+                CheckboxType::class,
+                [
+                    'label'        => false,
+                    'value'        => '1',
+                    'false_values' => [null],
+                ]
+            )
+            ->add(
+                'half_board',
+                CheckboxType::class,
+                [
+                    'label'        => false,
+                    'value'        => '1',
+                    'false_values' => [null],
+                ]
+            )
+            ->add(
+                'breakfast',
+                CheckboxType::class,
+                [
+                    'label'        => false,
+                    'value'        => '1',
+                    'false_values' => [null],
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Jetzt suchen']);
     }
 

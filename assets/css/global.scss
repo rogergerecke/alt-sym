@@ -87,6 +87,7 @@ h5,.h5{
 #soapy .container {
   padding-top: 4rem;
   padding-bottom: 4rem;
+  margin-bottom: 4rem;
 }
 
 .soapy-heading, .soapy-sub-heading {
@@ -103,7 +104,7 @@ h5,.h5{
 }
 
 #search-wrapper .col-md-3 {
-  border-right: $border-color solid 1px;
+ /* border-right: $border-color solid 1px;*/
 }
 
 /* Footer */

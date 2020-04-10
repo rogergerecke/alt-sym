@@ -14,37 +14,35 @@
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
 <div class="row" id="search-wrapper">
-    <div class="col-md-3">
+    <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="input-icon field-icon fa"></i>
-            <label>Region</label>
-
-            <small class="destination">
+            <label for="search-regions">Region</label>
+            <small class="text-muted">
                 Wo möchten Sie hin?</small>
-
-            {{ form_row(form.regions) }}
+            {{ form_row(form.regions, {'attr': {'id': 'search-regions','class':'form-control'}}) }}
         </div>
     </div>
 
 
-    <div class="col-md-3">
+    <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="input-icon field-icon fa"></i>
-            <label>Haustyp</label>
-            <small class="destination">
+            <label for="search-hostel-types">Haustyp</label>
+            <small class="text-muted">
                 Wie möchten Sie Wohnen?</small>
+            {{ form_row(form.hostel_types, {'attr': {'id': 'search-hostel-types','class':'form-control'}}) }}
         </div>
-        {{ form_row(form.hostel_types) }}
     </div>
 
 
-    <div class="col-md-3">
+    <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="input-icon field-icon fa"></i>
             <label>Gäste</label>
 
-            <small class="destination">
-                Wo möchten Sie hin?</small>
+            <small class="text-muted">
+                Mit wie vielen reisen Sie?</small>
 
             {{ form_row(form.see_distance) }}
         </div>
@@ -53,14 +51,42 @@
 
     <div class="col-md-3">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
-            <i class="input-icon field-icon fa"></i>
-            <label>Region</label>
+            <div class="row mt-1">
+                <div class="col-sm-6">
 
-            <small class="destination">
-                Wo möchten Sie hin?</small>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown">
+                        <button class="btn btn-link btn-block dropdown-toggle" type="button" id="dropdownMenu"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Mehr
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                            <div class="custom-control custom-checkbox">
+                                {{ form_row(form.handicap, {'attr': {'id': 'customCheck1','class':'custom-control-input'}}) }}
+                                <label class="custom-control-label" for="customCheck1">Barrierefrei</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                {{ form_row(form.bread_service, {'attr': {'id': 'customCheck2','class':'custom-control-input'}}) }}
+                                <label class="custom-control-label" for="customCheck2">Brötchenservice</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                {{ form_row(form.half_board, {'attr': {'id': 'customCheck3','class':'custom-control-input'}}) }}
+                                <label class="custom-control-label" for="customCheck3">Halbpension</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                {{ form_row(form.breakfast, {'attr': {'id': 'customCheck4','class':'custom-control-input'}}) }}
+                                <label class="custom-control-label" for="customCheck4">Frühstück</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dropdown Menu #END -->
+                </div>
 
-            {{ form_row(form.advance) }}
-            {{ form_row(form.submit) }}
+                <div class="col-sm-6">
+                    {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
