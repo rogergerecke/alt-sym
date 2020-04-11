@@ -6,12 +6,11 @@ use App\Entity\Hostel;
 use App\Entity\HostelTypes;
 use App\Repository\HostelTypesRepository;
 use App\Repository\RegionsRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType; // we need for range fields with ion-rangeslider
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -70,16 +69,16 @@ class SearchHostelType extends AbstractType
             )
             ->add(
                 'see_distance',
-                RangeType::class,
+                TextareaType::class,
                 [
                     'attr'  => [
-                        'class'     => 'js-range-slider',
-                        'data-type' => "double",
-                        'data-min'  => "1",
-                        'data-max'  => "10",
-                        'data-from' => "1",
-                        'data-to'   => "5",
-                        'data-postfix'=>' KM'
+                        'class'        => 'js-range-slider',
+                        'data-type'    => "double",
+                        'data-min'     => "1",
+                        'data-max'     => "10",
+                        'data-from'    => "1",
+                        'data-to'      => "5",
+                        'data-postfix' => ' KM',
                     ],
                     'label' => false,
                 ]
@@ -122,31 +121,34 @@ class SearchHostelType extends AbstractType
             )
             ->add(
                 'price_range',
-                RangeType::class,
+                TextareaType::class,
                 [
-                    'attr'  => [
-                        'class'     => 'js-range-slider',
-                        'data-type' => "double",
-                        'data-min'  => "10",
-                        'data-max'  => "150",
-                        'data-from' => "10",
-                        'data-to'   => "80",
-                        'data-postfix'=>' €'
+                    'attr'       => [
+                        'value' => 'false',
+                        'class'        => 'js-range-slider',
+                        'data-type'    => 'double',
+                        'data-step'    => 10,
+                        'data-min'     => '10',
+                        'data-max'     => '150',
+                        'data-from'    => '10',
+                        'data-to'      => '80',
+                        'data-postfix' => ' €',
                     ],
-                    'label' => false,
+                    'label'      => false,
                 ]
             )
             ->add(
                 'quantity_person',
-                RangeType::class,
+                TextareaType::class,
                 [
                     'attr'  => [
                         'class'     => 'js-range-slider',
-                        'data-type' => "double",
-                        'data-min'  => "1",
-                        'data-max'  => "15",
-                        'data-from' => "1",
-                        'data-to'   => "2",
+                        'data-type' => 'single',
+                        'data-step' => 1,
+                        'data-min'  => '1',
+                        'data-max'  => '15',
+                        'data-from' => '1',
+                        'data-to'   => '2',
                     ],
                     'label' => false,
                 ]

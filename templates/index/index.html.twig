@@ -7,7 +7,7 @@
 {% block body %}
 
     <!-- Soapy -->
-    <div id="soapy">
+    <div id="soapy" class="mb-2">
         <div class="container">
             <div>
                 <h1 class="soapy-heading text-center">Finden Sie den perfekten Gastgeber</h1>
@@ -18,14 +18,28 @@
     </div>
     <!-- Soapy #END -->
 
-    <!-- Content for Index Page -->
+
     <div class="container mt-3 mb-5">
+
+        <!-- Premium Member Aria -->
+        <h2 class="mt-5 mb-5">Premium Mitglieder</h2>
+        {{ include('boxes/_premium_host_box.html.twig') }}
+        <!-- Premium Member Aria #END -->
+
+        <!-- Top Activity -->
+        <h3 class="mb-5 mt-5">Top Aktivitäten</h3>
+
+        <!-- Top Activity #END -->
+
+        <!-- Content for Index Page -->
         <div class="row">
             <h2> {{ heading }} </h2>
 
             {{ content|raw }}
         </div>
+        <!-- Content for Index Page #END -->
+
     </div>
-    <!-- Content for Index Page #END -->
+
 {% endblock %}
 

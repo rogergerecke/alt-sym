@@ -32,6 +32,7 @@ class IndexController extends AbstractController
         }
 
 
+
         return $this->render('index/index.html.twig', [
             'title' => $content->getMetaTitle(),
             'description' => $content->getMetaDescription(),

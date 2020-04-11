@@ -18,17 +18,17 @@ const $ = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
 require('ion-rangeslider');
+require('@fortawesome/fontawesome-free');
 
 
 
 /* Include only icons we need */
 // https://fontawesome.com/how-to-use/with-the-api/setup/importing-icons
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faAngleDown, faAddressBook} from '@fortawesome/free-solid-svg-icons'
-import {far} from '@fortawesome/free-regular-svg-icons'
-import {fab} from '@fortawesome/free-brands-svg-icons'
+import {faAngleDown, faAddressBook,faEnvelope,faMapMarkerAlt,faHome,faUserFriends} from '@fortawesome/free-solid-svg-icons'
+
 // add the selected icon
-library.add(faAngleDown, faAddressBook);
+library.add(faAngleDown, faAddressBook,faEnvelope,faMapMarkerAlt,faHome,faUserFriends);
 
 $(document).ready(function () {
     /*$('[data-toggle="popover"]').popover();*/

@@ -1,22 +1,11 @@
 {# Yes this is all we need to render a form the logic is in SearchHostelType.php for you #}
-<!-- Card Search -->
-{#   <div class="card mb-5">
-      <div class="card-header">Suche Gastgeber</div>
-       <div class="card-body">
-           {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
-           {{ form_widget(form) }}
-           {{ form_end(form) }}
-       </div>
-   </div>#}
-<!-- Card Search #END -->
 
-<!-- Card Search -->
-
+<!-- Hostel Search -->
 {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
 <div class="row" id="search-wrapper">
     <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
-            <i class="input-icon field-icon fa"></i>
+            <i class="fas fa-map-marker-alt"></i>
             <label for="search-regions">Region</label>
             <small class="text-muted">
                 Wo möchten Sie hin?</small>
@@ -27,7 +16,7 @@
 
     <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
-            <i class="input-icon field-icon fa"></i>
+            <i class="fas fa-home"></i>
             <label for="search-hostel-types">Haustyp</label>
             <small class="text-muted">
                 Wie möchten Sie Wohnen?</small>
@@ -38,7 +27,7 @@
 
     <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
-            <i class="input-icon field-icon fa"></i>
+            <i class="fas fa-user-friends"></i>
             <label for="customRangeQuantityPerson">Gäste</label>
 
             <small class="text-muted">
