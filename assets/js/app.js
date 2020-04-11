@@ -33,20 +33,12 @@ library.add(faAngleDown, faAddressBook);
 $(document).ready(function () {
     /*$('[data-toggle="popover"]').popover();*/
 
-    /* Hostel search distance slider */
-    const $valueSpan = $('.valueSpan');
-    const $value = $('#see_distance');
-    $valueSpan.html($value.val());
-    $value.on('input change', () => {
-
-        $valueSpan.html($value.val());
-    });
 
     /*range slider init */
    /* $(".js-price-slider").ionRangeSlider();
     $(".js-guest-slider").ionRangeSlider();*/
     $(".js-range-slider").ionRangeSlider({
-        skin: "sharp"
+        skin: "round"
     });
 
     /* prevent the extra menu from close when clicking the option */

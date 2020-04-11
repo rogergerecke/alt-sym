@@ -39,12 +39,12 @@
     <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="input-icon field-icon fa"></i>
-            <label for="customRange1">Gäste</label>
+            <label for="customRangeQuantityPerson">Gäste</label>
 
             <small class="text-muted">
                 Mit wie vielen reisen Sie?</small>
 
-            {{ form_row(form.see_distance, {'id': 'customRange1', 'attr': {'class':'custom-range'}}) }}
+            {{ form_row(form.quantity_person, {'id': 'customRangeQuantityPerson'}) }}
         </div>
     </div>
 
@@ -81,7 +81,9 @@
                             <hr>
                             <label for="customPriceRange">Ihr Budget?</label>
                             {{ form_row(form.price_range, {'id': 'customPriceRange'}) }}
-
+                            <hr>
+                            <label for="customSeeDistanceRange">Entfernung zum See?</label>
+                            {{ form_row(form.see_distance, {'id': 'customSeeDistanceRange'}) }}
                         </div>
                     </div>
                     <!-- Dropdown Menu #END -->

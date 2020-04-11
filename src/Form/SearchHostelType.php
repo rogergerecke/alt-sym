@@ -73,8 +73,13 @@ class SearchHostelType extends AbstractType
                 RangeType::class,
                 [
                     'attr'  => [
-                        'min' => 1,
-                        'max' => 10,
+                        'class'     => 'js-range-slider',
+                        'data-type' => "double",
+                        'data-min'  => "1",
+                        'data-max'  => "10",
+                        'data-from' => "1",
+                        'data-to'   => "5",
+                        'data-postfix'=>' KM'
                     ],
                     'label' => false,
                 ]
@@ -124,9 +129,24 @@ class SearchHostelType extends AbstractType
                         'data-type' => "double",
                         'data-min'  => "10",
                         'data-max'  => "150",
-                        'data-from' => "20",
-                        'data-to'   => "50",
+                        'data-from' => "10",
+                        'data-to'   => "80",
                         'data-postfix'=>' €'
+                    ],
+                    'label' => false,
+                ]
+            )
+            ->add(
+                'quantity_person',
+                RangeType::class,
+                [
+                    'attr'  => [
+                        'class'     => 'js-range-slider',
+                        'data-type' => "double",
+                        'data-min'  => "1",
+                        'data-max'  => "15",
+                        'data-from' => "1",
+                        'data-to'   => "2",
                     ],
                     'label' => false,
                 ]
