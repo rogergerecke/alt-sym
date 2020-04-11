@@ -75,9 +75,19 @@ Encore
 
     // enables Sass/SCSS support
     .addStyleEntry('global', './assets/css/global.scss')
-
     .enableSassLoader()
 
+    // enable less support
+    .addStyleEntry('irs','./assets/css/set-irs.less')
+    .enableLessLoader()
+
+    // bootstrap need post loader for custom-range
+    .enablePostCssLoader((options) => {
+                 options.config = {
+            // the directory where the postcss.config.js file is stored
+            path: './'
+               };
+            })
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
@@ -109,6 +119,9 @@ Encore
         loader.exclude = /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/;
     })
 
+
+
+
     // Configure PostCSS loader.
     .addLoader({
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
@@ -119,5 +132,7 @@ Encore
             }
         })
     });
+
+
 
 module.exports = Encore.getWebpackConfig();

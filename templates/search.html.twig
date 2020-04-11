@@ -39,12 +39,12 @@
     <div class="col-md-3 border-right">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="input-icon field-icon fa"></i>
-            <label>Gäste</label>
+            <label for="customRange1">Gäste</label>
 
             <small class="text-muted">
                 Mit wie vielen reisen Sie?</small>
 
-            {{ form_row(form.see_distance) }}
+            {{ form_row(form.see_distance, {'id': 'customRange1', 'attr': {'class':'custom-range'}}) }}
         </div>
     </div>
 
@@ -63,21 +63,25 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
                             <div class="custom-control custom-checkbox">
-                                {{ form_row(form.handicap, {'attr': {'id': 'customCheck1','class':'custom-control-input'}}) }}
+                                {{ form_widget(form.handicap, {'id': 'customCheck1', 'attr': {'class':'custom-control-input'}}) }}
                                 <label class="custom-control-label" for="customCheck1">Barrierefrei</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_row(form.bread_service, {'attr': {'id': 'customCheck2','class':'custom-control-input'}}) }}
+                                {{ form_widget(form.bread_service, {'id': 'customCheck2', 'attr': {'class':'custom-control-input'}}) }}
                                 <label class="custom-control-label" for="customCheck2">Brötchenservice</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_row(form.half_board, {'attr': {'id': 'customCheck3','class':'custom-control-input'}}) }}
+                                {{ form_widget(form.half_board, {'id': 'customCheck3', 'attr': {'class':'custom-control-input'}}) }}
                                 <label class="custom-control-label" for="customCheck3">Halbpension</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_row(form.breakfast, {'attr': {'id': 'customCheck4','class':'custom-control-input'}}) }}
+                                {{ form_widget(form.breakfast, {'id': 'customCheck4', 'attr': {'class':'custom-control-input'}}) }}
                                 <label class="custom-control-label" for="customCheck4">Frühstück</label>
                             </div>
+                            <hr>
+                            <label for="customPriceRange">Ihr Budget?</label>
+                            {{ form_row(form.price_range, {'id': 'customPriceRange'}) }}
+
                         </div>
                     </div>
                     <!-- Dropdown Menu #END -->

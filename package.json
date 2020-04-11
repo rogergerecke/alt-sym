@@ -30,9 +30,11 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@symfony/webpack-encore": "^0.28.3",
+    "autoprefixer": "^9.7.6",
     "bootstrap": "^4.4.1",
     "core-js": "^3.6.4",
     "install": "^0.13.0",
+    "ion-rangeslider": "^2.3.1",
     "jquery": "^3.4.1",
     "popper.js": "^1.16.1",
     "postcss-loader": "^3.0.0",
@@ -44,6 +46,8 @@
     "webpack-notifier": "^1.8.0"
   },
   "devDependencies": {
+    "less": "^3.11.1",
+    "less-loader": "4.1.0",
     "node-sass": "^4.13.1"
   },
   "scripts": {
@@ -53,5 +57,8 @@
     "dev": "encore dev"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "browserslist": [
+    "defaults"
+  ]
 }

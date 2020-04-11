@@ -115,6 +115,22 @@ class SearchHostelType extends AbstractType
                     'false_values' => [null],
                 ]
             )
+            ->add(
+                'price_range',
+                RangeType::class,
+                [
+                    'attr'  => [
+                        'class'     => 'js-range-slider',
+                        'data-type' => "double",
+                        'data-min'  => "10",
+                        'data-max'  => "150",
+                        'data-from' => "20",
+                        'data-to'   => "50",
+                        'data-postfix'=>' €'
+                    ],
+                    'label' => false,
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Jetzt suchen']);
     }
 

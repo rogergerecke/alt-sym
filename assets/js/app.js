@@ -17,6 +17,7 @@ const $ = require('jquery');
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
+require('ion-rangeslider');
 
 
 
@@ -30,7 +31,7 @@ import {fab} from '@fortawesome/free-brands-svg-icons'
 library.add(faAngleDown, faAddressBook);
 
 $(document).ready(function () {
-    $('[data-toggle="popover"]').popover();
+    /*$('[data-toggle="popover"]').popover();*/
 
     /* Hostel search distance slider */
     const $valueSpan = $('.valueSpan');
@@ -39,6 +40,18 @@ $(document).ready(function () {
     $value.on('input change', () => {
 
         $valueSpan.html($value.val());
+    });
+
+    /*range slider init */
+   /* $(".js-price-slider").ionRangeSlider();
+    $(".js-guest-slider").ionRangeSlider();*/
+    $(".js-range-slider").ionRangeSlider({
+        skin: "sharp"
+    });
+
+    /* prevent the extra menu from close when clicking the option */
+    $('#soapy .dropdown-menu').click(function(e) {
+        e.stopPropagation();
     });
 
 });
