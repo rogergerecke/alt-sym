@@ -21,29 +21,48 @@ require('ion-rangeslider');
 require('@fortawesome/fontawesome-free');
 
 
-
 /* Include only icons we need */
 // https://fontawesome.com/how-to-use/with-the-api/setup/importing-icons
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faAngleDown, faAddressBook,faEnvelope,faMapMarkerAlt,faHome,faUserFriends} from '@fortawesome/free-solid-svg-icons'
+import {
+    faAngleDown,
+    faAddressBook,
+    faEnvelope,
+    faMapMarkerAlt,
+    faHome,
+    faUserFriends
+} from '@fortawesome/free-solid-svg-icons'
 
 // add the selected icon
-library.add(faAngleDown, faAddressBook,faEnvelope,faMapMarkerAlt,faHome,faUserFriends);
+library.add(faAngleDown, faAddressBook, faEnvelope, faMapMarkerAlt, faHome, faUserFriends);
 
 $(document).ready(function () {
     /*$('[data-toggle="popover"]').popover();*/
 
 
     /*range slider init */
-   /* $(".js-price-slider").ionRangeSlider();
-    $(".js-guest-slider").ionRangeSlider();*/
     $(".js-range-slider").ionRangeSlider({
         skin: "round"
     });
 
-    /* prevent the extra menu from close when clicking the option */
-    $('#soapy .dropdown-menu').click(function(e) {
+    /* prevent bootstrap dropdown-menu in search box for closing */
+    $('#soapy .dropdown-menu').click(function (e) {
         e.stopPropagation();
+    });
+
+    /* add smooth cross browser anger scroll*/
+    $("a").on('click', function (event) {
+        if (this.hash !== "") {
+            event.preventDefault();
+            var hash = this.hash;
+
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 800, function () {
+
+                window.location.hash = hash;
+            });
+        }
     });
 
 });

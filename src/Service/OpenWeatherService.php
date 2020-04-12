@@ -150,7 +150,7 @@ class OpenWeatherService
         $result = $this->repository->findOneBy(array('data_type' => $type));
 
         // nothing
-        if (!$result->getId()) {
+        if (!$result) {
             return false;
         }
 

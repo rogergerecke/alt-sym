@@ -10,7 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType; // we need for range fields with ion-rangeslider
+use Symfony\Component\Form\Extension\Core\Type\TextType;// we need for range fields with ion-rangeslider
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -69,7 +69,7 @@ class SearchHostelType extends AbstractType
             )
             ->add(
                 'see_distance',
-                TextareaType::class,
+                TextType::class,
                 [
                     'attr'  => [
                         'class'        => 'js-range-slider',
@@ -121,7 +121,7 @@ class SearchHostelType extends AbstractType
             )
             ->add(
                 'price_range',
-                TextareaType::class,
+                TextType::class,
                 [
                     'attr'       => [
                         'value' => 'false',
@@ -139,7 +139,7 @@ class SearchHostelType extends AbstractType
             )
             ->add(
                 'quantity_person',
-                TextareaType::class,
+                TextType::class,
                 [
                     'attr'  => [
                         'class'     => 'js-range-slider',
