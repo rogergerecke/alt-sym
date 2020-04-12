@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AdminMessageRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class AdminMessage
 {
@@ -37,7 +38,7 @@ class AdminMessage
     private $type;
 
     /**
-     * @ORM\Column(type="datetime", columnDefinition="DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+     * @ORM\Column(type="datetime")
      */
     private $date_add;
 
@@ -104,5 +105,13 @@ class AdminMessage
         $this->date_add = $date_add;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDateAddDefaultValue()
+    {
+        $this->date_add = new \DateTime();
     }
 }

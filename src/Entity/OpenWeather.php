@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OpenWeatherRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class OpenWeather
 {
@@ -36,7 +37,7 @@ class OpenWeather
     private $import_status_code;
 
     /**
-     * @ORM\Column(type="datetime", columnDefinition="DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 
@@ -91,5 +92,13 @@ class OpenWeather
         $this->date = $date;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDateDefaultValue()
+    {
+        $this->date = new \DateTime();
     }
 }

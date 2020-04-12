@@ -4,10 +4,22 @@
 namespace App\Service;
 
 
+use App\Entity\OpenWeather;
 use App\Repository\OpenWeatherRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\CurlHttpClient;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
+/**
+ * Class OpenWeatherService
+ * @package App\Service
+ */
 class OpenWeatherService
 {
     /**
@@ -15,52 +27,220 @@ class OpenWeatherService
      */
     private $repository;
 
-    private $isWeatherUpToDate = false;
-
+    /**
+     * Store unix now time stamp
+     * @var int
+     */
     private $now;
+
+    /**
+     * Free openweathermap account have request limit
+     * so wee cache the weather over the database for 1 hour.
+     * @var int
+     */
+    private $limit = 3600;
+
+    /**
+     * API openweathermap.org/api Type Name
+     * @var string
+     */
+    private $type = 'onecall'; // onecall api most recent data
+
+    /**
+     * Store the weather data
+     * @var
+     */
+    private $data;
+
     /**
      * @var AdminMessagesHandler
      */
     private $adminMessagesHandler;
 
-    public function __construct(OpenWeatherRepository $repository, AdminMessagesHandler $adminMessagesHandler)
-    {
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * OpenWeatherService constructor.
+     * @param OpenWeatherRepository $repository
+     * @param AdminMessagesHandler $adminMessagesHandler
+     * @param ValidatorInterface $validator
+     * @param EntityManagerInterface $em
+     * @param string $type
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    public function __construct(
+        OpenWeatherRepository $repository,
+        AdminMessagesHandler $adminMessagesHandler,
+        ValidatorInterface $validator,
+        EntityManagerInterface $em,
+        $type = ''
+    ) {
         $this->repository = $repository;
 
         $this->now = time();
         $this->adminMessagesHandler = $adminMessagesHandler;
+
+        $this->validator = $validator;
+        $this->em = $em;
+
+        // if type set
+        if (!empty($type)) {
+            $this->type = $type;
+        }
+
+        // load new?
+        if (!$this->isWeatherUpToDate($type)) {
+            $this->downloadNewWeatherData($type);
+        }
     }
 
     /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function setData($data): void
+    {
+        $this->data = $data;
+    }
+
+
+    /**
+     * Check is the dataset is up to date
+     * @param $type
      * @return bool
      */
-    public function isWeatherUpToDate(): bool
+    private function isWeatherUpToDate($type): bool
     {
-        return $this->isWeatherUpToDate;
+        // load time form db by type
+        $result = $this->repository->findOneBy(array('data_type' => $type));
+
+        // nothing
+        if (!$result->getId()) {
+            return false;
+        }
+
+
+        // calculate diff
+        $diff = $this->now - $result->getDate()->format('U');
+
+        if ($diff > $this->limit) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * @param bool $isWeatherUpToDate
+     * @param $type
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      */
-    public function setIsWeatherUpToDate(bool $isWeatherUpToDate): void
+    private function downloadNewWeatherData($type)
     {
-        $this->isWeatherUpToDate = $isWeatherUpToDate;
+        switch ($type) {
+            case 'weather' :
+                $this->downloadWeather();
+                break;
+            case 'forecast' :
+                $this->downloadForecast();
+                break;
+            case 'onecall' :
+                $this->downloadOneCall();
+                break;
+            default :
+                $this->downloadOneCall();
+        }
     }
 
-    public function downloadWeather()
+    /**
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    private function downloadWeather()
     {
+        $this->type = 'weather';
         $this->requestWeatherApi($_ENV['OPENWEATHER_API_CALL_WEATHER']);
     }
 
-    public function downloadForecast()
+    /**
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    private function downloadForecast()
     {
+        $this->type = 'forecast';
         $this->requestWeatherApi($_ENV['OPENWEATHER_API_CALL_FORECAST']);
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    private function downloadOneCall()
+    {
+        $this->type = 'onecall';
+        $this->requestWeatherApi($_ENV['OPENWEATHER_API_ONE_CALL']);
+    }
 
 
+    /**
+     * @param $url
+     * @return bool|Response
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws DecodingExceptionInterface
+     */
     private function requestWeatherApi($url)
-    {/**/
+    {
         $client = new CurlHttpClient();
         $response = null;
         // fired request with no redirects
@@ -96,10 +276,34 @@ class OpenWeatherService
         }
 
         if ($statusCode == 200) {
-            // its json
-            // its valid
-            // wee get a json string with weather data
-            $contents = $response->getContent();
+
+            // json string
+            $response->getContent();
+
+            // validation of input
+            $openWeather = new OpenWeather();
+            $openWeather->setWeatherData($response->toArray());
+            $openWeather->setDataType($this->type);
+            $openWeather->setImportStatusCode(200);
+
+
+            $errors = $this->validator->validate($openWeather);
+
+            if (count($errors) > 0) {
+                $errorsString = (string)$errors;
+                $this->adminMessagesHandler->addError(
+                    "Error String vom Validator $errorsString",
+                    "Json Validation Error beim Import der Wetterdaten"
+                );
+
+                $openWeather = null;
+
+                return false;
+            }
+
+            // fired to db
+            $this->em->persist($openWeather);
+            $this->em->flush();
         }
 
         return true;
