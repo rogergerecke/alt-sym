@@ -22,6 +22,18 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 class OpenWeatherService
 {
+    private $api_url = 'https://api.openweathermap.org/data/2.5/';
+    private $lang='de';
+    private $units='metric';
+    private $lat ='';
+    private $lon ='';
+
+    /**
+     * API openweathermap.org/api Type Name
+     * @var string
+     */
+    private $type = 'onecall'; // onecall api most recent data
+
     /**
      * @var OpenWeatherRepository
      */
@@ -39,12 +51,6 @@ class OpenWeatherService
      * @var int
      */
     private $limit = 3600;
-
-    /**
-     * API openweathermap.org/api Type Name
-     * @var string
-     */
-    private $type = 'onecall'; // onecall api most recent data
 
     /**
      * Store the weather data
@@ -98,6 +104,9 @@ class OpenWeatherService
         // if type set
         if (!empty($type)) {
             $this->type = $type;
+        }else{
+            // default
+            $type = $this->type;
         }
 
         // load new?

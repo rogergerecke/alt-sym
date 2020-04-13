@@ -38,7 +38,18 @@ Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs
 
 `OPENWEATHER_API_TYPE=onecall`
 
-# TO PRODUCTION
+# Kernkomponenten
+Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank ein Leistungstarke Komponente https://www.doctrine-project.org/ . Gern können Sie hier die Seiten der Kernkomponenten besuchen 
+und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen sollte ich diese nicht Integiert haben.
+
+- [Doctrine](https://www.doctrine-project.org/)
+- [Symfony](https://symfony.com/doc/current/components/index.html)
+- [CKEditor](https://ckeditor.com/ckeditor-5/)
+- [Image-editor](https://ui.toast.com/tui-image-editor/)
+- [OpenWeather](https://openweathermap.org/api)
+
+###### TO PRODUCTION Gedanken stütze für mich.
+Notizen für mich wenn es in die Public Production geht.
 
 Create the real **.env.php** for better performance.
 
