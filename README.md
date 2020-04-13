@@ -63,6 +63,8 @@ und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen so
 ###### TO PRODUCTION Gedanken stütze für mich.
 Notizen für mich wenn es in die Public Production geht.
 
+Remove header meta no robots index
+
 Create the real **.env.php** for better performance.
 
 ###### SETUP
