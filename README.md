@@ -48,12 +48,24 @@ und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen so
 - [Image-editor](https://ui.toast.com/tui-image-editor/)
 - [OpenWeather](https://openweathermap.org/api)
 
+
+# Fehler o. Sicherheits löcher melden
+
+**Hier** [issues](https://github.com/rogergerecke/alt-sym/issues) **melden und eintragen.**
+
+---
+
+### END
+
+---
+
+```
 ###### TO PRODUCTION Gedanken stütze für mich.
 Notizen für mich wenn es in die Public Production geht.
 
 Create the real **.env.php** for better performance.
 
-# SETUP
+###### SETUP
 
 ` yarn encore production`
 
