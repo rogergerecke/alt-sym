@@ -40,7 +40,7 @@ class User implements UserInterface
      * @Assert\Unique
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $customer_id;
+    private $partner_id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -125,14 +125,14 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCustomerId(): ?int
+    public function getPartnerId(): ?int
     {
-        return $this->customer_id;
+        return $this->partner_id;
     }
 
-    public function setCustomerId(?int $customer_id): self
+    public function setPartnerId(?int $partner_id): self
     {
-        $this->customer_id = $customer_id;
+        $this->partner_id = $partner_id;
 
         return $this;
     }

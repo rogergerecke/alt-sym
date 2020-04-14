@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    { //todo remove manuel translate to de
         $builder
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
