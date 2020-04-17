@@ -63,6 +63,7 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 ###Update Change log
 
 - Create first branch 1.1.10 contain
+- Remove Bug in Weather Entity -add Default and Update Timestamp
 - Update Weather Api Connection
 - Update from the Hostel Data source
 - Docker Curl downgrade to the version from Hetzner
