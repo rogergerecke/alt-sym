@@ -40,6 +40,9 @@
     "symfony/test-pack": "*"
   },
   "config": {
+    "platform": {
+      "php": "7.3.16"
+    },
     "preferred-install": {
       "*": "dist"
     },

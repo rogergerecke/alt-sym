@@ -4,7 +4,7 @@ services:
   webserver:
     build:
       context: ./docker/bin/webserver
-    container_name: 'altmuehlsee-apache'
+    container_name: 'apache-altmuehlsee'
     restart: 'always'
     ports:
       - "80:80"
@@ -20,7 +20,7 @@ services:
       - _SYSTEM_DEBUG=true
   mysql:
     build: ./docker/bin/mysql
-    container_name: 'altmuehlsee-mysql'
+    container_name: 'mysql-altmuehlsee'
     restart: 'always'
     ports:
       - "3306:3306"
@@ -35,7 +35,7 @@ services:
       MYSQL_PASSWORD: sym_muehlsee_pw
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: 'altmuehlsee-phpmyadmin'
+    container_name: 'phpmyadmin-altmuehlsee'
     links:
       - mysql
     environment:

@@ -39,8 +39,9 @@ Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs
 `OPENWEATHER_API_TYPE=onecall`
 
 # Kernkomponenten
-Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank ein Leistungstarke Komponente https://www.doctrine-project.org/ . Gern können Sie hier die Seiten der Kernkomponenten besuchen 
-und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen sollte ich diese nicht Integiert haben.
+Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank eine leistungsstarke 
+Komponente https://www.doctrine-project.org/ . Gern können Sie hier die Seiten der Kernkomponenten besuchen 
+und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen sollte ich diese nicht integriert haben.
 
 - [Doctrine](https://www.doctrine-project.org/)
 - [Symfony](https://symfony.com/doc/current/components/index.html)
@@ -49,7 +50,7 @@ und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen so
 - [OpenWeather](https://openweathermap.org/api)
 
 
-# Fehler o. Sicherheits löcher melden
+# Fehler melden !
 
 **Hier** [issues](https://github.com/rogergerecke/alt-sym/issues) **melden und eintragen.**
 
@@ -58,6 +59,13 @@ und Wünsche äussern über weiter Funktionen die diese zur verfügungstellen so
 ### END
 
 ---
+
+###Update Change log
+
+- Create first branch 1.1.10 contain
+- Update Weather Api Connection
+- Update from the Hostel Data source
+- Docker Curl downgrade to the version from Hetzner
 
 ```
 ###### TO PRODUCTION Gedanken stütze für mich.
@@ -78,3 +86,7 @@ SMTP Conection
 .entrypoints.json dosnt exist use
 
 `yarn build`
+
+Curl Bug must fix on Server:
+Attention Curl 7.64.0 dosnt work contain a bug in buffer
+Hetzner run Curl 7.52.1

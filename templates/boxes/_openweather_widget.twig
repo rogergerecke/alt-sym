@@ -1,0 +1,9 @@
+{% for item in openweather._getWeatherArray %}
+   {% if item.status == 200 %}
+       {% for w in item.weather %}
+          {% if w is iterable %}
+
+           {% endif %}
+       {% endfor %}
+    {% endif %}
+{% endfor %}
