@@ -416,13 +416,14 @@ class OpenWeatherService
 
         // fired request with no redirects
         try {
-            $response = $client->request('GET', $this->request_url, ['max_redirects' => 0,]);
+            $response = $client->request('GET', $this->request_url, ['max_redirects' => 0,'timeout' => 10]);
         } catch (TransportExceptionInterface $e) {
             $this->adminMessagesHandler->addError(
                 "CurlHttpClient Request Exception: {$e->getMessage()}",
                 "CurlHttpClient Request Exception"
             );
         }
+
 
 
         // the status code of the request to verified code
@@ -459,7 +460,7 @@ class OpenWeatherService
             // json string
             $response->getContent();
 
-            // data object
+            // data object json string to array
             $openWeather->setWeatherData($response->toArray());
             $openWeather->setDataType($this->type);
             $openWeather->setImportStatusCode(200);
@@ -485,6 +486,28 @@ class OpenWeatherService
         }
 
         return true;
+    }
+
+
+    /**
+     * @return array|bool[]
+     */
+    public function _getWeatherArray()
+    {
+        $output = null;
+
+        $weather = $this->repository->findOneBy(['data_type' => $this->type]);
+        if ($weather->getImportStatusCode() == 200) {
+
+            $output[] = [
+                'status' => 200,
+                'weather' => $weather->getWeatherData()
+            ];
+
+            return $output;
+        }
+
+        return ['status' => false];
     }
 
 }

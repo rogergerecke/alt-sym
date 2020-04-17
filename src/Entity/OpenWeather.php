@@ -95,9 +95,19 @@ class OpenWeather
     }
 
     /**
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
+     * Set a default date by transaction if is empty
      */
     public function setDateDefaultValue()
+    {
+        $this->date = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     * Set the date as ON UPDATE
+     */
+    public function setDateByUpdateTransaction()
     {
         $this->date = new \DateTime();
     }
