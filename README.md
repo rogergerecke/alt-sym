@@ -1,15 +1,15 @@
-This repro is only a backup from a website please dont use it.
+This repro is only a backup from a website please don't use it.
 
 # Installations Anleitung
 Das System ist jetzt immer weiter gewachsen und darum braucht es 
 jetzt schon ein kleines Handbuch für die erste Installation zum 
-Start.  Sind diese erst einemal gemacht braucht es nichts mehr weiter.  
+Start.  Sind diese erst einmal gemacht, braucht es nichts mehr weiter.  
 
 Aber ein Account bei https://symfony.com/blog/category/security-advisories 
-ist zu empfehlen um über Sicherheitslücken informiert zu sein und diese in den 
-meisten Fällen mit einem simplen compser update zu schließen.
+ist zu empfehlen um,  über Sicherheitslücken informiert zu sein und diese in den 
+meisten Fällen mit einem simplen Composer update zu schließen.
 
-Im Terminal ausführen wenn Composer Installiert ist.
+Im Terminal ausführen,  wenn Composer installiert ist.
 
 `composer update`
 
@@ -17,7 +17,7 @@ Im Terminal ausführen wenn Composer Installiert ist.
 Systemeinstellung wie **Datenbank, Mailserver Verbindung, API Schlüßel** für externe Dienstleister werden jetzt alle in der **.env**  gemacht die **.env** ist die Grundkonfigurations Datei.
 
 # Das Wetter widget
-Da das Wetter-Plugin von Wetter .com noch nicht frei zu gestallten ist und an dieser API grade gearbeitet wird müssen wir erstmal wechseln damit das Wetter widget nicht das Mobile Layout stört.
+Da das Wetter-Plugin von Wetter .com noch nicht frei zu gestallten ist und an dieser API grade gearbeitet wird müssen wir,  erstmal wechseln damit das Wetter widget nicht das Mobile Layout stört.
 
 Das Wetter widget wird jetzt über die API von https://openweathermap.org/api erzeugt!  Dafür brauch man dort ein Kostenlosen zugang weil dieser zugang kostenlos ist,  sind die anfragen dort limitiert es ist also nötig sie zu Cachen.
 
@@ -54,19 +54,19 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 
 **Hier** [issues](https://github.com/rogergerecke/alt-sym/issues) **melden und eintragen.**
 
----
 
-### END
 
 ---
 
 ###Update Change log
 
 - Create first branch 1.1.10 contain
-- Remove Bug in Weather Entity -add Default and Update Timestamp
-- Update Weather Api Connection
-- Update from the Hostel Data source
-- Docker Curl downgrade to the version from Hetzner
+- Add Weather Widget
+- Add new Hostel Search Design
+
+### Bugs
+- Symfony with Curl 7.64 don't work correct Curl have a bug.
+
 
 ```
 ###### TO PRODUCTION Gedanken stütze für mich.
