@@ -1,9 +1,72 @@
 {% for item in openweather._getWeatherArray %}
-   {% if item.status == 200 %}
-       {% for w in item.weather %}
-          {% if w is iterable %}
+    {# Only show if dataset status-code 200 #}
+    {% if item.status == 200 %}
 
-           {% endif %}
-       {% endfor %}
+        <!-- Card -->
+        <div class="card">
+            <div class="card-header text-center">
+                Wetter Altmühlsee
+            </div>
+
+            <!-- Card-Body -->
+            <div class="card-body">
+                <!-- Weather Today Row -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <!-- Weather Today Icon -->
+                        <img src="http://openweathermap.org/img/wn/{{ item.weather.current.weather.0.icon }}@2x.png"
+                             alt="Das Wetter wird {{ item.weather.current.weather.0.description }} in Altmühlsee">
+                    </div>
+                    <div class="col-md-9">
+                        <!-- Weather Today Date -->
+                        <p>{{ item.weather.current.dt|date('D, d.m') }}</p>
+                        <!-- Weather Today Temp Feel -->
+                        <p>{{ item.weather.current.feels_like|round }}</p>
+                        <!-- Weather Today in Word -->
+                        <p>{{ item.weather.current.weather.0.description }}</p>
+                    </div>
+                </div>
+                <!-- Weather Today Row # END-->
+
+                <!-- 3 Days Weather Row -->
+                <div class="row">
+                    {% for daily in item.weather.daily %}
+                        {% if loop.index <= 3 %}
+                            {% if daily is iterable %}
+
+                                <!-- Day Weather -->
+                                <div class="col-md-4">
+                                    {% for weather in daily.weather %}
+                                        {% if weather is iterable %}
+                                            <!-- Day Weather Date -->
+                                            <p>{{ daily.dt|date('D, d.m') }}</p>
+                                            <!-- Day Weather Icon -->
+                                            <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+                                                 alt="Das Wetter wird {{ weather.description }} in Altmühlsee">
+                                        {% endif %}
+                                    {% endfor %}
+
+
+                                    <!-- Day Weather Feel -->
+                                    <p>{{ daily.feels_like.night|round }} / {{ daily.feels_like.day|round }}°C</p>
+                                    <!-- Day Weather as Word -->
+                                    {% for weather in daily.weather %}
+                                        {% if weather is iterable %}
+                                            <p>{{ weather.description }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <!-- Day Weather as Word #END -->
+                                </div>
+                                <!-- Day Weather #END -->
+
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- 3 Days Weather Row #END -->
+
+            </div>
+        </div>
+
     {% endif %}
 {% endfor %}

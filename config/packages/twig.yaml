@@ -1,5 +1,5 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
-        # the value is the service's id
+        # make the OpenWeatherService vars global public
         openweather: '@App\Service\OpenWeatherService'
