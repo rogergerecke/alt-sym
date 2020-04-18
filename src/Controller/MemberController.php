@@ -12,9 +12,14 @@ class MemberController extends AbstractController
      */
     public function index()
     {
-        return $this->render('member/index.html.twig', [
-            'controller_name' => 'MemberController',
-        ]);
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without having ROLE_USER');
+
+        return $this->render(
+            'member/index.html.twig',
+            [
+                'controller_name' => 'MemberController',
+            ]
+        );
     }
 
     /**
@@ -22,8 +27,29 @@ class MemberController extends AbstractController
      */
     public function login()
     {
-        return $this->render('member/index.html.twig', [
-            'controller_name' => 'MemberController',
-        ]);
+        // redirect by user role
+        $user = $this->getUser();
+
+        // not singe in
+        if (!$user){
+            return $this->redirectToRoute('app_login');
+        }
+
+        // to admin dash bord
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin');
+        }
+
+        // to member dash bord
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('member');
+        }
+
+        return $this->render(
+            'member/index.html.twig',
+            [
+                'controller_name' => 'MemberController',
+            ]
+        );
     }
 }
