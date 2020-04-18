@@ -71,6 +71,9 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 ## (31.05.20)
 **8.** Integration https://ui.toast.com/tui-image-editor/
 
+## August
+**iCalendar** Kalender integration für Veranstalltungen **im - und export**
+
 ## Deadline 01.10.20
 
 

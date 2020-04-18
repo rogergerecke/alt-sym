@@ -42,7 +42,7 @@
                     <a href="{{ path('static_site_region') }}" class="text-muted">Region</a>
                 </li>
                 <li>
-                    <a href="/veranstaltung" class="text-muted">Veranstaltung</a>
+                    <a href="{{ path('event') }}" class="text-muted">Veranstaltungen</a>
                 </li>
                 <li>
                     <a href="{{ path('static_site_leisure') }}" class="text-muted">Freizeit</a>
@@ -61,8 +61,16 @@
             <h5 class="text-uppercase">Mitglieder</h5>
             <ul class="list-unstyled">
                 <li>
+                    <a href="{{ path('app_register') }}">Mitglied werden</a>
+                </li>
+                <li>
                     <a href="{{ path('login') }}" class="text-muted">Login</a>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li>
+                        <a href="{{ path('app_logout') }}" class="text-muted">Logout</a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="{{ path('app_register') }}" class="text-muted">Inserat</a>
                 </li>
