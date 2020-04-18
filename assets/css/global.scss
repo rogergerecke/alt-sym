@@ -62,7 +62,7 @@ h5, .h5 {
 }
 
 /* Header Banner */
-#header-banner a{
+#header-banner a {
   text-decoration: underline;
 }
 
@@ -114,9 +114,52 @@ h5, .h5 {
   padding: 1.5rem 2rem;
 }
 
-#soapy .custom-control{
+#soapy .custom-control {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+/* Weather Widget */
+#weather-widget {
+  font-family: "Open Sans", Verdana, Geneva, sans-serif;
+  background-color: #fcfcfc;
+  color: #404040;
+}
+
+#weather-widget .card-header{
+  background-color: #fcfcfc;
+  border-bottom: none;
+}
+
+#weather-widget .info-ow{
+  font-size: 0.5rem;
+}
+
+#weather-current{
+  font-size: 0.8rem;
+}
+
+#weather-current .ow-temp{
+  font-size: 1rem;
+}
+
+#weather-forecast{
+  font-size: 0.6rem;
+}
+
+#weather-forecast img{
+  margin-bottom: 1rem;
+}
+
+#weather-forecast .ow-date{
+  font-size: 0.8rem;
+}
+#weather-forecast .ow-temp{
+  font-size: 0.9rem;
+}
+
+.ow-date{
+  font-weight: bold;
 }
 
 /* Footer */

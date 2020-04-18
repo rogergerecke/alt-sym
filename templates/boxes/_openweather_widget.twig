@@ -3,7 +3,7 @@
     {% if item.status == 200 %}
 
         <!-- Card -->
-        <div class="card">
+        <div class="card" id="weather-widget">
             <div class="card-header text-center">
                 Wetter Altmühlsee
             </div>
@@ -11,17 +11,17 @@
             <!-- Card-Body -->
             <div class="card-body">
                 <!-- Weather Today Row -->
-                <div class="row">
+                <div class="row mb-3" id="weather-current">
                     <div class="col-md-3">
                         <!-- Weather Today Icon -->
-                        <img src="http://openweathermap.org/img/wn/{{ item.weather.current.weather.0.icon }}@2x.png"
+                        <img src="{{ asset('build/images/weather/' ~ item.weather.current.weather.0.icon ~ '.svg') }}"
                              alt="Das Wetter wird {{ item.weather.current.weather.0.description }} in Altmühlsee">
                     </div>
                     <div class="col-md-9">
                         <!-- Weather Today Date -->
-                        <p>{{ item.weather.current.dt|date('D, d.m') }}</p>
+                        <p class="ow-date">{{ item.weather.current.dt|date('l, d.m.Y') }}</p>
                         <!-- Weather Today Temp Feel -->
-                        <p>{{ item.weather.current.feels_like|round }}</p>
+                        <p class="ow-temp">Aktuell {{ item.weather.current.temp|round }}°C</p>
                         <!-- Weather Today in Word -->
                         <p>{{ item.weather.current.weather.0.description }}</p>
                     </div>
@@ -29,7 +29,7 @@
                 <!-- Weather Today Row # END-->
 
                 <!-- 3 Days Weather Row -->
-                <div class="row">
+                <div class="row" id="weather-forecast">
                     {% for daily in item.weather.daily %}
                         {% if loop.index <= 3 %}
                             {% if daily is iterable %}
@@ -39,20 +39,20 @@
                                     {% for weather in daily.weather %}
                                         {% if weather is iterable %}
                                             <!-- Day Weather Date -->
-                                            <p>{{ daily.dt|date('D, d.m') }}</p>
+                                            <p class="text-center ow-date">{{ daily.dt|date('D, d.m') }}</p>
                                             <!-- Day Weather Icon -->
-                                            <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+                                            <img src="{{ asset('build/images/weather/' ~ weather.icon ~ '.svg') }}"
                                                  alt="Das Wetter wird {{ weather.description }} in Altmühlsee">
                                         {% endif %}
                                     {% endfor %}
 
 
                                     <!-- Day Weather Feel -->
-                                    <p>{{ daily.feels_like.night|round }} / {{ daily.feels_like.day|round }}°C</p>
+                                    <p class="text-center ow-temp">{{ daily.feels_like.night|round }} / {{ daily.feels_like.day|round }}°C</p>
                                     <!-- Day Weather as Word -->
                                     {% for weather in daily.weather %}
                                         {% if weather is iterable %}
-                                            <p>{{ weather.description }}</p>
+                                            <p class="text-center">{{ weather.description }}</p>
                                         {% endif %}
                                     {% endfor %}
                                     <!-- Day Weather as Word #END -->
@@ -64,7 +64,7 @@
                     {% endfor %}
                 </div>
                 <!-- 3 Days Weather Row #END -->
-
+                <span class="info-ow d-block text-right"><a href="https://openweathermap.org/api/one-call-api" class="text-muted">OpenWeather ®</a></span>
             </div>
         </div>
 
