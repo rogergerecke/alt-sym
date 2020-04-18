@@ -49,19 +49,46 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 - [Image-editor](https://ui.toast.com/tui-image-editor/)
 - [OpenWeather](https://openweathermap.org/api)
 
+# Fahrplan
+## (18.04.20)
+~~1. Mobil Bootstrap 4 Design~~
+
+~~2. Anbindung OpenWeather API Cronjob~~
+
+## (21.04.20)
+
+**3.** Admin Bereich
+
+**4.** Statische Seiten
+
+**5.** CKEditor 4 Inhaltsbearbeitung im Admin
+
+## (17.05.20)
+**6.** Checkout
+
+**7.** Member Aria 
+
+## (31.05.20)
+**8.** Integration https://ui.toast.com/tui-image-editor/
+
+## Deadline 01.10.20
+
+
 
 # Fehler melden !
 
 **Hier** [issues](https://github.com/rogergerecke/alt-sym/issues) **melden und eintragen.**
 
-
-
 ---
 
-###Update Change log
+### Update Change Log
 
-- Create first branch 1.1.10 contain
-- Add Weather Widget
+### Branch: 1.1.11 
+- Update Hostel Data structure
+
+
+### Branch: 1.1.10
+- Add Weather Widget Mobile Style
 - Add new Hostel Search Design
 
 ### Bugs

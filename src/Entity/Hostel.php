@@ -108,6 +108,11 @@ class Hostel
      */
     private $currency;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $active;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -313,6 +318,18 @@ class Hostel
     public function setCurrency(?string $currency): self
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+
+    public function setActive(?int $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }
