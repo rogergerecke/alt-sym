@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -16,21 +17,21 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // redirect by user role
-        $user = $this->getUser();
+        /* // redirect by user role
+         $user = $this->getUser();
 
-        if ($user) {
+         if ($user) {
 
-            // to admin dash bord
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('admin');
-            }
+             // to admin dash bord
+             if ($this->isGranted('ROLE_ADMIN')) {
+                 return $this->redirectToRoute('admin');
+             }
 
-            // to member dash bord
-            if ($this->isGranted('ROLE_USER')) {
-                return $this->redirectToRoute('member');
-            }
-        }
+             // to member dash bord
+             if ($this->isGranted('ROLE_USER')) {
+                 return $this->redirectToRoute('member');
+             }
+         }*/
 
 
         // get the login error if there is one
@@ -38,7 +39,10 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render(
+            '@EasyAdmin/page/login.html.twig',
+            ['last_username' => $lastUsername, 'error' => $error]
+        );
     }
 
     /**

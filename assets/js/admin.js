@@ -1,3 +1,4 @@
+/*
 // The editor creator to use.
 import ClassicEditorBase from '@ckeditor/ckeditor5-build-classic';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
@@ -98,4 +99,4 @@ ClassicEditor
     })
     .catch(error => {
         console.error(error.stack);
-    });
+    });*/

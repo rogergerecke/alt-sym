@@ -3,8 +3,8 @@
 
 const Encore = require('@symfony/webpack-encore');
 
-const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
-const {styles} = require('@ckeditor/ckeditor5-dev-utils');
+/*const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
+const {styles} = require('@ckeditor/ckeditor5-dev-utils');*/
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -43,7 +43,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('front-js', './assets/js/app.js')
-    .addEntry('admin-js', './assets/js/admin.js')
+    //.addEntry('admin-js', './assets/js/admin.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -106,7 +106,7 @@ Encore
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
 
-    // ckeditor part include
+   /* // ckeditor part include
     .addPlugin(new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
         language: 'de'
@@ -135,7 +135,7 @@ Encore
                 themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
             }
         })
-    });
+    });*/
 
 
 

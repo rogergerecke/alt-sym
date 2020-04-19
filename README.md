@@ -121,3 +121,7 @@ SMTP Conection
 Curl Bug must fix on Server:
 Attention Curl 7.64.0 dosnt work contain a bug in buffer
 Hetzner run Curl 7.52.1
+```
+
+CKFinder
+NOTE: Since usually setting permissions to 0777 is insecure, it is advisable to change the group ownership of the directory to the same user as Apache and add group write permissions instead. Please contact your system administrator in case of any doubts.

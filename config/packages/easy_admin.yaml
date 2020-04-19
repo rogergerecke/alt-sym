@@ -1,0 +1,37 @@
+easy_admin:
+  site_name: '<strong>Altmühlsee</strong>'
+  formats:
+    number: '%d'
+    date: 'd.m.Y'
+  entities:
+      # List the entity class name you want to manage
+      StaticSite:
+          class: App\Entity\StaticSite
+          label: 'Seiten'
+          form:
+              fields:
+                  - {property: 'content', type: 'text_editor'}
+                  - {property: 'name', type: 'text'}
+
+      User:
+          class: App\Entity\User
+          label: 'Benutzer'
+          form:
+              title: "Benutzer Bearbeiten/Neu"
+
+      Regions:
+          class: App\Entity\Regions
+          label: 'Regionen'
+          form:
+              title: "Regionen Bearbeiten/Neu"
+
+      HostelTypes:
+            class: App\Entity\HostelTypes
+            label: 'Hostel Typen'
+            form:
+                title: "Regionen Bearbeiten/Neu"
+
+  user:
+      # this method/property must return the string representation of the user
+      # (Symfony will look for getFullName(), isFullName(), ..., and 'fullName' property)
+      name_property_path: 'Name'

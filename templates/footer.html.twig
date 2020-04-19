@@ -63,12 +63,13 @@
                 <li>
                     <a href="{{ path('app_register') }}">Mitglied werden</a>
                 </li>
-                <li>
-                    <a href="{{ path('login') }}" class="text-muted">Login</a>
-                </li>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li>
                         <a href="{{ path('app_logout') }}" class="text-muted">Logout</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('app_login') }}" class="text-muted">Login</a>
                     </li>
                 {% endif %}
                 <li>
@@ -87,19 +88,21 @@
                         href="http://webservice-albrecht.de"
                         target="_blank" class="text-muted">Webservice
                     Albrecht</a>
-               <div class="row">
-                   <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
                        <span
                                xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/StillImage"
                                property="dct:title" rel="dct:type">Weather Icons</span> by <a
-                               xmlns:cc="http://creativecommons.org/ns#" href="https://dovora.com"
-                               property="cc:attributionName" rel="cc:attributionURL">Dovora Interactive</a> is licensed under a
-                       <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0
-                           International License</a>.<br/>Based on a work at <a xmlns:dct="http://purl.org/dc/terms/"
-                                                                                href="https://dovora.com/resources/weather-icons/"
-                                                                                rel="dct:source">https://dovora.com/resources/weather-icons/</a>.
-                   </div>
-               </div>
+                                xmlns:cc="http://creativecommons.org/ns#" href="https://dovora.com"
+                                property="cc:attributionName" rel="cc:attributionURL">Dovora Interactive</a> is licensed
+                        under a
+                        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution
+                            4.0
+                            International License</a>.<br/>Based on a work at <a xmlns:dct="http://purl.org/dc/terms/"
+                                                                                 href="https://dovora.com/resources/weather-icons/"
+                                                                                 rel="dct:source">https://dovora.com/resources/weather-icons/</a>.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
