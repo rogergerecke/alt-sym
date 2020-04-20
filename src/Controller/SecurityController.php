@@ -5,7 +5,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -17,22 +16,6 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        /* // redirect by user role
-         $user = $this->getUser();
-
-         if ($user) {
-
-             // to admin dash bord
-             if ($this->isGranted('ROLE_ADMIN')) {
-                 return $this->redirectToRoute('admin');
-             }
-
-             // to member dash bord
-             if ($this->isGranted('ROLE_USER')) {
-                 return $this->redirectToRoute('member');
-             }
-         }*/
-
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -41,7 +24,12 @@ class SecurityController extends AbstractController
 
         return $this->render(
             '@EasyAdmin/page/login.html.twig',
-            ['last_username' => $lastUsername, 'error' => $error, 'csrf_token_intention' => 'authenticate','username_parameter' => 'email','password_parameter' => 'password',]
+            ['last_username'        => $lastUsername,
+             'error'                => $error,
+             'csrf_token_intention' => 'authenticate',
+             'username_parameter'   => 'email',
+             'password_parameter'   => 'password',
+            ]
         );
     }
 

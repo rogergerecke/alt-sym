@@ -7,11 +7,25 @@ easy_admin:
       # List the entity class name you want to manage
       StaticSite:
           class: App\Entity\StaticSite
+          url_base_path: '../'
           label: 'Seiten'
           form:
               fields:
+                  - {property: 'heading', type: 'text'}
                   - {property: 'content', type: 'text_editor'}
                   - {property: 'name', type: 'text'}
+                  - {property: 'meta_title', type: 'text'}
+                  - {property: 'meta_description', type: 'text'}
+                  - {property: 'url', type: 'url'}
+          list:
+            fields:
+                - {property: 'heading', type: 'text'}
+                - {property: 'content', type: 'text_editor'}
+                - {property: 'name', type: 'text'}
+                - {property: 'meta_title', type: 'text'}
+                - {property: 'meta_description', type: 'text'}
+                - {property: 'status', type: 'toggle'}
+                - {property: 'url', type: 'url'}
 
       User:
           class: App\Entity\User

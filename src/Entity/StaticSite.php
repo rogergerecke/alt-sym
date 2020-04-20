@@ -42,7 +42,7 @@ class StaticSite
     private $content;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="boolean")
      */
     private $status;
 
