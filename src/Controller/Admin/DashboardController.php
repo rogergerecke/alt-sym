@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Hostel;
 use App\Entity\HostelTypes;
 use App\Entity\Regions;
 use App\Entity\StaticSite;
@@ -37,9 +38,14 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Seiten', 'fa fa-folder-open', StaticSite::class);
-        yield MenuItem::linkToCrud('Benutzer', 'fa fa-folder-open', User::class);
-        yield MenuItem::linkToCrud('Regionen', 'fa fa-folder-open', Regions::class);
-        yield MenuItem::linkToCrud('Hostel Typen', 'fa fa-folder-open', HostelTypes::class);
+        yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
+        yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class);
+        yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
+        yield MenuItem::subMenu('Hotels')->setSubItems(
+            [
+                MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
+                MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', HostelTypes::class),
+            ]
+        );
     }
 }
