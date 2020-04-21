@@ -12,6 +12,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Hostel
 {
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="hostel")
+     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
+     */
+    private $user;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -109,9 +115,9 @@ class Hostel
     private $currency;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private $active;
+    private $status;
 
     public function getId(): ?int
     {
@@ -322,14 +328,14 @@ class Hostel
         return $this;
     }
 
-    public function getActive(): ?int
+    public function getStatus(): ?bool
     {
-        return $this->active;
+        return $this->status;
     }
 
-    public function setActive(?int $active): self
+    public function setStatus(?bool $status): self
     {
-        $this->active = $active;
+        $this->status = $status;
 
         return $this;
     }

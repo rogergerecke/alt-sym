@@ -41,10 +41,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
+        yield MenuItem::section('Hotel Gruppe','fa fa-house-user');
         yield MenuItem::subMenu('Hotels')->setSubItems(
             [
-                MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
-                MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', HostelTypes::class),
+                 MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
+                 MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', HostelTypes::class),
             ]
         );
     }

@@ -27,9 +27,9 @@ class Regions
     private $zipcode;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="boolean")
      */
-    private $active;
+    private $status;
 
     /**
      * @ORM\Column(type="integer")
@@ -65,14 +65,14 @@ class Regions
         return $this;
     }
 
-    public function getActive(): ?int
+    public function getStatus(): ?int
     {
-        return $this->active;
+        return $this->status;
     }
 
-    public function setActive(int $active): self
+    public function setStatus(int $status): self
     {
-        $this->active = $active;
+        $this->status = $status;
 
         return $this;
     }

@@ -25,18 +25,22 @@ Weil Hetzner Ihr hoster ist haben Sie dort die möglichkeit einen Cronjob einzur
 
 Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs anlegen das sich die Ausführungzeiten überschneiden und man einen Aufruf alle 30 Minuten hat.
 
-#### Cronjob-Einstellung:
+#### Cronjob-Einstellung fürs Wetter Update:
 
 `Interpreter: Wget`
 
 `Skript (absoluter Pfad): --spider https://altmuehlsee.com/open/weather/api`
 
-#### .env Settings
+#### .env Settings fürs Wetter:
 `OPENWEATHER_LAT_LON=@49.1161974,10.6974247`
 
 `OPENWEATHER_API_KEY=youre api key here`
 
 `OPENWEATHER_API_TYPE=onecall`
+
+# Der Admin- und Member Bereich
+
+Der Admin und die Benutzer haben einen Login: **/login** die Inhalte werden durch unterschiedliche Benutzer Rechte ausgespielt
 
 # Kernkomponenten
 Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank eine leistungsstarke 

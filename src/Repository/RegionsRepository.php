@@ -28,7 +28,7 @@ class RegionsRepository extends ServiceEntityRepository
         // get all regions there are active
         $result = $this->createQueryBuilder('r')
             ->select('r.name','r.regions_id')
-            ->where('r.active = 1')
+            ->where('r.status = 1')
             ->orderBy('r.name', 'ASC')
             ->getQuery()
             ->getResult()

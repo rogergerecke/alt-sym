@@ -41,6 +41,7 @@ class SearchHostelType extends AbstractType
     {
         $this->regions = $regions;
         $this->hostel_types = $hostel_types;
+
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -52,9 +53,11 @@ class SearchHostelType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        $this->regions->getRegionsForForm(),
+                        $this->regions->getRegionsForForm()
                     ],
                     'label'   => false,
+                    'group_by'=>'id'
+
                 ]
             )
             ->add(
@@ -65,6 +68,7 @@ class SearchHostelType extends AbstractType
                         $this->hostel_types->getHostelTypesForForm(),
                     ],
                     'label'   => false,
+                    'group_by'=>'id'
                 ]
             )
             ->add(

@@ -1,50 +1,8 @@
 easy_admin:
   site_name: '<strong>Altmühlsee</strong>'
-  formats:
-    number: '%d'
-    date: 'd.m.Y'
-  entities:
-      # List the entity class name you want to manage
-      StaticSite:
-          class: App\Entity\StaticSite
-          url_base_path: '../'
-          label: 'Seiten'
-          form:
-              fields:
-                  - {property: 'heading', type: 'text'}
-                  - {property: 'content', type: 'text_editor'}
-                  - {property: 'name', type: 'text'}
-                  - {property: 'meta_title', type: 'text'}
-                  - {property: 'meta_description', type: 'text'}
-                  - {property: 'url', type: 'url'}
-          list:
-            fields:
-                - {property: 'heading', type: 'text'}
-                - {property: 'content', type: 'text_editor'}
-                - {property: 'name', type: 'text'}
-                - {property: 'meta_title', type: 'text'}
-                - {property: 'meta_description', type: 'text'}
-                - {property: 'status', type: 'toggle'}
-                - {property: 'url', type: 'url'}
-
-      User:
-          class: App\Entity\User
-          label: 'Benutzer'
-          form:
-              title: "Benutzer Bearbeiten/Neu"
-
-      Regions:
-          class: App\Entity\Regions
-          label: 'Regionen'
-          form:
-              title: "Regionen Bearbeiten/Neu"
-
-      HostelTypes:
-            class: App\Entity\HostelTypes
-            label: 'Hostel Typen'
-            form:
-                title: "Regionen Bearbeiten/Neu"
-
+#  formats:
+#    number: '%d'
+#    date: 'd.m.Y'
   user:
       # this method/property must return the string representation of the user
       # (Symfony will look for getFullName(), isFullName(), ..., and 'fullName' property)

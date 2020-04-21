@@ -21,7 +21,7 @@
 
     <!-- Dynamic Style -->
     {% block stylesheets %}
-        {{ encore_entry_link_tags('front-css') }}
+        {{ encore_entry_link_tags('global') }}
         {{ encore_entry_link_tags('irs') }}
     {% endblock %}
 
@@ -112,7 +112,7 @@
 <!-- JAVASCRIPT -->
 <!-- .js at the end -->
 {% block javascripts %}
-    {{ encore_entry_script_tags('front-js') }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 </body>
 </html>
