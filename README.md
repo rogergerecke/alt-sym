@@ -61,6 +61,8 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 
 ## (21.04.20)
 
+~~**1** Datenbank Update~~
+
 **3.** Admin Bereich
 
 **4.** Statische Seiten

@@ -14,11 +14,6 @@ class Hostel
 {
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="hostel")
-     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
-     */
-    private $user;
-    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -33,7 +28,7 @@ class Hostel
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="integer")
      */
     private $partner_id;
 
@@ -118,6 +113,11 @@ class Hostel
      * @ORM\Column(type="boolean")
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $room_types;
 
     public function getId(): ?int
     {
@@ -336,6 +336,18 @@ class Hostel
     public function setStatus(?bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getRoomTypes(): ?string
+    {
+        return $this->room_types;
+    }
+
+    public function setRoomTypes(string $room_types): self
+    {
+        $this->room_types = $room_types;
 
         return $this;
     }

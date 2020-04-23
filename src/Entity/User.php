@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,10 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Hostel",mappedBy="user")
-     */
-    private $hostel;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -44,7 +41,7 @@ class User implements UserInterface
 
     /**
      * @Assert\Unique
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", unique=true)
      */
     private $partner_id;
 
@@ -58,9 +55,6 @@ class User implements UserInterface
      */
     private $status;
 
-    public function __construct() {
-        $this->hostel = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
