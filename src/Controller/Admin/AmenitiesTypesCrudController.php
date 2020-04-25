@@ -2,26 +2,23 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\HostelTypes;
+use App\Entity\AmenitiesTypes;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class HostelTypesCrudController extends AbstractCrudController
+class AmenitiesTypesCrudController extends AbstractCrudController
 {
-    public static $entityFqcn = HostelTypes::class;
+    public static $entityFqcn = AmenitiesTypes::class;
 
-    public function configureCrud(Crud $crud): Crud
-    {
-        return $crud;
-    }
 
     public function configureFields(string $pageName): iterable
     {
         $name = TextField::new('name');
-        $type_id = IntegerField::new('type_id');
-        $active = IntegerField::new('active');
+        $type_id = IntegerField::new('amenities_id');
+        $active = BooleanField::new('status');
         $sort = IntegerField::new('sort');
         $id = IntegerField::new('id', 'ID');
 
@@ -34,5 +31,8 @@ class HostelTypesCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$name, $type_id, $active, $sort];
         }
+
+        return [];
     }
+
 }

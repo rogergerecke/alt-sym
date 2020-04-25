@@ -1,0 +1,84 @@
+{# Yes this is all we need to render a form the logic is in SearchHostelType.php for you #}
+
+<!-- Hostel Search -->
+{{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
+<div id="search-wrapper">
+    <h5 class="border-bottom mb-2">Unterkünfte filtern</h5>
+    <div class="col-md-12 border-bottom mb-2">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="fas fa-map-marker-alt"></i>
+            <label for="search-regions">Region</label>
+            <small class="text-muted">
+                Wo möchten Sie hin?</small>
+            {{ form_row(form.regions, {'attr': {'id': 'search-regions','class':'form-control'}}) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-12 border-bottom mb-2">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="fas fa-home"></i>
+            <label for="search-hostel-types">Haustyp</label>
+            <small class="text-muted">
+                Wie möchten Sie Wohnen?</small>
+            {{ form_row(form.hostel_types, {'attr': {'id': 'search-hostel-types','class':'form-control'}}) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-12 border-bottom mb-2">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            <i class="fas fa-user-friends"></i>
+            <label for="customRangeQuantityPerson">Gäste</label>
+
+            <small class="text-muted">
+                Mit wie vielen reisen Sie?</small>
+
+            {{ form_row(form.quantity_person, {'id': 'customRangeQuantityPerson'}) }}
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="form-group form-extra-field clearfix field-detination has-icon">
+            {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary btn-block'}}) }}
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <!-- Dropdown Menu -->
+        <div class="dropdown">
+            <button class="btn btn-link btn-block dropdown-toggle" type="button" id="dropdownMenu"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Mehr
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <div class="custom-control custom-checkbox">
+                    {{ form_widget(form.handicap, {'id': 'customCheck1', 'attr': {'class':'custom-control-input'}}) }}
+                    <label class="custom-control-label" for="customCheck1">Barrierefrei</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    {{ form_widget(form.bread_service, {'id': 'customCheck2', 'attr': {'class':'custom-control-input'}}) }}
+                    <label class="custom-control-label" for="customCheck2">Brötchenservice</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    {{ form_widget(form.half_board, {'id': 'customCheck3', 'attr': {'class':'custom-control-input'}}) }}
+                    <label class="custom-control-label" for="customCheck3">Halbpension</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    {{ form_widget(form.breakfast, {'id': 'customCheck4', 'attr': {'class':'custom-control-input'}}) }}
+                    <label class="custom-control-label" for="customCheck4">Frühstück</label>
+                </div>
+                <hr>
+                <label for="customPriceRange">Ihr Budget?</label>
+                {{ form_row(form.price_range, {'id': 'customPriceRange'}) }}
+                <hr>
+                <label for="customSeeDistanceRange">Entfernung zum See?</label>
+                {{ form_row(form.see_distance, {'id': 'customSeeDistanceRange'}) }}
+            </div>
+        </div>
+        <!-- Dropdown Menu #END -->
+    </div>
+</div>
+{{ form_end(form) }}

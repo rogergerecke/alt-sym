@@ -19,6 +19,22 @@ class HostelRepository extends ServiceEntityRepository
         parent::__construct($registry, Hostel::class);
     }
 
+    public function findHostelsWithFilter(?string $filter)
+    {
+        $qb = $this->createQueryBuilder('h');
+
+        if ($filter) {
+            $qb
+                ->andWhere('h.room_types LIKE :filter OR h.partner_id LIKE :filter')
+                ->setParameter('filter', '%'.$filter.'%');
+        }
+
+        return $qb
+            ->orderBy('h.status', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Hostel[] Returns an array of Hostel objects
     //  */

@@ -43,7 +43,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
 
-        /* Section */
+        /* Hostel section */
         yield MenuItem::section('Hotel Gruppe', 'fa fa-house-user');
         yield MenuItem::subMenu('Hotels')->setSubItems(
             [
@@ -52,7 +52,7 @@ class DashboardController extends AbstractDashboardController
             ]
         );
 
-        /* Section */
+        /* System config section */
         yield MenuItem::section('System Einstellung', 'fa fa-fan');
         yield MenuItem::subMenu('Übersetzung', 'fa fa-language')->setSubItems(
             [
