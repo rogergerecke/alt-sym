@@ -10,8 +10,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * User contain the login data to the backend a user cant have hostels or ads and many more.
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="acount.with.email.exist")
+ * 
  */
 class User implements UserInterface
 {
@@ -25,6 +27,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
@@ -40,8 +44,9 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @Assert\Unique
+     *
      * @ORM\Column(type="integer", unique=true)
+     * @Assert\Unique
      */
     private $partner_id;
 

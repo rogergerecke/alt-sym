@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
+ * Hostel contain the full address data for hostel location a user cant have many hostels.
  * @ORM\Entity(repositoryClass="App\Repository\HostelRepository")
  */
 class Hostel
@@ -70,6 +71,7 @@ class Hostel
     private $country;
 
     /**
+     * Country ISO id code number
      * @ORM\Column(type="integer", nullable=true)
      */
     private $country_id;
@@ -105,11 +107,14 @@ class Hostel
     private $email;
 
     /**
+     * ex. EUR
+     *
      * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $currency;
 
     /**
+     *
      * @ORM\Column(type="boolean")
      */
     private $status;
@@ -118,6 +123,22 @@ class Hostel
      * @ORM\Column(type="string", length=255)
      */
     private $room_types;
+
+    /**
+     * The amenities contain a json array
+     *
+     * ['camping', 'vila', 'penthouse']
+     *
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $amenities = [];
+
+    /**
+     * The html description of the hotel
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
 
     public function getId(): ?int
     {
@@ -348,6 +369,30 @@ class Hostel
     public function setRoomTypes(string $room_types): self
     {
         $this->room_types = $room_types;
+
+        return $this;
+    }
+
+    public function getAmenities(): ?array
+    {
+        return $this->amenities;
+    }
+
+    public function setAmenities(?array $amenities): self
+    {
+        $this->amenities = $amenities;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

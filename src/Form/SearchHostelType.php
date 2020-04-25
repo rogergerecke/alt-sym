@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\AmenitiesTypes;
 use App\Entity\Hostel;
-use App\Entity\HostelTypes;
-use App\Repository\HostelTypesRepository;
+use App\Repository\AmenitiesTypesRepository;
 use App\Repository\RegionsRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -32,21 +32,18 @@ class SearchHostelType extends AbstractType
     private $regions;
 
     /**
-     * Hostel type database load to
-     * @var HostelTypesRepository
+     * @var AmenitiesTypesRepository
      */
-    private $hostel_types;
+    private $amenitiesTypesRepository;
 
-    public function __construct(RegionsRepository $regions, HostelTypesRepository $hostel_types)
+    public function __construct(RegionsRepository $regions, AmenitiesTypesRepository $amenitiesTypesRepository)
     {
         $this->regions = $regions;
-        $this->hostel_types = $hostel_types;
-
+        $this->amenitiesTypesRepository = $amenitiesTypesRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $group = new HostelTypes();
         $builder
             ->add(
                 'regions',
@@ -65,7 +62,7 @@ class SearchHostelType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        $this->hostel_types->getHostelTypesForForm(),
+                        $this->amenitiesTypesRepository->getAmenitiesTypesForForm(),
                     ],
                     'label'   => false,
                     'group_by'=>'id'
