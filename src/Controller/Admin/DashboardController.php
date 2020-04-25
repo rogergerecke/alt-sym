@@ -2,9 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\AmenitiesTypes;
 use App\Entity\Hostel;
-use App\Entity\HostelTypes;
 use App\Entity\Regions;
+use App\Entity\RoomAmenitiesDescription;
 use App\Entity\StaticSite;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -41,11 +42,21 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
-        yield MenuItem::section('Hotel Gruppe','fa fa-house-user');
+
+        /* Section */
+        yield MenuItem::section('Hotel Gruppe', 'fa fa-house-user');
         yield MenuItem::subMenu('Hotels')->setSubItems(
             [
-                 MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
-                 MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', HostelTypes::class),
+                MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
+                MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', AmenitiesTypes::class),
+            ]
+        );
+
+        /* Section */
+        yield MenuItem::section('System Einstellung', 'fa fa-fan');
+        yield MenuItem::subMenu('Übersetzung', 'fa fa-language')->setSubItems(
+            [
+                MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
         );
     }
