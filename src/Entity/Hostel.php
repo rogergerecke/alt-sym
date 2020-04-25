@@ -140,6 +140,16 @@ class Hostel
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $api_key;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hostel_availability_url;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -393,6 +403,30 @@ class Hostel
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->api_key;
+    }
+
+    public function setApiKey(?string $api_key): self
+    {
+        $this->api_key = $api_key;
+
+        return $this;
+    }
+
+    public function getHostelAvailabilityUrl(): ?string
+    {
+        return $this->hostel_availability_url;
+    }
+
+    public function setHostelAvailabilityUrl(?string $hostel_availability_url): self
+    {
+        $this->hostel_availability_url = $hostel_availability_url;
 
         return $this;
     }
