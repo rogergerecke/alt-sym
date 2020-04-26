@@ -21,6 +21,7 @@ class HostelRepository extends ServiceEntityRepository
 
     public function findHostelsWithFilter(?string $filter)
     {
+        print_r($filter);
         $qb = $this->createQueryBuilder('h');
 
         if ($filter) {
@@ -33,6 +34,41 @@ class HostelRepository extends ServiceEntityRepository
             ->orderBy('h.status', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+
+    /**
+     * Find the hostels for the Start Page Listing
+     * @return int|mixed|string
+     */
+    public function findStartPageHostels()
+    {
+        $qb = $this->createQueryBuilder('hsp')
+            ->where('hsp.status = 1')
+            ->andWhere('hsp.startpage = 1')
+            ->andWhere('hsp.top_placement_finished >= :time')
+            ->setParameter('time', new \DateTime('now'))
+            ->addOrderBy('hsp.sort','DESC');
+
+        return $qb->getQuery()->getResult();
+
+    }
+
+    /**
+     * Find the hostels for the Top Listing in Hostel View Controller
+     * @return int|mixed|string
+     */
+    public function findTopListingHostels()
+    {
+        $qb = $this->createQueryBuilder('tlh')
+            ->where('tlh.status = 1')
+            ->andWhere('tlh.toplisting = 1')
+            ->andWhere('tlh.top_placement_finished >= :time')
+            ->setParameter('time', new \DateTime('now'))
+            ->addOrderBy('tlh.sort','DESC');
+
+        return $qb->getQuery()->getResult();
+
     }
 
     // /**

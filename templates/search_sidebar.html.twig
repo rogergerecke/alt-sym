@@ -2,9 +2,9 @@
 
 <!-- Hostel Search -->
 {{ form_start(form, {'attr': {'novalidate': 'novalidate','action': path('hostel_view'), 'method': 'POST'}}) }}
-<div id="search-wrapper">
-    <h5 class="border-bottom mb-2">Unterkünfte filtern</h5>
-    <div class="col-md-12 border-bottom mb-2">
+<div id="search-sidebar">
+    <h5 class="border-bottom mb-3 text-center pt-1 pb-4">Unterkünfte filtern</h5>
+    <div class="col-md-12 border-bottom mb-3">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="fas fa-map-marker-alt"></i>
             <label for="search-regions">Region</label>
@@ -15,18 +15,18 @@
     </div>
 
 
-    <div class="col-md-12 border-bottom mb-2">
+    <div class="col-md-12 border-bottom mb-3">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="fas fa-home"></i>
             <label for="search-hostel-types">Haustyp</label>
             <small class="text-muted">
-                Wie möchten Sie Wohnen?</small>
+                Wie Wohnen?</small>
             {{ form_row(form.hostel_types, {'attr': {'id': 'search-hostel-types','class':'form-control'}}) }}
         </div>
     </div>
 
 
-    <div class="col-md-12 border-bottom mb-2">
+    <div class="col-md-12 border-bottom mb-3">
         <div class="form-group form-extra-field clearfix field-detination has-icon">
             <i class="fas fa-user-friends"></i>
             <label for="customRangeQuantityPerson">Gäste</label>

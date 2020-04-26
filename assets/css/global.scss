@@ -95,9 +95,8 @@ h5, .h5 {
 .soapy-heading, .soapy-sub-heading {
   color: #fff;
 }
-
-#search-wrapper {
-  margin-top: 2.5rem;
+/* on hostel view */
+#search-sidebar {
   border-radius: .25rem;
   border: $border-color solid 1px;
   background-color: #fff;
@@ -105,8 +104,14 @@ h5, .h5 {
   color: lighten($body-color, 20);
 }
 
-#search-wrapper .col-md-3 {
-  /* border-right: $border-color solid 1px;*/
+/* on startpage */
+#search-wrapper {
+  margin-top: 2.5rem;
+  border-radius: .25rem;
+  border: $border-color solid 1px;
+  background-color: #fff;
+  padding: 1rem;
+  color: lighten($body-color, 20);
 }
 
 #soapy .dropdown-menu {

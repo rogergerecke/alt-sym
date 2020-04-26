@@ -150,6 +150,26 @@ class Hostel
      */
     private $hostel_availability_url;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $sort;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $startpage;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $toplisting;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $top_placement_finished;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -427,6 +447,54 @@ class Hostel
     public function setHostelAvailabilityUrl(?string $hostel_availability_url): self
     {
         $this->hostel_availability_url = $hostel_availability_url;
+
+        return $this;
+    }
+
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    public function setSort(int $sort): self
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
+    public function getStartpage(): ?bool
+    {
+        return $this->startpage;
+    }
+
+    public function setStartpage(bool $startpage): self
+    {
+        $this->startpage = $startpage;
+
+        return $this;
+    }
+
+    public function getToplisting(): ?bool
+    {
+        return $this->toplisting;
+    }
+
+    public function setToplisting(bool $toplisting): self
+    {
+        $this->toplisting = $toplisting;
+
+        return $this;
+    }
+
+    public function getTopPlacementFinished(): ?\DateTimeInterface
+    {
+        return $this->top_placement_finished;
+    }
+
+    public function setTopPlacementFinished(?\DateTimeInterface $top_placement_finished): self
+    {
+        $this->top_placement_finished = $top_placement_finished;
 
         return $this;
     }

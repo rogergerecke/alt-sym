@@ -4,13 +4,16 @@ namespace App\Form;
 
 use App\Entity\AmenitiesTypes;
 use App\Entity\Hostel;
+use App\Entity\Regions;
 use App\Repository\AmenitiesTypesRepository;
 use App\Repository\RegionsRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;// we need for range fields with ion-rangeslider
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+// we need for range fields with ion-rangeslider
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -49,11 +52,12 @@ class SearchHostelType extends AbstractType
                 'regions',
                 ChoiceType::class,
                 [
-                    'choices' => [
-                        $this->regions->getRegionsForForm()
+                    'choices'    => [
+                        $this->regions->getRegionsForForm(),
                     ],
-                    'label'   => false,
-                    'group_by'=>'id'
+                    'label'      => false,
+                    'group_by'   => 'id',
+                    'data_class' => Regions::class,
 
                 ]
             )
@@ -61,11 +65,12 @@ class SearchHostelType extends AbstractType
                 'hostel_types',
                 ChoiceType::class,
                 [
-                    'choices' => [
+                    'choices'    => [
                         $this->amenitiesTypesRepository->getAmenitiesTypesForForm(),
                     ],
-                    'label'   => false,
-                    'group_by'=>'id'
+                    'label'      => false,
+                    'group_by'   => 'id',
+                    'data_class' => Hostel::class,
                 ]
             )
             ->add(
@@ -124,8 +129,8 @@ class SearchHostelType extends AbstractType
                 'price_range',
                 TextType::class,
                 [
-                    'attr'       => [
-                        'value' => 'false',
+                    'attr'  => [
+                        'value'        => 'false',
                         'class'        => 'js-range-slider',
                         'data-type'    => 'double',
                         'data-step'    => 10,
@@ -135,7 +140,7 @@ class SearchHostelType extends AbstractType
                         'data-to'      => '80',
                         'data-postfix' => ' €',
                     ],
-                    'label'      => false,
+                    'label' => false,
                 ]
             )
             ->add(
@@ -157,12 +162,12 @@ class SearchHostelType extends AbstractType
             ->add('submit', SubmitType::class, ['label' => 'Jetzt suchen']);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(
-            [
-                'data_class' => Hostel::class,
-            ]
-        );
-    }
+    /*  public function configureOptions(OptionsResolver $resolver)
+      {
+          $resolver->setDefaults(
+              [
+                  'data_class' => Hostel::class,
+              ]
+          );
+      }*/
 }

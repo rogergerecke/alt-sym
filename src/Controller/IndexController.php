@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Hostel;
 use App\Form\SearchHostelType;
+use App\Repository\HostelRepository;
 use App\Repository\StaticSiteRepository;
-use App\Service\OpenWeatherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,32 +15,35 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="index")
      * @param StaticSiteRepository $repository
-     * @param OpenWeatherService $weatherService
+     * @param HostelRepository $hostelRepository
      * @return Response
      */
-    public function index(StaticSiteRepository $repository,OpenWeatherService $weatherService)
+    public function index(StaticSiteRepository $repository, HostelRepository $hostelRepository)
     {
         // load content from database for the start page
         $content = $repository->findOneBy(array('name' => 'Index'));
 
+
         // creat a new hostel search form
-        $hostel = new Hostel();
-
         $form = $this->createForm(SearchHostelType::class);
-
-        if ($form->isSubmitted() and $form->isValid()){
+        // if the form submitted redirect to hostel view
+        if ($form->isSubmitted() and $form->isValid()) {
+            // todo add real $form-< valid entity
             // send user to /gastgeber
             return $this->redirectToRoute('hostel_view');
         }
 
-/*$weatherService->downloadOneCall();*/
 
-        return $this->render('index/index.html.twig', [
-            'title' => $content->getMetaTitle(),
-            'description' => $content->getMetaDescription(),
-            'heading' => $content->getHeading(),
-            'content' => $content->getContent(),
-            'form' => $form->createView()
-        ]);
+        return $this->render(
+            'index/index.html.twig',
+            [
+                'title'              => $content->getMetaTitle(),
+                'description'        => $content->getMetaDescription(),
+                'heading'            => $content->getHeading(),
+                'content'            => $content->getContent(),
+                'form'               => $form->createView(),
+                'start_page_hostels' => $hostelRepository->findStartPageHostels(),
+            ]
+        );
     }
 }

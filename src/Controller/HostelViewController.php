@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Hostel;
 use App\Form\SearchHostelType;
 use App\Repository\HostelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,38 +20,57 @@ class HostelViewController extends AbstractController
     /**
      * @Route("/gastgeber", name="hostel_view")
      * @param HostelRepository $hostelRepository
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function index(HostelRepository $hostelRepository,Request $request)
+    public function index(HostelRepository $hostelRepository, Request $request)
     {
 
         // creat a new hostel search form
-        $hostel = new Hostel();
-
         $form = $this->createForm(SearchHostelType::class);
 
-        if ($form->isSubmitted() and $form->isValid()){
-            // send user to /gastgeber
-            return $this->redirectToRoute('hostel_view');
+        if ($request->isMethod('POST')) {
+
+            /* $form->submit($request->request->get($form->getName()));*/
+
+            if ($form->isSubmitted() and $form->isValid()) {
+                // send user to /gastgeber
+                return $this->redirectToRoute('hostel_view');
+            } else {
+                $this->addFlash('danger', 'Diese Anfrage war nicht valide bitte tun Sie das nicht.');
+            }
         }
 
+
+// todo pagination
         $hostels = null;
         // get the request
-        if($request->get('search_hostel')){
+        if ($request->request->get($form->getName())) {
             $q = $request->query->get('search_hostel');
             $hostels = $hostelRepository->findHostelsWithFilter($q);
 
-           /* if($hostels !== null){
-               print_r($hostels);
-            }*/
+            if ($hostels !== null) {
+                // do output
+                /*print_r($hostels);*/
+            } else {
+                $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
+            }
+        }
+
+        // no request default show all
+        if (null === $request->request->get('search_hostel')) {
+            $hostels = $hostelRepository->findBy(['status' => true]);
         }
 
 
-
-        return $this->render('hostel_view/index.html.twig', [
-            'controller_name' => 'HostelViewController',
-            'form' => $form->createView(),
-            'hostels'=>$hostels
-        ]);
+        return $this->render(
+            'hostel_view/index.html.twig',
+            [
+                'controller_name' => 'HostelViewController',
+                'form'            => $form->createView(),
+                'hostels'         => $hostels,
+                'top_hostels'     => $hostelRepository->findTopListingHostels(),
+            ]
+        );
     }
 }
