@@ -73,4 +73,32 @@ class HostelViewController extends AbstractController
             ]
         );
     }
+
+
+    /**
+     * @Route("/gastgeber/details/{id}", name="hostel_details", requirements={"id"="\d+"})
+     * @param int $id
+     * @param HostelRepository $hostelRepository
+     */
+    public function details(int $id, HostelRepository $hostelRepository)
+    {
+
+        $hostel = $hostelRepository->find($id);
+
+        if (null === $hostel) {
+            $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
+        }
+
+        return $this->render(
+            'hostel_view/hostel_details.html.twig',
+            [
+                'controller_name' => 'HostelViewController',
+                'form'            => '$form->createView()',
+                'hostels'         => '$hostels',
+                'top_hostels'     => '$hostelRepository->findTopListingHostels()',
+                'hostel'          => $hostel,
+                'go_maps_api_key' => $_ENV['GOOGLE_MAPS_API_KEY'],
+            ]
+        );
+    }
 }

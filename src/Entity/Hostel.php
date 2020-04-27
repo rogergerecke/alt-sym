@@ -170,6 +170,11 @@ class Hostel
      */
     private $top_placement_finished;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mobile;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -495,6 +500,18 @@ class Hostel
     public function setTopPlacementFinished(?\DateTimeInterface $top_placement_finished): self
     {
         $this->top_placement_finished = $top_placement_finished;
+
+        return $this;
+    }
+
+    public function getMobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile(?string $mobile): self
+    {
+        $this->mobile = $mobile;
 
         return $this;
     }

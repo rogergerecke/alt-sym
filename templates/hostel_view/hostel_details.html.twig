@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Altmühlsee Unterkunft Details{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+<span>Stars ****</span>
+                <h1>{{ hostel.hostelName }}</h1>
+                <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}, {{ hostel.country }} <a href="#map">auf Karte zeigen.</a></small>
+                <!-- Image Slider -->
+                <div class="MagicSlideshow" data-options="selectors: bottom; selectors-style: thumbnails;">
+                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg" alt="basic html slideshow">
+                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg" alt="basic html slideshow">
+                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg" alt="basic html slideshow">
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+ab 75 EUR/Nacht
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Beschreibung</h2>
+            {{ hostel.description }}
+        </div>
+        <div class="row">
+            <h3>Ausstattung</h3>
+            {{ hostel.amenities }}
+        </div>
+        <div class="row">
+            <h4>Zimmer</h4>
+            {{ hostel.roomTypes }}
+        </div>
+    </div>
+
+
+
+    <!-- Google Maps Container -->
+   <div class="container mb-5">
+       <div class="row">
+           <div id="map" style="width: 100%; height: 500px">
+
+           </div>
+
+           <!-- Google maps script -->
+           <script>
+               // Initialize and add the map
+               function initMap() {
+                   // The location of Uluru
+                   var uluru = {lat: {{ hostel.latitude }}, lng: {{ hostel.longitude }} };
+                   // The map, centered at Uluru
+                   var map = new google.maps.Map(
+                       document.getElementById('map'), {zoom: 14, center: uluru});
+                   // The marker, positioned at Uluru
+                   var marker = new google.maps.Marker({position: uluru, map: map});
+               }
+           </script>
+
+           <script async defer
+                   src="https://maps.googleapis.com/maps/api/js?key={{ go_maps_api_key }}&callback=initMap">
+           </script>
+           <!-- Google maps script #END -->
+
+       </div>
+   </div>
+{% endblock %}

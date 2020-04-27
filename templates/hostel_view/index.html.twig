@@ -11,18 +11,21 @@
             <div class="col-md-9">
 
                 <!-- Hostel view Premium Position -->
-                {{ include('hostel_view/top_position_hostel_view.html.twig') }}
+                {{ include('hostel_view/_hostel_top_position.html.twig') }}
 
                 <!-- Hostel view Default Position -->
                 {% for hostel in hostels %}
                     <div class="card card-list-hotels mb-2">
                         <div class="row">
                             <div class="img-thumb-box col-md-4">
-                                <a href="./details.html?id={{ hostel.id }}">
+                                <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
                                     {#<img src="{{ hostel.id }}" alt="" class="rounded float-left card-img-left">#}
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225" class="rounded float-left card-img-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                                         class="rounded float-left card-img-left">
                                         <rect fill="#ddd" width="225" height="225"/>
-                                        <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5" font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225</text>
+                                        <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                                              font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                                        </text>
                                     </svg>
                                 </a>
                             </div>
@@ -33,8 +36,8 @@
                                     <div class="col-md-12">
                                         {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>
                                          <?php if (!empty($chunk[$service['name']])): ?>#}
-                                       {# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
-                                             title="{{ hostel.id }}"/>#}
+                                        {# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
+                                              title="{{ hostel.id }}"/>#}
                                         {#  <?php endif; ?>
                                           <?php endforeach; ?>#}
                                     </div>
@@ -56,18 +59,20 @@
                                         </div>
 
                                         <div id="collapse_{{ hostel.id }}" class="collapse"
-                                             aria-labelledby="heading_{{ hostel.id }}" data-parent="#accordion_{{ hostel.id }}">
+                                             aria-labelledby="heading_{{ hostel.id }}"
+                                             data-parent="#accordion_{{ hostel.id }}">
                                             <div class="card-body">
                                                 <p>{{ hostel.address }}</p>
                                                 <p>{{ hostel.address }} {{ hostel.city }}</p>
-                                                <p>Tel.: {{ hostel.phone }}</p>
+                                                <p>Tel.: <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a></p>
                                                 <p>Fax.: {{ hostel.fax }}</p>
+                                                <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's anzeigen</a></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <p>
-                                    <a href="\mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage">E-Mail</a>
+                                    <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage">E-Mail</a>
                                 </p>
                             </div>
                         </div>

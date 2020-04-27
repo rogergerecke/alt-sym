@@ -2,7 +2,7 @@
     <div class="card card-list-hotels mb-2 bg-info">
         <div class="row">
             <div class="img-thumb-box col-md-4">
-                <a href="./details.html?id={{ hostel.id }}">
+                <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
                     {#<img src="{{ hostel.id }}" alt="" class="rounded float-left card-img-left">#}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225" class="rounded float-left card-img-left">
                         <rect fill="#ddd" width="225" height="225"/>
