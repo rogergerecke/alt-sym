@@ -59,5 +59,14 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
         );
+
+        /* Media Manager section */
+        yield MenuItem::section('Media Manager', 'fa fa-photo-video');
+        yield MenuItem::subMenu('Gallery', 'fa fa-tags')->setSubItems(
+            [
+                MenuItem::linkToCrud('Media', 'fa fa-image', MediaCrudController::class),
+                MenuItem::linkToCrud('Media Gallery', 'fa fa-images', MediaGalleryCrudController::class),
+            ]
+        );
     }
 }
