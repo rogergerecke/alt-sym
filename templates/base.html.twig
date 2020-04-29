@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, nofollow">
 
     <meta name="description"
           content="{% block description %}Welcome!{% endblock %}">
@@ -11,13 +11,16 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
 
     {# todo IMPORTENT remove in production no index #}
-    <meta name="robots" content="noindex" />
+    <meta name="robots" content="noindex"/>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto+Condensed:300&display=swap" rel="stylesheet">
     <!-- Fontawesome Icons -->
 
     {#<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/ico">#}
+
+    <link rel="stylesheet" type="text/css" href="../../magicslideshow/magicslideshow.css"/>
+    <script src="../../magicslideshow/magicslideshow.js" type="text/javascript"></script>
 
     <!-- Dynamic Style -->
     {% block stylesheets %}
@@ -52,46 +55,52 @@
     </header>
     <!-- Header with Navigation #END -->
 
-
-
-
-            <!-- Hostel search form -->
-           {# {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
-                #}{# only show search on index and gastgeber page #}{#
-                <div class="col-md-3">
-                    <aside id="search">
-
-                    </aside>
+    <!-- Main Content -->
+    <main id="main">
+        <!-- Error Messages -->
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}#}
-            <!-- Hostel search form #END -->
+            {% endfor %}
+        {% endfor %}
+        <!-- Error Messages #END -->
+
+        {% block body %}
+
+        {% endblock %}
+    </main>
 
 
-                <main id="main">
-                    {% block body %}
-
-                    {% endblock %}
-                </main>
-
-
-
-            <!-- Ads -->
-          {#  {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
-                #}{# only show search on index and gastgeber page #}{#
-                <div class="col-md-3">
-                    <aside id="ads">
-                        {{ include('advertising.html.twig') }}
-                        {{ include('wetter.html.twig') }}
-                    </aside>
-                </div>
-            {% endif %}#}
-            <!-- Ads #END -->
+    <!-- Ads -->
+    {#  {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
+          #}{# only show search on index and gastgeber page #}{#
+          <div class="col-md-3">
+              <aside id="ads">
+                  {{ include('advertising.html.twig') }}
+                  {{ include('wetter.html.twig') }}
+              </aside>
+          </div>
+      {% endif %}#}
+    <!-- Ads #END -->
 
 </div>
 
+{% if app.request.get('_route') == 'index' %}
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            {{ content }}
 
         </div>
         <div class="col-md-6">
@@ -99,14 +108,13 @@
         </div>
     </div>
 </div>
+{% endif %}
 
-    <!-- Footer -->
-    <footer id="footer">
-            {% include('footer.html.twig') %}
-    </footer>
-    <!-- Footer #END -->
-
-
+<!-- Footer -->
+<footer id="footer">
+    {% include('footer.html.twig') %}
+</footer>
+<!-- Footer #END -->
 
 
 <!-- JAVASCRIPT -->

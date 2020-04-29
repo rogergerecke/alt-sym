@@ -1,43 +1,66 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="noindex, nofollow">
 
-{% block title %}Log in!{% endblock %}
+    <meta name="description"
+          content="{% block description %}Welcome!{% endblock %}">
 
+    <title>{% block title %}Admin{% endblock %}</title>
+
+    {# todo IMPORTENT remove in production no index #}
+    <meta name="robots" content="noindex"/>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto+Condensed:300&display=swap" rel="stylesheet">
+    <!-- Fontawesome Icons -->
+
+
+    <!-- Dynamic Style -->
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('admin-css') }}
+    {% endblock %}
+
+</head>
+<body id="body" class="text-center">
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <form class="form-signin" method="post">
+        {% if error is defined %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>{{ dump() }}
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+        <img class="mb-4 img-thumbnail" src="{{ asset('build/images/icon.svg') }}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" name="email" value="{% if last_username is defined %}{{ last_username }}{% endif %}"
+               id="inputEmail" class="form-control"
+               placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+               required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted"><span class="text-muted">2007 - {{ "now"|date('Y') }} ©</span> <a
+                    href="http://webservice-albrecht.de"
+                    target="_blank" class="text-muted">Webservice
+                Albrecht</a></p>
+    </form>
 {% endblock %}
 
+
+<!-- JAVASCRIPT -->
+<!-- .js at the end -->
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
+</html>

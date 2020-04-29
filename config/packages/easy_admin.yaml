@@ -1,0 +1,9 @@
+easy_admin:
+  site_name: '<strong>Altmühlsee</strong>'
+#  formats:
+#    number: '%d'
+#    date: 'd.m.Y'
+  user:
+      # this method/property must return the string representation of the user
+      # (Symfony will look for getFullName(), isFullName(), ..., and 'fullName' property)
+      name_property_path: 'Name'

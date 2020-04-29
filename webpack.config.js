@@ -3,8 +3,8 @@
 
 const Encore = require('@symfony/webpack-encore');
 
-const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
-const {styles} = require('@ckeditor/ckeditor5-dev-utils');
+/*const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
+const {styles} = require('@ckeditor/ckeditor5-dev-utils');*/
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -43,8 +43,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('admin', './assets/js/admin.js')
-    //.addEntry('page1', './assets/js/page1.js')
+    .addEntry('admin-cke', './assets/js/admin-cke.js')
     //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -74,10 +73,13 @@ Encore
     })
 
     // enables Sass/SCSS support
+    // global style for frontend
     .addStyleEntry('global', './assets/css/global.scss')
+    // admin style for backend
+    .addStyleEntry('admin-css', './assets/css/admin.scss')
     .enableSassLoader()
-
     // enable less support
+    // style for javascript range slider
     .addStyleEntry('irs','./assets/css/set-irs.less')
     .enableLessLoader()
 
@@ -102,7 +104,7 @@ Encore
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
 
-    // ckeditor part include
+   /* // ckeditor part include
     .addPlugin(new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
         language: 'de'
@@ -131,8 +133,16 @@ Encore
                 themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
             }
         })
-    });
+    });*/
 
+    // test ckeditor 5 new ide
+   /* .copyFiles([
+        {from: './node_modules/@ckeditor/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        {from: './node_modules/@ckeditor/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
+        {from: './node_modules/@ckeditor/lang', to: 'ckeditor/lang/[path][name].[ext]'},
+        {from: './node_modules/@ckeditor/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
+        {from: './node_modules/@ckeditor/skins', to: 'ckeditor/skins/[path][name].[ext]'}
+    ])*/
 
 
 module.exports = Encore.getWebpackConfig();

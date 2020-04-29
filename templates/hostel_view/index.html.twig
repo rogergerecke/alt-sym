@@ -1,20 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HostelViewController!{% endblock %}
+{% block title %}Altmühlsee Unterkünfte{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                {{ include('search_sidebar.html.twig') }}
+            </div>
+            <div class="col-md-9">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                <!-- Hostel view Premium Position -->
+                {{ include('hostel_view/_hostel_top_position.html.twig') }}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/gerec/PhpstormProjects/alt-sym/src/Controller/HostelViewController.php'|file_link(0) }}">src/Controller/HostelViewController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/gerec/PhpstormProjects/alt-sym/templates/hostel_view/index.html.twig'|file_link(0) }}">templates/hostel_view/index.html.twig</a></code></li>
-    </ul>
-</div>
+                <!-- Hostel view Default Position -->
+                {% for hostel in hostels %}
+                    <div class="card card-list-hotels mb-2">
+                        <div class="row">
+                            <div class="img-thumb-box col-md-4">
+                                <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
+                                    {#<img src="{{ hostel.id }}" alt="" class="rounded float-left card-img-left">#}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                                         class="rounded float-left card-img-left">
+                                        <rect fill="#ddd" width="225" height="225"/>
+                                        <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                                              font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                                        </text>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="card-body col-md-8 align-top">
+                                <h3>{{ hostel.hostelName }}</h3>
+                                <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
+                                <div class="row mb-1">
+                                    <div class="col-md-12">
+                                        {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>
+                                         <?php if (!empty($chunk[$service['name']])): ?>#}
+                                        {# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
+                                              title="{{ hostel.id }}"/>#}
+                                        {#  <?php endif; ?>
+                                          <?php endforeach; ?>#}
+                                    </div>
+                                </div>
+                                <div class="accordion" id="accordion_{{ hostel.id }}">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_{{ hostel.id }}">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                        data-target="#collapse_{{ hostel.id }}" aria-expanded="true"
+                                                        aria-controls="collapseOne">
+                                                    <div class="icon-spirit icon-location">
+                                                        <i class="fa fa-2x fa-map-marker-alt"></i>
+                                                    </div>{{ hostel.city }}
+                                                    , 10 KM vom See
+                                                    entfernt <i class="fas fa-angle-down rotate-icon"></i>
+                                                </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapse_{{ hostel.id }}" class="collapse"
+                                             aria-labelledby="heading_{{ hostel.id }}"
+                                             data-parent="#accordion_{{ hostel.id }}">
+                                            <div class="card-body">
+                                                <p>{{ hostel.address }}</p>
+                                                <p>{{ hostel.address }} {{ hostel.city }}</p>
+                                                <p>Tel.: <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a></p>
+                                                <p>Fax.: {{ hostel.fax }}</p>
+                                                <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's anzeigen</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>
+                                    <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage">E-Mail</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Nothing to show</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

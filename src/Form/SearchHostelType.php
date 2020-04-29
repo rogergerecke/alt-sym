@@ -2,15 +2,18 @@
 
 namespace App\Form;
 
+use App\Entity\AmenitiesTypes;
 use App\Entity\Hostel;
-use App\Entity\HostelTypes;
-use App\Repository\HostelTypesRepository;
+use App\Entity\Regions;
+use App\Repository\AmenitiesTypesRepository;
 use App\Repository\RegionsRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;// we need for range fields with ion-rangeslider
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+// we need for range fields with ion-rangeslider
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,39 +35,42 @@ class SearchHostelType extends AbstractType
     private $regions;
 
     /**
-     * Hostel type database load to
-     * @var HostelTypesRepository
+     * @var AmenitiesTypesRepository
      */
-    private $hostel_types;
+    private $amenitiesTypesRepository;
 
-    public function __construct(RegionsRepository $regions, HostelTypesRepository $hostel_types)
+    public function __construct(RegionsRepository $regions, AmenitiesTypesRepository $amenitiesTypesRepository)
     {
         $this->regions = $regions;
-        $this->hostel_types = $hostel_types;
+        $this->amenitiesTypesRepository = $amenitiesTypesRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $group = new HostelTypes();
         $builder
             ->add(
                 'regions',
                 ChoiceType::class,
                 [
-                    'choices' => [
+                    'choices'    => [
                         $this->regions->getRegionsForForm(),
                     ],
-                    'label'   => false,
+                    'label'      => false,
+                    'group_by'   => 'id',
+                    'data_class' => Regions::class,
+
                 ]
             )
             ->add(
                 'hostel_types',
                 ChoiceType::class,
                 [
-                    'choices' => [
-                        $this->hostel_types->getHostelTypesForForm(),
+                    'choices'    => [
+                        $this->amenitiesTypesRepository->getAmenitiesTypesForForm(),
                     ],
-                    'label'   => false,
+                    'label'      => false,
+                    'group_by'   => 'id',
+                    'data_class' => Hostel::class,
                 ]
             )
             ->add(
@@ -123,8 +129,8 @@ class SearchHostelType extends AbstractType
                 'price_range',
                 TextType::class,
                 [
-                    'attr'       => [
-                        'value' => 'false',
+                    'attr'  => [
+                        'value'        => 'false',
                         'class'        => 'js-range-slider',
                         'data-type'    => 'double',
                         'data-step'    => 10,
@@ -134,7 +140,7 @@ class SearchHostelType extends AbstractType
                         'data-to'      => '80',
                         'data-postfix' => ' €',
                     ],
-                    'label'      => false,
+                    'label' => false,
                 ]
             )
             ->add(
@@ -156,12 +162,12 @@ class SearchHostelType extends AbstractType
             ->add('submit', SubmitType::class, ['label' => 'Jetzt suchen']);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(
-            [
-                'data_class' => Hostel::class,
-            ]
-        );
-    }
+    /*  public function configureOptions(OptionsResolver $resolver)
+      {
+          $resolver->setDefaults(
+              [
+                  'data_class' => Hostel::class,
+              ]
+          );
+      }*/
 }

@@ -16,29 +16,23 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // redirect by user role
-        $user = $this->getUser();
-
-        if ($user) {
-
-            // to admin dash bord
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('admin');
-            }
-
-            // to member dash bord
-            if ($this->isGranted('ROLE_USER')) {
-                return $this->redirectToRoute('member');
-            }
-        }
-
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+       /* $parameter = ['easyadmin_config'=>
+                          [
+                              'last_username'        => $lastUsername,
+                              'error'                => $error,
+                              'csrf_token_intention' => 'authenticate',
+                              'username_parameter'   => 'email',
+                              'password_parameter'   => 'password',
+                          ]];*/
+        return $this->render(
+            'security/login.html.twig'
+        );
     }
 
     /**

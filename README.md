@@ -25,18 +25,22 @@ Weil Hetzner Ihr hoster ist haben Sie dort die möglichkeit einen Cronjob einzur
 
 Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs anlegen das sich die Ausführungzeiten überschneiden und man einen Aufruf alle 30 Minuten hat.
 
-#### Cronjob-Einstellung:
+#### Cronjob-Einstellung fürs Wetter Update:
 
 `Interpreter: Wget`
 
 `Skript (absoluter Pfad): --spider https://altmuehlsee.com/open/weather/api`
 
-#### .env Settings
+#### .env Settings fürs Wetter:
 `OPENWEATHER_LAT_LON=@49.1161974,10.6974247`
 
 `OPENWEATHER_API_KEY=youre api key here`
 
 `OPENWEATHER_API_TYPE=onecall`
+
+# Der Admin- und Member Bereich
+
+Der Admin und die Benutzer haben einen Login: **/login** die Inhalte werden durch unterschiedliche Benutzer Rechte ausgespielt
 
 # Kernkomponenten
 Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank eine leistungsstarke 
@@ -57,9 +61,15 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 
 ## (21.04.20)
 
-**3.** Admin Bereich
+~~**1** Datenbank Update~~
 
-**4.** Statische Seiten
+~~**3.** Admin Bereich~~
+
+~~**a** Integration Dateiupload mit~~ [elFinder 2][https://studio-42.github.io/elFinder/#elf_l1_Lw]
+
+~~**4.** Statische Seiten Impressum Datenschutz ect.~~
+
+- Integration dynamische URLs
 
 **5.** CKEditor 4 Inhaltsbearbeitung im Admin
 
@@ -121,3 +131,10 @@ SMTP Conection
 Curl Bug must fix on Server:
 Attention Curl 7.64.0 dosnt work contain a bug in buffer
 Hetzner run Curl 7.52.1
+```
+
+CKFinder
+NOTE: Since usually setting permissions to 0777 is insecure, it is advisable to change the group ownership of the directory to the same user as Apache and add group write permissions instead. Please contact your system administrator in case of any doubts.
+
+
+[https://studio-42.github.io/elFinder/#elf_l1_Lw]: https://studio-42.github.io/elFinder/#elf_l1_Lw

@@ -2,17 +2,22 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * User contain the login data to the backend a user cant have hostels or ads and many more.
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="acount.with.email.exist")
+ * 
  */
 class User implements UserInterface
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,6 +27,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
@@ -37,8 +44,9 @@ class User implements UserInterface
     private $password;
 
     /**
+     *
+     * @ORM\Column(type="integer", unique=true)
      * @Assert\Unique
-     * @ORM\Column(type="integer", nullable=true)
      */
     private $partner_id;
 
@@ -46,6 +54,12 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $status;
+
 
     public function getId(): ?int
     {
@@ -71,7 +85,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -98,7 +112,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -145,6 +159,18 @@ class User implements UserInterface
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?bool $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

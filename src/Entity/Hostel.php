@@ -8,10 +8,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
+ * Hostel contain the full address data for hostel location a user cant have many hostels.
  * @ORM\Entity(repositoryClass="App\Repository\HostelRepository")
  */
 class Hostel
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -27,7 +29,7 @@ class Hostel
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="integer")
      */
     private $partner_id;
 
@@ -69,6 +71,7 @@ class Hostel
     private $country;
 
     /**
+     * Country ISO id code number
      * @ORM\Column(type="integer", nullable=true)
      */
     private $country_id;
@@ -104,14 +107,73 @@ class Hostel
     private $email;
 
     /**
+     * ex. EUR
+     *
      * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $currency;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     *
+     * @ORM\Column(type="boolean")
      */
-    private $active;
+    private $status;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $room_types;
+
+    /**
+     * The amenities contain a json array
+     *
+     * ['camping', 'vila', 'penthouse']
+     *
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $amenities = [];
+
+    /**
+     * The html description of the hotel
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $api_key;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hostel_availability_url;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $sort;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $startpage;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $toplisting;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $top_placement_finished;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mobile;
 
     public function getId(): ?int
     {
@@ -322,14 +384,134 @@ class Hostel
         return $this;
     }
 
-    public function getActive(): ?int
+    public function getStatus(): ?bool
     {
-        return $this->active;
+        return $this->status;
     }
 
-    public function setActive(?int $active): self
+    public function setStatus(?bool $status): self
     {
-        $this->active = $active;
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getRoomTypes(): ?string
+    {
+        return $this->room_types;
+    }
+
+    public function setRoomTypes(string $room_types): self
+    {
+        $this->room_types = $room_types;
+
+        return $this;
+    }
+
+    public function getAmenities(): ?array
+    {
+        return $this->amenities;
+    }
+
+    public function setAmenities(?array $amenities): self
+    {
+        $this->amenities = $amenities;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->api_key;
+    }
+
+    public function setApiKey(?string $api_key): self
+    {
+        $this->api_key = $api_key;
+
+        return $this;
+    }
+
+    public function getHostelAvailabilityUrl(): ?string
+    {
+        return $this->hostel_availability_url;
+    }
+
+    public function setHostelAvailabilityUrl(?string $hostel_availability_url): self
+    {
+        $this->hostel_availability_url = $hostel_availability_url;
+
+        return $this;
+    }
+
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    public function setSort(int $sort): self
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
+    public function getStartpage(): ?bool
+    {
+        return $this->startpage;
+    }
+
+    public function setStartpage(bool $startpage): self
+    {
+        $this->startpage = $startpage;
+
+        return $this;
+    }
+
+    public function getToplisting(): ?bool
+    {
+        return $this->toplisting;
+    }
+
+    public function setToplisting(bool $toplisting): self
+    {
+        $this->toplisting = $toplisting;
+
+        return $this;
+    }
+
+    public function getTopPlacementFinished(): ?\DateTimeInterface
+    {
+        return $this->top_placement_finished;
+    }
+
+    public function setTopPlacementFinished(?\DateTimeInterface $top_placement_finished): self
+    {
+        $this->top_placement_finished = $top_placement_finished;
+
+        return $this;
+    }
+
+    public function getMobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile(?string $mobile): self
+    {
+        $this->mobile = $mobile;
 
         return $this;
     }

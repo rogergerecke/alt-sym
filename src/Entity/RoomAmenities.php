@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\HostelTypesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RoomAmenitiesRepository")
  */
-class HostelTypes
+class RoomAmenities
 {
     /**
      * @ORM\Id()
@@ -16,25 +16,31 @@ class HostelTypes
      */
     private $id;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=10)
      */
-    private $type_id;
+    private $type;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=10)
      */
-    private $active;
+    private $default_value;
 
     /**
      * @ORM\Column(type="smallint")
      */
     private $sort;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $status;
 
     public function getId(): ?int
     {
@@ -53,26 +59,26 @@ class HostelTypes
         return $this;
     }
 
-    public function getTypeId(): ?int
+    public function getType(): ?string
     {
-        return $this->type_id;
+        return $this->type;
     }
 
-    public function setTypeId(int $type_id): self
+    public function setType(string $type): self
     {
-        $this->type_id = $type_id;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getActive(): ?int
+    public function getDefaultValue(): ?string
     {
-        return $this->active;
+        return $this->default_value;
     }
 
-    public function setActive(int $active): self
+    public function setDefaultValue(string $default_value): self
     {
-        $this->active = $active;
+        $this->default_value = $default_value;
 
         return $this;
     }
@@ -85,6 +91,18 @@ class HostelTypes
     public function setSort(int $sort): self
     {
         $this->sort = $sort;
+
+        return $this;
+    }
+
+    public function getStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

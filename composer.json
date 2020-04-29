@@ -5,6 +5,11 @@
     "php": "^7.2.5",
     "ext-ctype": "*",
     "ext-iconv": "*",
+    "ext-json": "*",
+    "doctrine/annotations": "^1.10",
+    "easycorp/easyadmin-bundle": "3.0.*",
+    "friendsofsymfony/ckeditor-bundle": "^2.2",
+    "helios-ag/fm-elfinder-bundle": "^10.0",
     "sensio/framework-extra-bundle": "^5.1",
     "symfony/apache-pack": "^1.0",
     "symfony/asset": "5.0.*",
@@ -30,8 +35,7 @@
     "symfony/validator": "5.0.*",
     "symfony/web-link": "5.0.*",
     "symfony/webpack-encore-bundle": "^1.7",
-    "symfony/yaml": "5.0.*",
-    "ext-json": "*"
+    "symfony/yaml": "5.0.*"
   },
   "require-dev": {
     "symfony/debug-pack": "*",
@@ -84,8 +88,10 @@
   },
   "extra": {
     "symfony": {
-      "allow-contrib": false,
+      "allow-contrib": "true",
       "require": "5.0.*"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
