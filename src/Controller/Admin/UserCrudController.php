@@ -39,4 +39,9 @@ class UserCrudController extends AbstractCrudController
             return [$email, $password, $partner_id, $name, $status];
         }
     }
+
+    public static function getEntityFqcn(): string
+    {
+        return self::$entityFqcn;
+    }
 }

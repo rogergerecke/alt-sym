@@ -63,9 +63,13 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 
 ~~**1** Datenbank Update~~
 
-**3.** Admin Bereich
+~~**3.** Admin Bereich~~
 
-**4.** Statische Seiten
+~~**a** Integration Dateiupload mit~~ [elFinder 2][https://studio-42.github.io/elFinder/#elf_l1_Lw]
+
+~~**4.** Statische Seiten Impressum Datenschutz ect.~~
+
+- Integration dynamische URLs
 
 **5.** CKEditor 4 Inhaltsbearbeitung im Admin
 
@@ -131,3 +135,6 @@ Hetzner run Curl 7.52.1
 
 CKFinder
 NOTE: Since usually setting permissions to 0777 is insecure, it is advisable to change the group ownership of the directory to the same user as Apache and add group write permissions instead. Please contact your system administrator in case of any doubts.
+
+
+[https://studio-42.github.io/elFinder/#elf_l1_Lw]: https://studio-42.github.io/elFinder/#elf_l1_Lw

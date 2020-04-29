@@ -24,4 +24,8 @@ class RoomAmenitiesDescriptionCrudController extends AbstractCrudController
         ];
     }
 
+    public static function getEntityFqcn(): string
+    {
+       return self::$entityFqcn;
+    }
 }

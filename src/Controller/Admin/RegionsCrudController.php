@@ -37,4 +37,9 @@ class RegionsCrudController extends AbstractCrudController
             return [$name, $zipcode, $status, $regions_id];
         }
     }
+
+    public static function getEntityFqcn(): string
+    {
+        return self::$entityFqcn;
+    }
 }

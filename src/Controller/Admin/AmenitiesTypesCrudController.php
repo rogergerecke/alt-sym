@@ -35,4 +35,8 @@ class AmenitiesTypesCrudController extends AbstractCrudController
         return [];
     }
 
+    public static function getEntityFqcn(): string
+    {
+        return self::$entityFqcn;
+    }
 }

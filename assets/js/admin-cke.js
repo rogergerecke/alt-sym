@@ -1,7 +1,8 @@
-/*
+
 // The editor creator to use.
-import ClassicEditorBase from '@ckeditor/ckeditor5-build-classic';
-import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
+const ClassicEditor = require( '@ckeditor/ckeditor5-build-classic' );
+
+/*import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
@@ -77,7 +78,7 @@ ClassicEditor.defaultConfig = {
     // This value must be kept in sync with the language defined in webpack.config.js.
     language: 'de'
 };
-
+*/
 
 ClassicEditor
     .create(document.querySelector('#editor'), {
@@ -99,4 +100,4 @@ ClassicEditor
     })
     .catch(error => {
         console.error(error.stack);
-    });*/
+    });
