@@ -30,7 +30,7 @@
                                 </a>
                             </div>
                             <div class="card-body col-md-8 align-top">
-                                <h3>{{ hostel.hostelName }}</h3>
+                                <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}">{{ hostel.hostelName }}</a></h3>
                                 <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
                                 <div class="row mb-1">
                                     <div class="col-md-12">
@@ -49,8 +49,8 @@
                                                 <button class="btn btn-link" type="button" data-toggle="collapse"
                                                         data-target="#collapse_{{ hostel.id }}" aria-expanded="true"
                                                         aria-controls="collapseOne">
-                                                    <div class="icon-spirit icon-location">
-                                                        <i class="fa fa-2x fa-map-marker-alt"></i>
+                                                    <div class="listing-icon-location">
+                                                        <i class="fa fa-map-marker-alt"></i>
                                                     </div>{{ hostel.city }}
                                                     , 10 KM vom See
                                                     entfernt <i class="fas fa-angle-down rotate-icon"></i>
