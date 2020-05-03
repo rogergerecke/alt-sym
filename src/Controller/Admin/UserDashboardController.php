@@ -17,7 +17,7 @@ class UserDashboardController extends AbstractDashboardController
 {
 
     /**
-     * @Route("/admin/user", name="admin_user")
+     * @Route("/user", name="user")
      */
     public function index(): Response
     {

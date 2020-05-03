@@ -112,7 +112,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         if ($token->getRoleNames()[0] == 'ROLE_USER') {
-            return new RedirectResponse($this->urlGenerator->generate('admin_user'));
+            return new RedirectResponse($this->urlGenerator->generate('user'));
         }
 
         throw new CustomUserMessageAuthenticationException('User role group not exist');

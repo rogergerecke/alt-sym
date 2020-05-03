@@ -19,11 +19,11 @@ class UserProfilDashboardController extends AbstractDashboardController
 {
 
     /**
-     * @var DashboardController
+     * @var AdminDashboardController
      */
     private $dashboardController;
 
-    public function __construct(DashboardController $dashboardController)
+    public function __construct(AdminDashboardController $dashboardController)
     {
         $this->dashboardController = $dashboardController;
     }

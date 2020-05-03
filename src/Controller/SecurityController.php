@@ -11,6 +11,8 @@ class SecurityController extends AbstractController
 {
 
     /**
+     * Default login for ADMIN and USER
+     *
      * @Route("/login", name="app_login")
      * @return Response
      */
