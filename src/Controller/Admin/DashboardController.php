@@ -11,9 +11,11 @@ use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -69,4 +71,30 @@ class DashboardController extends AbstractDashboardController
             ]
         );
     }
+
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        return UserMenu::new()
+            // use the given $user object to get the user name
+            ->setName($user->getName())
+            // use this method if you don't want to display the name of the user
+            ->displayUserName(true)
+
+            // you can return an URL with the avatar image
+           /* ->setAvatarUrl('https://...')*/
+           /* ->setAvatarUrl($user->getProfileImageUrl())*/
+            // use this method if you don't want to display the user image
+            ->displayUserAvatar(true)
+            // you can also pass an email address to use gravatar's service
+            ->setGravatarEmail($user->getEmail())
+
+            // you can use any type of menu item, except submenus
+            ->addMenuItems([
+                MenuItem::linkToRoute('Mein Profil', 'fa fa-id-card', 'admin_user_profil'),
+                /*MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),*/
+                MenuItem::section('------'),
+                MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
+            ]);
+    }
+
 }
