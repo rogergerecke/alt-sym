@@ -95,6 +95,7 @@ h5, .h5 {
 .soapy-heading, .soapy-sub-heading {
   color: #fff;
 }
+/* Hostel Listing */
 /* on hostel view */
 #search-sidebar {
   border-radius: .25rem;
@@ -102,6 +103,11 @@ h5, .h5 {
   background-color: #fff;
   padding: 1rem;
   color: lighten($body-color, 20);
+}
+
+#search-sidebar .dropdown-menu{
+  padding-right: 2rem;
+  padding-left: 2rem;
 }
 
 /* on startpage */
@@ -122,6 +128,30 @@ h5, .h5 {
 #soapy .custom-control {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+.clh-top-position{
+  border-top: $headings-color solid 8px !important;
+  border-bottom: $headings-color solid 8px !important;
+}
+
+.listing-icon-location{
+  float: left;
+  padding-right: 0.3rem;
+}
+
+.card-list-hotels h3 a{
+  color: $headings-color;
+}
+
+.card-list-hotels .accordion .card-header{
+  background-color: inherit;
+}
+
+.card-list-hotels .accordion .card{
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
 }
 
 /* Weather Widget */
@@ -193,6 +223,11 @@ h5, .h5 {
 #footer .list-group-item {
   border-radius: unset;
   border: none;
+}
+
+#footer-member .badge-pill{
+  font-family: Verdana, serif;
+  color: #fff;
 }
 
 #copyright {

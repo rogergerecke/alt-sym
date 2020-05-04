@@ -23,7 +23,7 @@ class HostelViewController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function index(HostelRepository $hostelRepository, Request $request)
+    public function listing(HostelRepository $hostelRepository, Request $request)
     {
 
         // creat a new hostel search form
@@ -64,7 +64,7 @@ class HostelViewController extends AbstractController
 
 
         return $this->render(
-            'hostel_view/index.html.twig',
+            'hostel_view/hostel_listing.twig',
             [
                 'controller_name' => 'HostelViewController',
                 'form'            => $form->createView(),

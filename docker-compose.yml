@@ -12,12 +12,10 @@ services:
     links:
       - mysql
     volumes:
-      - ${DOCUMENT_ROOT-.}:/var/www/html
-      - ${PHP_INI-./docker/config/php/php.ini}:/usr/local/etc/php/php.ini
-      - ${VHOSTS_DIR-./docker/config/vhosts}:/etc/apache2/sites-enabled
-      - ${LOG_DIR-./docker/logs/apache2}:/var/log/apache2
-    environment:
-      - _SYSTEM_DEBUG=true
+      - ${DOCUMENT_ROOT-.}:/var/www/html:cached
+      - ${PHP_INI-./docker/config/php/php.ini}:/usr/local/etc/php/php.ini:cached
+      - ${VHOSTS_DIR-./docker/config/vhosts}:/etc/apache2/sites-enabled:cached
+      - ${LOG_DIR-./docker/logs/apache2}:/var/log/apache2:cached
   mysql:
     build: ./docker/bin/mysql
     container_name: 'mysql-altmuehlsee'
@@ -25,9 +23,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ${MYSQL_DATA_DIR-./docker/data/mysql}:/var/lib/mysql
-      - ${MYSQL_LOG_DIR-./docker/logs/mysql}:/var/log/mysql
-      - ${MYSQL_CONFIG-./docker/config/mysql/mycustom.cnf}:/etc/mysql/conf.d/custom.cnf
+      - ${MYSQL_DATA_DIR-./docker/data/mysql}:/var/lib/mysql:cached
+      - ${MYSQL_LOG_DIR-./docker/logs/mysql}:/var/log/mysql:cached
+      - ${MYSQL_CONFIG-./docker/config/mysql/mycustom.cnf}:/etc/mysql/conf.d/custom.cnf:cached
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: sym_muehlsee

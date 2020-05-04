@@ -1,5 +1,5 @@
 {% for hostel in top_hostels %}
-    <div class="card card-list-hotels mb-2 bg-info">
+    <div class="clh-top-position card card-list-hotels mb-4">
         <div class="row">
             <div class="img-thumb-box col-md-4">
                 <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
@@ -30,8 +30,8 @@
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
                                         data-target="#collapse_{{ hostel.id }}" aria-expanded="true"
                                         aria-controls="collapseOne">
-                                    <div class="icon-spirit icon-location">
-                                        <i class="fa fa-2x fa-map-marker-alt"></i>
+                                    <div class="listing-icon-location">
+                                        <i class="fa fa-map-marker-alt"></i>
                                     </div>{{ hostel.city }}
                                     , 10 KM vom See
                                     entfernt <i class="fas fa-angle-down rotate-icon"></i>
