@@ -24,7 +24,7 @@ class RegionsCrudController extends AbstractCrudController
         $regions_id = IntegerField::new('regions_id');
         $name = TextField::new('name');
         $zipcode = IntegerField::new('zipcode','PLZ');
-        $status = BooleanField::new('status');
+        $status = BooleanField::new('status','On / Off');
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
