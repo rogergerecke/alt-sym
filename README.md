@@ -1,8 +1,12 @@
 **This repro is only a backup from a website please don't use it.**
 
+<a href="#install">Installations Anleitung</a>
+<a href="#weatherwidget">Das Wetter widget</a>
+<a href="#timelimit">Fahrplan Projekt Status</a>
+
 Diese Installations Anleitung ist für dich S.A.
 
-# Installations Anleitung
+# [Installations Anleitung ](#install)
 Das System ist jetzt immer weiter gewachsen und darum braucht es 
 jetzt schon ein kleines Handbuch für die erste Installation zum 
 Start.  Sind diese erst einmal gemacht, braucht es nichts mehr weiter.  
@@ -18,7 +22,7 @@ Im Terminal ausführen,  wenn Composer installiert ist.
 ## Grundsätzlich die .env
 Systemeinstellung wie **Datenbank, Mailserver Verbindung, API Schlüßel** für externe Dienstleister werden jetzt alle in der **.env**  gemacht die **.env** ist die Grundkonfigurations Datei.
 
-# Das Wetter widget
+# [Das Wetter widget](#weatherwidget)
 Da das Wetter-Plugin von Wetter .com noch nicht frei zu gestallten ist und an dieser API grade gearbeitet wird müssen wir,  erstmal wechseln damit das Wetter widget nicht das Mobile Layout stört.
 
 Das Wetter widget wird jetzt über die API von https://openweathermap.org/api erzeugt!  Dafür brauch man dort ein Kostenlosen zugang weil dieser zugang kostenlos ist,  sind die anfragen dort limitiert es ist also nötig sie zu Cachen.
@@ -55,11 +59,15 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 - [Image-editor](https://ui.toast.com/tui-image-editor/)
 - [OpenWeather](https://openweathermap.org/api)
 
-# Fahrplan
+# [Fahrplan Projekt Status](#timelimit)
+
+Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es Abgeschloßen sein.  Durchgestrichene Ziele sind ereicht.
 ## (18.04.20)
 ~~1. Mobil Bootstrap 4 Design~~
 
 ~~2. Anbindung OpenWeather API Cronjob~~
+
+~~- cronjob und chaching~~
 
 ## (21.04.20)
 
@@ -71,20 +79,33 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 
 ~~**4.** Statische Seiten Impressum Datenschutz ect.~~
 
-- Integration dynamische URLs
+**5a.** Hostel Detailt Seite mit Magictoolbox Slider
 
-**5.** CKEditor 4 Inhaltsbearbeitung im Admin
+- Integration dynamische URLs (80%)
+
+**5b.** CKEditor 4 Inhaltsbearbeitung im Admin (55%)
 
 ## (17.05.20)
 **6.** Checkout
 
-**7.** Member Aria 
+**7.** Member Aria (70%)
+- Meine Konto Bereich
+- Anlegen und Bearbeiten von Hostel
+- Anlegen von Veranstalltung (kostenpflichtig)
+- Anlegen von Banner-Werbung auf der Startseite (kostenpflichtig)
+- Eintragen von Events
+
+
+- Zimmer anlegen mit eigenschaften
 
 ## (31.05.20)
 **8.** Integration https://ui.toast.com/tui-image-editor/
+- Media Manager 
+- Bearbeitung von Bilder in Format und Farbe
 
 ## August
 **iCalendar** Kalender integration für Veranstalltungen **im - und export**
+- Abgreifen von Events und Veranstalltung mit klick in Kalender übernehmen
 
 ## Deadline 01.10.20
 

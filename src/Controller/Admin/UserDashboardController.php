@@ -11,7 +11,6 @@ use App\Entity\Media;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Menu\SectionMenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -21,6 +20,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserDashboardController extends AbstractDashboardController
 {
+
+
 
     /**
      * @Route("/user", name="user")
@@ -74,6 +75,7 @@ class UserDashboardController extends AbstractDashboardController
 
     public function configureUserMenu(UserInterface $user): UserMenu
     {
+        // menu build print_r($user);
         return UserMenu::new()
             // use the given $user object to get the user name
             ->setName($user->getName())
