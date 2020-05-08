@@ -5,10 +5,8 @@ twig:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
 
 fos_ck_editor:
-    base_path: "build"
-    js_path:   "build/admin-cke.js"
     default_config: default
     configs:
         default:
-            filebrowserBrowseRoute: "elfinder"
+            filebrowserBrowseRoute: elfinder
             filebrowserBrowseRouteParameters: []

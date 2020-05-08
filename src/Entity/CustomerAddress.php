@@ -19,7 +19,7 @@ class CustomerAddress
     /**
      * @ORM\Column(type="integer")
      */
-    private $customer_id;
+    private $user_id;
 
     /**
      * @ORM\Column(type="smallint", options={"default" : 1})
@@ -82,7 +82,7 @@ class CustomerAddress
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $birthday;
 
@@ -91,14 +91,14 @@ class CustomerAddress
         return $this->id;
     }
 
-    public function getCustomerId(): ?int
+    public function getUserId(): ?int
     {
-        return $this->customer_id;
+        return $this->user_id;
     }
 
-    public function setCustomerId(int $customer_id): self
+    public function setUserId(int $user_id): self
     {
-        $this->customer_id = $customer_id;
+        $this->user_id = $user_id;
 
         return $this;
     }
@@ -247,12 +247,12 @@ class CustomerAddress
         return $this;
     }
 
-    public function getBirthday(): ?string
+    public function getBirthday(): ?\DateTime
     {
         return $this->birthday;
     }
 
-    public function setBirthday(string $birthday): self
+    public function setBirthday(\DateTime $birthday): self
     {
         $this->birthday = $birthday;
 

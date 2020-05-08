@@ -24,8 +24,8 @@ final class Version20200421165822 extends AbstractMigration
 
         $this->addSql('CREATE TABLE hostel_rooms (id INT AUTO_INCREMENT NOT NULL, hostel_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE hostel ADD room_types VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE hostel ADD CONSTRAINT FK_38FBB1679393F8FE FOREIGN KEY (partner_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (partner_id)');
+        $this->addSql('ALTER TABLE hostel ADD CONSTRAINT FK_38FBB1679393F8FE FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (user_id)');
     }
 
     public function down(Schema $schema) : void

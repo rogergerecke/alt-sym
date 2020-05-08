@@ -23,15 +23,10 @@ class Hostel
 
     /**
      * @ORM\Column(type="integer")
-     */
-    private $hostel_id;
-
-    /**
-     * @ORM\Column(type="integer")
      * @Assert\NotBlank
      * @Assert\Type(type="integer")
      */
-    private $partner_id;
+    private $user_id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -180,26 +175,14 @@ class Hostel
         return $this->id;
     }
 
-    public function getHostelId(): ?int
+    public function getUserId(): ?int
     {
-        return $this->hostel_id;
+        return $this->user_id;
     }
 
-    public function setHostelId(int $hostel_id): self
+    public function setUserId(int $user_id): self
     {
-        $this->hostel_id = $hostel_id;
-
-        return $this;
-    }
-
-    public function getPartnerId(): ?int
-    {
-        return $this->partner_id;
-    }
-
-    public function setPartnerId(int $partner_id): self
-    {
-        $this->partner_id = $partner_id;
+        $this->user_id = $user_id;
 
         return $this;
     }

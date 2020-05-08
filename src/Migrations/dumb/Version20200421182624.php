@@ -35,7 +35,7 @@ final class Version20200421182624 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE hostel DROP FOREIGN KEY FK_38FBB167BF396750');
-        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (partner_id)');
+        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (user_id)');
         $this->addSql('ALTER TABLE user ADD hostel_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D649FC68ACC0 FOREIGN KEY (hostel_id) REFERENCES hostel (id)');
         $this->addSql('CREATE INDEX IDX_8D93D649FC68ACC0 ON user (hostel_id)');

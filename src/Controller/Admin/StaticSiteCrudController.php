@@ -6,6 +6,7 @@ use App\Entity\StaticSite;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -19,16 +20,20 @@ class StaticSiteCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud;
+        return $crud->setEntityPermission('ROLE_ADMIN');
     }
 
     public function configureFields(string $pageName): iterable
     {
-        $heading = TextAreaField::new('heading','Überschrift');
-        $content = TextField::new('content')->addCssClass('ckeditor');
-        $name = TextAreaField::new('name','Route');
-        $meta_title = TextAreaField::new('meta_title','Meta Title');
-        $meta_description = TextAreaField::new('meta_description','Meta Beschreibung');
+        $heading = TextField::new('heading','Überschrift');
+        $panel = FormField::addPanel('Inhalts Seite Bearbeiten');
+
+        /* ckeditor auto include by FOS plugin */
+        $content = TextareaField::new('content');
+
+        $name = TextField::new('name','Route');
+        $meta_title = TextField::new('meta_title','Meta Title');
+        $meta_description = TextField::new('meta_description','Meta Beschreibung');
         $url = UrlField::new('url','SEO Url');
         $id = IntegerField::new('id', 'ID');
         $status = BooleanField::new('status');
@@ -40,7 +45,7 @@ class StaticSiteCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [$heading, $content, $name, $meta_title, $meta_description, $url];
         } elseif (Crud::PAGE_EDIT === $pageName) {
-            return [$heading, $content, $name, $meta_title, $meta_description, $url];
+            return [$panel, $heading, $content, $name, $meta_title, $meta_description, $url];
         }
     }
 
