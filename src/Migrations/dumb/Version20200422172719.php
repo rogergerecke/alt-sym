@@ -23,7 +23,7 @@ final class Version20200422172719 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DROP INDEX IDX_38FBB1679393F8FE ON hostel');
-        $this->addSql('ALTER TABLE hostel CHANGE partner_id partner_id INT NOT NULL');
+        $this->addSql('ALTER TABLE hostel CHANGE user_id partner_id INT NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -31,7 +31,7 @@ final class Version20200422172719 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE hostel CHANGE partner_id partner_id INT DEFAULT NULL');
-        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (partner_id)');
+        $this->addSql('ALTER TABLE hostel CHANGE user_id partner_id INT DEFAULT NULL');
+        $this->addSql('CREATE INDEX IDX_38FBB1679393F8FE ON hostel (user_id)');
     }
 }

@@ -22,7 +22,7 @@ final class Version20200421173805 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE hostel ADD CONSTRAINT FK_38FBB1679393F8FE FOREIGN KEY (partner_id) REFERENCES user (partner_id)');
+        $this->addSql('ALTER TABLE hostel ADD CONSTRAINT FK_38FBB1679393F8FE FOREIGN KEY (user_id) REFERENCES user (partner_id)');
         $this->addSql('ALTER TABLE hostel_rooms ADD hostel_room INT NOT NULL');
         $this->addSql('ALTER TABLE user CHANGE partner_id partner_id INT DEFAULT NULL');
     }

@@ -28,9 +28,10 @@ class UserCrudController extends AbstractCrudController
         $status = BooleanField::new('status','Status');
         $id = IntegerField::new('id', 'ID');
         $roles = TextField::new('roles');
+        $hostel_name = TextField::new('hostel_name');
 
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$id, $email, $partner_id, $name, $status];
+            return [$id, $email, $partner_id, $name, $status,$hostel_name];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [$id, $email, $roles, $password, $partner_id, $name, $status];
         } elseif (Crud::PAGE_NEW === $pageName) {

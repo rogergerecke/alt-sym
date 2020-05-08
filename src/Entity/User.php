@@ -19,6 +19,13 @@ class User implements UserInterface
 {
 
     /**
+     * @var Hostel
+     * @ORM\OneToMany(targetEntity="App\Entity\Hostel", mappedBy="user_id")
+     * @ORM\JoinColumn(name="user_id")
+     */
+    protected $hostel;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")

@@ -49,7 +49,9 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::section('Einstellung','fa fa-tasks');
         yield MenuItem::subMenu('Hostel', 'fa fa-hotel')->setSubItems(
                  [
-                     MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class),
+                     // todo add show only from logged in user
+                     MenuItem::linkToCrud('Meine Hostels', 'fa fa-hotel', Hostel::class)->setAction('detail'),
+                     MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class)->setAction('new'),
                      MenuItem::linkToCrud('Add Room', 'fa fa-hotel', Hostel::class),
                      MenuItem::linkToCrud('Add Images', 'fa fa-hotel', Hostel::class),
                  ]
