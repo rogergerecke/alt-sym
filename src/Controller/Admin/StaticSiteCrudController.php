@@ -21,7 +21,7 @@ class StaticSiteCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setEntityPermission('ROLE_ADMIN');
+        return $crud->setEntityPermission('ROLE_ADMIN')->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
     public function configureFields(string $pageName): iterable
@@ -35,7 +35,7 @@ class StaticSiteCrudController extends AbstractCrudController
         $name = TextField::new('name', 'Route');
         $meta_title = TextField::new('meta_title', 'Meta Title');
         $meta_description = TextField::new('meta_description', 'Meta Beschreibung');
-        $url = UrlField::new('url', 'SEO Url');
+        $url = TextField::new('url', 'SEO Url');
         $id = IntegerField::new('id', 'ID');
         $status = BooleanField::new('status');
 

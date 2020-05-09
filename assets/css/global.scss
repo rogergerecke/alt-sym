@@ -154,6 +154,9 @@ h5, .h5 {
   border-radius: 0;
 }
 
+/* Event Listing */
+@import "events";
+
 /* Weather Widget */
 #weather-widget {
   font-family: "Open Sans", Verdana, Geneva, sans-serif;
@@ -235,6 +238,8 @@ h5, .h5 {
   padding-bottom: 2rem;
   border-top: $border-color solid 1px;
 }
+
+
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";

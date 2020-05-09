@@ -60,30 +60,40 @@
         <div class="col-md-3" id="footer-member">
             <h5 class="text-uppercase">Mitglieder</h5>
             <ul class="list-unstyled">
-                <li>
-                    <a href="{{ path('static_site_entry') }}">Mitglied werden <span class="badge badge-pill badge-success">FREI</span></a>
-                </li>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {# if authenticated create the link for the right admin dashboard #}
                     <li>
                         <a href="{{ path('app_logout') }}" class="text-muted">Logout</a>
                     </li>
-                    <li>
-                        <a href="{{ path('admin') }}" class="text-muted">Admin</a>
-                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a href="{{ path('admin') }}" class="font-weight-bold text-danger">Admin</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('user') }}" class="font-weight-bold text-danger">Admin</a>
+                        </li>
+                    {% endif %}
                 {% else %}
+                    <li>
+                        <a href="{{ path('static_site_entry') }}">Mitglied werden <span
+                                    class="badge badge-pill badge-success">FREI</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ path('static_site_entry') }}" class="text-muted">Unterkunft eintragen <span
+                                    class="badge badge-pill badge-success">FREI</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ path('static_site_entry') }}" class="text-muted">Werbung schalten</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('static_site_entry') }}" class="text-muted">Event eintragen <span
+                                    class="badge badge-pill badge-primary">FREI</span></a>
+                    </li>
                     <li>
                         <a href="{{ path('app_login') }}" class="text-muted">Login</a>
                     </li>
                 {% endif %}
-                <li>
-                    <a href="{{ path('static_site_entry') }}" class="text-muted">Unterkunft eintragen <span class="badge badge-pill badge-success">FREI</span></a>
-                </li>
-                <li>
-                    <a href="{{ path('static_site_entry') }}" class="text-muted">Werbung schalten</a>
-                </li>
-                <li>
-                    <a href="{{ path('static_site_entry') }}" class="text-muted">Event eintragen <span class="badge badge-pill badge-primary">FREI</span></a>
-                </li>
             </ul>
         </div>
     </div>

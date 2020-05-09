@@ -19,6 +19,28 @@ class EventsRepository extends ServiceEntityRepository
         parent::__construct($registry, Events::class);
     }
 
+    public function getAllActiveEvent()
+    {
+        $now = new \DateTime();
+        return $this->createQueryBuilder('e')
+            ->select(
+                'e.id',
+                'e.title',
+                'e.short_description',
+                'e.description',
+                'e.address',
+                'e.latitude',
+                'e.longitude',
+                'e.event_start_date',
+                'e.event_end_date'
+            )
+            ->where('e.status = 1')
+            ->andWhere('e.event_start_date <= :start')
+            ->setParameter('start', $now->format('Y-m-d'))
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Events[] Returns an array of Events objects
     //  */

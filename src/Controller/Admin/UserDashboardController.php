@@ -45,7 +45,7 @@ class UserDashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateFormat('ddMMyyyy')
+            ->setDateFormat('dd.MM.yyyy')
             ->setEntityPermission('ROLE_USER');
     }
 
