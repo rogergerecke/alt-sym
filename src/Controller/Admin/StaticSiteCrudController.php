@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 
 class StaticSiteCrudController extends AbstractCrudController
@@ -25,16 +26,16 @@ class StaticSiteCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $heading = TextField::new('heading','Überschrift');
+        $heading = TextField::new('heading', 'Überschrift');
         $panel = FormField::addPanel('Inhalts Seite Bearbeiten');
 
-        /* ckeditor auto include by FOS plugin */
-        $content = TextareaField::new('content');
+        /* ckeditor include by FOS plugin */
+        $content = TextareaField::new('content')->setFormType(CKEditorType::class);
 
-        $name = TextField::new('name','Route');
-        $meta_title = TextField::new('meta_title','Meta Title');
-        $meta_description = TextField::new('meta_description','Meta Beschreibung');
-        $url = UrlField::new('url','SEO Url');
+        $name = TextField::new('name', 'Route');
+        $meta_title = TextField::new('meta_title', 'Meta Title');
+        $meta_description = TextField::new('meta_description', 'Meta Beschreibung');
+        $url = UrlField::new('url', 'SEO Url');
         $id = IntegerField::new('id', 'ID');
         $status = BooleanField::new('status');
 

@@ -22,7 +22,6 @@ class UserDashboardController extends AbstractDashboardController
 {
 
 
-
     /**
      * @Route("/user", name="user")
      */
@@ -33,28 +32,45 @@ class UserDashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()->setTitle('Ihr Bereich');
+        return Dashboard::new()->setTitle('Member Admin');
     }
 
+
+    /**
+     * Configure the crud global for all
+     * loaded crud from here user-permission ROLE_USER
+     *
+     * @return Crud
+     */
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateFormat('ddMMyyyy');
+            ->setDateFormat('ddMMyyyy')
+            ->setEntityPermission('ROLE_USER');
     }
 
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class);
-        yield MenuItem::section('Einstellung','fa fa-tasks');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user_id = (string)$user->getId();
+
+        yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)->setAction('detail')->setEntityId(
+            $user_id
+        );
+
+        yield MenuItem::section('Einstellung', 'fa fa-tasks');
         yield MenuItem::subMenu('Hostel', 'fa fa-hotel')->setSubItems(
-                 [
-                     // todo add show only from logged in user
-                     MenuItem::linkToCrud('Meine Hostels', 'fa fa-hotel', Hostel::class)->setAction('detail'),
-                     MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class)->setAction('new'),
-                     MenuItem::linkToCrud('Add Room', 'fa fa-hotel', Hostel::class),
-                     MenuItem::linkToCrud('Add Images', 'fa fa-hotel', Hostel::class),
-                 ]
+            [
+                // todo add show only from logged in user
+                MenuItem::linkToCrud('Meine Hostels', 'fa fa-hotel', Hostel::class)->setQueryParameter(
+                    'user_id',
+                    $user_id
+                ),
+                MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class)->setAction('new'),
+                MenuItem::linkToCrud('Add Room', 'fa fa-hotel', Hostel::class),
+                MenuItem::linkToCrud('Add Images', 'fa fa-hotel', Hostel::class),
+            ]
         );
 
         /* Marketing section */
@@ -68,11 +84,11 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Media', 'fa fa-media', Media::class);
 
         /* Information section */
-        yield MenuItem::section('Information','fa fa-info-circle');
-        yield MenuItem::linkToUrl('Werbung','fa fa-question','/');
-        yield MenuItem::linkToUrl('Bild Formate','fa fa-question','/');
-        yield MenuItem::linkToUrl('Preise','fa fa-question','/');
-        yield MenuItem::linktoRoute('Impressum','fa fa-question','static_site_imprint');
+        yield MenuItem::section('Information', 'fa fa-info-circle');
+        yield MenuItem::linkToUrl('Werbung', 'fa fa-question', '/');
+        yield MenuItem::linkToUrl('Bild Formate', 'fa fa-question', '/');
+        yield MenuItem::linkToUrl('Preise', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
     }
 
     public function configureUserMenu(UserInterface $user): UserMenu

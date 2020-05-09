@@ -23,21 +23,40 @@ class UserCrudController extends AbstractCrudController
     {
         $email = TextField::new('email');
         $password = TextField::new('password');
-        $partner_id = IntegerField::new('partner_id');
-        $name = TextField::new('name');
-        $status = BooleanField::new('status','Status');
+        $partner_id = IntegerField::new('partner_id','Kundennummer');
+        $name = TextField::new('name','Ganzer Name');
+        $status = BooleanField::new('status','Account Online');
         $id = IntegerField::new('id', 'ID');
-        $roles = TextField::new('roles');
+
         $hostel_name = TextField::new('hostel_name');
 
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$id, $email, $partner_id, $name, $status,$hostel_name];
+            return [
+                $id,
+                $email,
+                $partner_id,
+                $name,
+                $hostel_name
+            ];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
-            return [$id, $email, $roles, $password, $partner_id, $name, $status];
+            return [
+
+                $name,
+                $partner_id,
+                $email,
+                $password,
+                $status
+            ];
         } elseif (Crud::PAGE_NEW === $pageName) {
-            return [$email, $password, $partner_id, $name, $status];
+            return [
+
+            ];
         } elseif (Crud::PAGE_EDIT === $pageName) {
-            return [$email, $password, $partner_id, $name, $status];
+            return [
+                $email,
+                $password,
+                $name
+            ];
         }
     }
 

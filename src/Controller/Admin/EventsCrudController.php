@@ -6,8 +6,9 @@ use App\Entity\Events;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class EventsCrudController extends AbstractCrudController
 {
@@ -15,7 +16,7 @@ class EventsCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud;
+        return $crud->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
     public function configureFields(string $pageName): iterable
@@ -24,7 +25,7 @@ class EventsCrudController extends AbstractCrudController
         return [
             IdField::new('id'),
             TextField::new('title'),
-            TextEditorField::new('description'),
+            TextareaField::new('description','Beschreibung')->setFormType(CKEditorType::class),
         ];
     }
 
