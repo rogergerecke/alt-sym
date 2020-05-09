@@ -1,20 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventController!{% endblock %}
+{% block title %}Altmühlsee Events!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/gerec/PhpstormProjects/alt-sym/src/Controller/EventController.php'|file_link(0) }}">src/Controller/EventController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/gerec/PhpstormProjects/alt-sym/templates/event/index.html.twig'|file_link(0) }}">templates/event/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="container">
+        <h1 class="text-center text-uppercase">Veranstaltung</h1>
+        {% for event in events %}
+            <div class="row mb-4">
+                <div class="col-md-1 mr-2">
+                    <div class="event-date-cycle border-color-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">
+                        {{ event.event_start_date|date('d.m H:i') }} UHR
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-color-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }} shadow-sm">
+                        <div class="card-header">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Placeholder_no_text.svg" alt="" class="rounded-circle float-left" width="45">
+                           <h5 class="mb-1"> {{ event.title }}</h5>
+                            <p><i class="fa fa-map-marker-alt"></i> {{ event.address }} den {{ event.event_start_date|date('d.m.Y') }}</p>
+                        </div>
+                        <div class="card-body">
+                           <p> {{ event.short_description }}</p>
+                            <a href="" class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">Mehr Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

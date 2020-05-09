@@ -4,10 +4,12 @@
 {% block description %}{{ meta_description }}{% endblock %}
 
 {% block body %}
-   <div class="row">
-       <div class="col-md-12">
-           <h1>{{ heading }}</h1>
-           {{ content|raw }}
-       </div>
-   </div>
+  <div class="container">
+      <div class="row">
+          <div class="col-md-12">
+              <h1>{{ heading }}</h1>
+              {{ content|raw }}
+          </div>
+      </div>
+  </div>
 {% endblock %}

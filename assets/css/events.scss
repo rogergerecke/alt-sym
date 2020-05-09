@@ -1,0 +1,58 @@
+$border-yellow: #ffc20b;
+$border-green: #40cbb4;
+$border-red: #e6275a;
+$border-purple: #4c35a9;
+
+.event-date-cycle {
+  width: 100px;
+  top: 0px;
+  height: 100px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 18px;
+  color: #212639;
+  font-weight: 500;
+  padding: 30px 15px 0;
+  border-radius: 50%;
+  border: 2px dashed #dddddd;
+}
+
+.border-color-yellow {
+  border-color: $border-yellow !important;
+}
+
+.border-color-green {
+  border-color: $border-green !important;
+}
+
+.border-color-red {
+  border-color: $border-red !important;
+}
+
+.border-color-purple {
+  border-color: $border-purple !important;
+}
+
+.btn-yellow{
+  color: #fff !important;
+  background-color: $border-yellow !important;
+  border-color: $border-yellow !important;
+}
+
+.btn-green{
+  color: #fff;
+  background-color: $border-green !important;
+  border-color: $border-green !important;
+}
+
+.btn-red{
+  color: #fff !important;
+  background-color: $border-red !important;
+  border-color: $border-red !important;
+}
+
+.btn-purple{
+  color: #fff !important;
+  background-color: $border-purple !important;
+  border-color: $border-purple !important;
+}
