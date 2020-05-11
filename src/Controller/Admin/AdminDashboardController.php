@@ -41,7 +41,8 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateFormat('dd.MM.yyyy');
+            ->setDateFormat('dd.MM.yyyy')
+            ->setEntityPermission('ROLE_ADMIN');
     }
 
     /* Global Admin Menu */

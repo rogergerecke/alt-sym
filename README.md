@@ -83,7 +83,7 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 
 - Integration dynamische URLs (80%)
 
-**5b.** CKEditor 4 Inhaltsbearbeitung im Admin (55%)
+~~**5b.** CKEditor 4 Inhaltsbearbeitung im Admin~~
 
 ## (17.05.20)
 **6.** Checkout
@@ -99,7 +99,7 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 - Zimmer anlegen mit eigenschaften
 
 ## (31.05.20)
-**8.** Integration https://ui.toast.com/tui-image-editor/
+~~**8.** Integration https://ui.toast.com/tui-image-editor/ integriert in elFinder~~
 - Media Manager 
 - Bearbeitung von Bilder in Format und Farbe
 

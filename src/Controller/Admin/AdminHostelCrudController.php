@@ -20,16 +20,11 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class HostelCrudController extends AbstractCrudController
+class AdminHostelCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Hostel::class;
-    }
-
-    public function configureCrud(Crud $crud): Crud
-    {
-        return parent::configureCrud($crud);
     }
 
 

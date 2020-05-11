@@ -12,6 +12,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use FM\ElfinderBundle\Connector\ElFinderConnector;
+use FM\ElfinderBundle\Controller\ElFinderController;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class EventsCrudController extends AbstractCrudController
@@ -26,11 +28,13 @@ class EventsCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
 
-
         $id = IdField::new('id');
         $title = TextField::new('title','Titel');
         $short_description = TextareaField::new('short_description','Kurzbeschreibung');
-        $description = TextareaField::new('description', 'Beschreibung')->setFormType(CKEditorType::class);
+
+        $description = TextareaField::new('description', 'Beschreibung')
+            ->setFormType(CKEditorType::class);
+
         $address = TextField::new('address','Adresse');
         $latitude = NumberField::new('latitude');
         $longitude = NumberField::new('longitude');
