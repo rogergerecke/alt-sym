@@ -170,6 +170,13 @@ class Hostel
      */
     private $mobile;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RoomAmenitiesDescription", mappedBy="id")
+     * @var
+     */
+    private $room_amenities_description;
+
     public function getId(): ?int
     {
         return $this->id;

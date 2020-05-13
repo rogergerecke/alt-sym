@@ -15,24 +15,13 @@ class ElfinderController extends AbstractController
 {
 
     /**
-     * @var UserRepository
-     */
-    private $repository;
-
-    public function __construct(UserRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-
-    /**
      * @Route("/elfinder")
      * @param Request $request
+     * @param UserInterface $user
      * @return Response
      */
-    public function showDefaultAction(Request $request)
+    public function show(UserInterface $user)
     {
-
         // set the $instance for the setting from packages/fm_elfinder.yaml
         $role = $this->get('security.token_storage')->getToken()->getUser()->getRoles();
 
@@ -47,7 +36,7 @@ class ElfinderController extends AbstractController
                 break;
             case 'ROLE_USER':
                 $instance = 'user';
-                $homeFolder = $this->buildHomeFolderName();
+                $homeFolder = 'user_at_'.$user->getId();
                 break;
             default:
                 $instance = 'default';
@@ -63,18 +52,5 @@ class ElfinderController extends AbstractController
             )
         );
 
-    }
-
-    private function buildHomeFolderName()
-    {
-
-        $username = $this->get('security.token_storage')->getToken()->getUser()->getUsername();
-        $user_id = $this->repository->findOneBy(['email' => $username])->getId();
-
-        // transform user.anton@gmail.com to user_anton
-        $username = explode('@', $username);
-        $username = str_replace('.', '_', $username[0]);
-
-        return $username.'_at_'.$user_id;
     }
 }

@@ -9,6 +9,7 @@ use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -17,17 +18,38 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserDashboardController extends AbstractDashboardController
 {
 
 
+
+    /**
+     * @var Security
+     */
+    private $security;
+
+    /**
+     * @var UserInterface|null
+     */
+    private $user_id;
+
+    public function __construct(Security $security)
+    {
+
+        $this->security = $security;
+
+        $this->user_id = $this->security->getUser()->getId();
+    }
+
     /**
      * @Route("/user", name="user")
      */
     public function index(): Response
     {
+
         return parent::index();
     }
 
@@ -52,15 +74,15 @@ class UserDashboardController extends AbstractDashboardController
     }
 
 
+
+
     public function configureMenuItems(): iterable
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $user_id = (string)$user->getId();
 
 
         yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
             ->setAction('detail')
-            ->setEntityId($user_id);
+            ->setEntityId($this->user_id);
 
         yield MenuItem::section('Einstellung', 'fa fa-tasks');
         yield MenuItem::subMenu('Hostel', 'fa fa-hotel')
@@ -70,7 +92,7 @@ class UserDashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Meine Hostels', 'fa fa-hotel', Hostel::class)
                     ->setQueryParameter(
                     'user_id',
-                    $user_id
+                        $this->user_id
                 ),
                 MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class)
                     ->setAction('new'),
@@ -117,7 +139,9 @@ class UserDashboardController extends AbstractDashboardController
             // you can use any type of menu item, except submenus
             ->addMenuItems(
                 [
-                    MenuItem::linkToRoute('Mein Profil', 'fa fa-id-card', 'admin_user_profil'),
+                    MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
+                        ->setAction('detail')
+                        ->setEntityId($this->user_id),
                     /*MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),*/
                     MenuItem::section('------'),
                     MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
