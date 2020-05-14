@@ -19,6 +19,30 @@ class RoomAmenitiesRepository extends ServiceEntityRepository
         parent::__construct($registry, RoomAmenities::class);
     }
 
+
+    /**
+     * Get the full Room Amenities option with description selected by
+     * $lang code
+     *
+     * @param string $_lang
+     * @return int|mixed|string
+     */
+    public function getRoomAmenitiesWithDescription($_lang = 'de')
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT r.id,r.name, d 
+             FROM App\Entity\RoomAmenities r
+          LEFT OUTER JOIN App\Entity\RoomAmenitiesDescription d WITH 
+              r.id = d.ra_id
+             AND r.status = 1
+             AND d.lang = :lang'
+        )->setParameter('lang',$_lang);
+
+        return $query->getResult();
+    }
+
     // /**
     //  * @return RoomAmenities[] Returns an array of RoomAmenities objects
     //  */
