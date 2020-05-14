@@ -46,18 +46,22 @@ Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs
 
 # Der Admin- und Member Bereich
 
-Der Admin und die Benutzer haben einen Login: **/login** die Inhalte werden durch unterschiedliche Benutzer Rechte ausgespielt
+Der Admin und die Benutzer haben einen Login: **/login** die Inhalte werden durch unterschiedliche Benutzer Rechte ausgespielt.
 
 # Kernkomponenten
 Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank eine leistungsstarke 
-Komponente https://www.doctrine-project.org/ . Gern können Sie hier die Seiten der Kernkomponenten besuchen 
-und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen sollte ich diese nicht integriert haben.
+Komponente https://www.doctrine-project.org/ . 
+
+Gern können Sie hier die Seiten der Kernkomponenten besuchen 
+und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen sollte ich diese nicht schon integriert haben.
 
 - [Doctrine](https://www.doctrine-project.org/)
 - [Symfony](https://symfony.com/doc/current/components/index.html)
 - [CKEditor](https://ckeditor.com/ckeditor-5/)
 - [Image-editor](https://ui.toast.com/tui-image-editor/)
 - [OpenWeather](https://openweathermap.org/api)
+- [Magic Tool Box Slider](https://www.magictoolbox.com/magicslideshow/)
+- [elFinder 2](https://studio-42.github.io/elFinder/#elf_l1_Lw)
 
 # [Fahrplan Projekt Status](#timelimit)
 
@@ -79,7 +83,9 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 
 ~~**4.** Statische Seiten Impressum Datenschutz ect.~~
 
-**5a.** Hostel Detailt Seite mit Magictoolbox Slider
+~~**5a.** Hostel Detailt Seite mit~~ [Magic Tool Box Slider][https://www.magictoolbox.com/magicslideshow/]
+
+**5c.** Hostel SEO Urls Generator für Detailtseiten
 
 - Integration dynamische URLs (80%)
 
@@ -93,10 +99,9 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 - Anlegen und Bearbeiten von Hostel
 - Anlegen von Veranstalltung (kostenpflichtig)
 - Anlegen von Banner-Werbung auf der Startseite (kostenpflichtig)
-- Eintragen von Events
-
-
+- Eintragen von Events (kostenlos)
 - Zimmer anlegen mit eigenschaften
+
 
 ## (31.05.20)
 ~~**8.** Integration https://ui.toast.com/tui-image-editor/ integriert in elFinder~~
@@ -109,9 +114,25 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 
 ## Deadline 01.10.20
 
+# Benutzer Bereich
+Der Benutzer kann mehre Hostels anlegen. Jedes Hostel kann mehre Zimmer haben.  
+ 
+Ein Hostel hat eine Detailt Seite mit Bilder(n) und Beschreibung ein **Premium Hostel** kann einen Erweiterten Editor nutzen.  
+Ein **Premium Hostel** kann mehr Bilder hochladen.
 
+Ein Premium-Hostel kommt in Toplisting auf der Startseite und in der Suche.
 
-# Fehler melden !
+Ein Hostel Betreiber kann selber Bilder hochladen und Sie in Belichtung und Ausschnitt online ändern.
+
+# Hostel Detail Listing
+- Mit Slider Bilder Zoom und Austattungs Pictogrammen
+- Angabben zu den verfügbaren Zimmern
+- Geodata zu google maps
+
+# Hostel Suche
+Suche nach Eigenschaften und Distance zum See
+
+# Hier Fehler melden !
 
 **Hier** [issues](https://github.com/rogergerecke/alt-sym/issues) **melden und eintragen.**
 
@@ -142,6 +163,8 @@ Exempl.
 
 `{"free-wlan""indoor-bath""free-tv"}`
 
+
+ TODO Update to Bootsrap 4.5
 ```
 ###### TO PRODUCTION Gedanken stütze für mich.
 Notizen für mich wenn es in die Public Production geht.
