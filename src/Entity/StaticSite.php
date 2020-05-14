@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StaticSiteRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class StaticSite
 {
@@ -138,5 +139,12 @@ class StaticSite
         $this->url = $url;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function addDefaultStatus(){
+        $this->status = 1;
     }
 }

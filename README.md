@@ -83,7 +83,7 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 
 - Integration dynamische URLs (80%)
 
-**5b.** CKEditor 4 Inhaltsbearbeitung im Admin (55%)
+~~**5b.** CKEditor 4 Inhaltsbearbeitung im Admin~~
 
 ## (17.05.20)
 **6.** Checkout
@@ -99,7 +99,7 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 - Zimmer anlegen mit eigenschaften
 
 ## (31.05.20)
-**8.** Integration https://ui.toast.com/tui-image-editor/
+~~**8.** Integration https://ui.toast.com/tui-image-editor/ integriert in elFinder~~
 - Media Manager 
 - Bearbeitung von Bilder in Format und Farbe
 
@@ -130,6 +130,17 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 ### Bugs
 - Symfony with Curl 7.64 don't work correct Curl have a bug.
 
+### Developer Info
+
+###### Hostel anlegen methode (TABLE= HOSTEL)
+
+Beim Anlegen eines Hostels gibt es im,  Admin ein Dropdown mit vorgegeben Werten für die grundsätzliche Ausstatung des Hostels die generel gültig sind und sich nicht nur aufs Zimmer beziehen.  Diese werte kommen aus der TABLE = room_amenities die Übersetzung zu dieser Table kommen aus TABLE = room_amenities_description.
+
+Beim Anlegen eines neuen Hostels wird Datensatz also mit HOSTEL.amenities = (string) array() angelegt.
+
+Exempl.
+
+`{"free-wlan""indoor-bath""free-tv"}`
 
 ```
 ###### TO PRODUCTION Gedanken stütze für mich.

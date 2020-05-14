@@ -5,7 +5,10 @@ namespace App\Controller;
 use App\Repository\StaticSiteRepository;
 use Doctrine\Common\Annotations\Annotation\Required;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class StaticSiteController
@@ -18,14 +21,20 @@ class StaticSiteController extends AbstractController
      * @var StaticSiteRepository
      */
     private $repository;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * StaticSiteController constructor.
      * @param StaticSiteRepository $repository
+     * @param TranslatorInterface $translator
      */
-    public function __construct(StaticSiteRepository $repository)
+    public function __construct(StaticSiteRepository $repository,TranslatorInterface $translator)
     {
         $this->repository = $repository;
+        $this->translator = $translator;
     }
 
     /**
@@ -35,7 +44,11 @@ class StaticSiteController extends AbstractController
      */
     public function imprint()
     {
-        $site = $this->repository->findOneBy(['name' => 'Imprint']);
+        $site = $this->repository->findOneBy(['name' => 'Imprint', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -55,7 +68,11 @@ class StaticSiteController extends AbstractController
      */
     public function privacy()
     {
-        $site = $this->repository->findOneBy(['name' => 'Privacy']);
+        $site = $this->repository->findOneBy(['name' => 'Privacy', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -76,7 +93,11 @@ class StaticSiteController extends AbstractController
      */
     public function contact()
     {
-        $site = $this->repository->findOneBy(['name' => 'Contact']);
+        $site = $this->repository->findOneBy(['name' => 'Contact', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -96,7 +117,11 @@ class StaticSiteController extends AbstractController
      */
     public function region()
     {
-        $site = $this->repository->findOneBy(['name' => 'Region']);
+        $site = $this->repository->findOneBy(['name' => 'Region', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -116,7 +141,11 @@ class StaticSiteController extends AbstractController
      */
     public function leisure()
     {
-        $site = $this->repository->findOneBy(['name' => 'Leisure']);
+        $site = $this->repository->findOneBy(['name' => 'Leisure', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -136,7 +165,11 @@ class StaticSiteController extends AbstractController
      */
     public function entry()
     {
-        $site = $this->repository->findOneBy(['name' => 'Entry']);
+        $site = $this->repository->findOneBy(['name' => 'Entry', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
 
         return $this->render(
             'static_site/index.html.twig',
@@ -149,5 +182,28 @@ class StaticSiteController extends AbstractController
         );
     }
 
-    // todo add handler for dynamic url and pages
+    /**
+     * The handler of dynamic content sites
+     * @param $site
+     * @return Response
+     * @Route("/content/{site}", requirements={"site"="\w+"})
+     */
+    public function content(string $site)
+    {
+        $site = $this->repository->findOneBy(['url' => $site, 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render(
+            'static_site/index.html.twig',
+            [
+                'heading'          => false,
+                'meta_title'       => $site->getMetaTitle(),
+                'meta_description' => $site->getMetaDescription(),
+                'content'          => $site->getContent(),
+            ]
+        );
+    }
 }

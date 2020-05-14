@@ -21,7 +21,14 @@ class StaticSiteCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setEntityPermission('ROLE_ADMIN')->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+        return $crud
+            ->setEntityPermission('ROLE_ADMIN')
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+            ->setPageTitle('index', 'Die Inhaltsseiten')
+            ->setHelp(
+                'index',
+                'Die Inhaltsseiten dienen zum anlegen von statischen Inhalten wie z.b. das Impressum oder die AGB'
+            );
     }
 
     public function configureFields(string $pageName): iterable
@@ -32,7 +39,7 @@ class StaticSiteCrudController extends AbstractCrudController
         /* ckeditor include by FOS plugin */
         $content = TextareaField::new('content')->setFormType(CKEditorType::class);
 
-        $name = TextField::new('name', 'Route');
+        $name = TextField::new('name', '@Route annotation');
         $meta_title = TextField::new('meta_title', 'Meta Title');
         $meta_description = TextField::new('meta_description', 'Meta Beschreibung');
         $url = TextField::new('url', 'SEO Url');

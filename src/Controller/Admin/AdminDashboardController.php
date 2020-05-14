@@ -19,10 +19,29 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminDashboardController extends AbstractDashboardController
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
+    /**
+     * @var UserInterface|null
+     */
+    private $user_id;
+
+    public function __construct(Security $security)
+    {
+
+        $this->security = $security;
+
+        $this->user_id = $this->security->getUser()->getId();
+    }
+
     /**
      * @Route("/admin", name="admin")
      */
@@ -41,22 +60,26 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateFormat('dd.MM.yyyy');
+            ->setDateFormat('dd.MM.yyyy')
+            ->setEntityPermission('ROLE_ADMIN');
     }
 
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
-        yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class);
-        yield MenuItem::linkToCrud('Event','fa fa-glass-cheers',Events::class);
+        yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
+            ->setController(AdminUserCrudController::class);
+        yield MenuItem::linkToCrud('Event', 'fa fa-glass-cheers', Events::class);
 
 
         /* Hostel section */
-        yield MenuItem::section('Hotel Gruppe', 'fa fa-house-user');
-        yield MenuItem::subMenu('Hotels','fa fa-hotel')->setSubItems(
+        yield MenuItem::section('Hostel Menu', 'fa fa-house-user');
+        yield MenuItem::subMenu('Hostels', 'fa fa-hotel')->setSubItems(
             [
-                MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class),
+                MenuItem::linkToCrud('Hostel Manager', 'fa fa-hotel', Hostel::class)->setController(
+                    AdminHostelCrudController::class
+                ),
                 MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', AmenitiesTypes::class),
             ]
         );
@@ -82,6 +105,7 @@ class AdminDashboardController extends AbstractDashboardController
 
     public function configureUserMenu(UserInterface $user): UserMenu
     {
+        // menu build print_r($user);
         return UserMenu::new()
             // use the given $user object to get the user name
             ->setName($user->getName())
@@ -89,20 +113,24 @@ class AdminDashboardController extends AbstractDashboardController
             ->displayUserName(true)
 
             // you can return an URL with the avatar image
-           /* ->setAvatarUrl('https://...')*/
-           /* ->setAvatarUrl($user->getProfileImageUrl())*/
+            /* ->setAvatarUrl('https://...')*/
+            /* ->setAvatarUrl($user->getProfileImageUrl())*/
             // use this method if you don't want to display the user image
             ->displayUserAvatar(true)
             // you can also pass an email address to use gravatar's service
             ->setGravatarEmail($user->getEmail())
 
             // you can use any type of menu item, except submenus
-            ->addMenuItems([
-                MenuItem::linkToRoute('Mein Profil', 'fa fa-id-card', 'admin_user_profil'),
-                /*MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),*/
-                MenuItem::section('------'),
-                MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
-            ]);
-    }
+            ->addMenuItems(
+                [
+                    MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
+                        ->setAction('detail')
+                        ->setEntityId($this->user_id),
+                    /*MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),*/
+                    MenuItem::section('------'),
+                    MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
+                ]
+            );
 
+    }
 }

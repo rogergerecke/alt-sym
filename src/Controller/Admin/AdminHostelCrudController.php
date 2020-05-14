@@ -3,25 +3,53 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Hostel;
+use App\Entity\RoomAmenities;
+use App\Entity\User;
+use App\Repository\RoomAmenitiesRepository;
+use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\ArrayType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SelectConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormInterface;
 
-class HostelCrudController extends AbstractCrudController
+class AdminHostelCrudController extends AbstractCrudController
 {
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var RoomAmenities
+     */
+    private $roomAmenities;
+
+    public function __construct(UserRepository $userRepository,RoomAmenitiesRepository $roomAmenities)
+    {
+        $this->userRepository = $userRepository;
+        $this->roomAmenities = $roomAmenities;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Hostel::class;
@@ -29,7 +57,10 @@ class HostelCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return parent::configureCrud($crud);
+        return $crud
+            ->setPageTitle('new','Hostel Manager')
+            ->setHelp('new','Hier ein Hostel für ein Benutzer anlegen.')
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
 
@@ -60,23 +91,21 @@ class HostelCrudController extends AbstractCrudController
         $room_types = TextField::new('room_types');// todo dropdown array[]
 
         /* amenities choices array */
-        $amenities = ArrayField::new('amenities');
-         /*   ->setFormType(CollectionType::class)
+        $amenities = CollectionField::new('amenities')
+            ->setEntryType(ChoiceType::class)
             ->setFormTypeOptions(
-                ['amenities', CollectionType::class, [
-                    'entry_type'   => ChoiceType::class,
-                    'entry_options'  => [
-                        'choices'  => [
-                            'Nashville' => 'nashville',
-                            'Paris'     => 'paris',
-                            'Berlin'    => 'berlin',
-                            'London'    => 'london',
-                        ],
+                ['entry_options'  => [
+                    'choices'  => [
+                        'Nashville' => 'nashville',
+                        'Paris'     => 'paris',
+                        'Berlin'    => 'berlin',
+                        'London'    => 'london',
                     ],
-                ]]
+                ],
+                    ]
             );//todo json*/
 
-        $description = TextEditorField::new('description', 'Beschreibung');
+        $description = TextareaField::new('description', 'Beschreibung')->setFormType(CKEditorType::class);
 
         // api connection parameter for hostel availability import
         $api_key = TextField::new('api_key');// todo only display autogenarate UUid
@@ -127,6 +156,7 @@ class HostelCrudController extends AbstractCrudController
             ];
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [
+                $user_id,
                 $hostel_name,
                 $address,
                 $address_sub,
@@ -179,30 +209,15 @@ class HostelCrudController extends AbstractCrudController
     }
 
 
-    /**
-     * Create a new hostel with
-     * the id from the logged in user
-     * a user cant have many hostel's
-     *
-     * @param string $entityFqcn
-     * @return Hostel|mixed
-     */
-    public function createEntity(string $entityFqcn)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $hostel = new Hostel();
-        $hostel->setUserId((int)$user->getId());
-
-        return $hostel;
-    }
-
-
     public function configureActions(Actions $actions): Actions
     {
 
         return parent::configureActions($actions); // TODO: Change the autogenerated stub
     }
 
+    protected function buildRoomAmenities(){
+        // todo joining over lang description
+        $roomAmenities = $this->roomAmenities->findBy(['status'=>true]);
+    }
 
 }
