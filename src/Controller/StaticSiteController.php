@@ -44,7 +44,7 @@ class StaticSiteController extends AbstractController
      */
     public function imprint()
     {
-        $site = $this->repository->findOneBy(['name' => 'Imprint', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Imprint', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -68,7 +68,7 @@ class StaticSiteController extends AbstractController
      */
     public function privacy()
     {
-        $site = $this->repository->findOneBy(['name' => 'Privacy', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Privacy', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -93,7 +93,7 @@ class StaticSiteController extends AbstractController
      */
     public function contact()
     {
-        $site = $this->repository->findOneBy(['name' => 'Contact', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Contact', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -117,7 +117,7 @@ class StaticSiteController extends AbstractController
      */
     public function region()
     {
-        $site = $this->repository->findOneBy(['name' => 'Region', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Region', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -141,7 +141,7 @@ class StaticSiteController extends AbstractController
      */
     public function leisure()
     {
-        $site = $this->repository->findOneBy(['name' => 'Leisure', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Leisure', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -165,7 +165,7 @@ class StaticSiteController extends AbstractController
      */
     public function entry()
     {
-        $site = $this->repository->findOneBy(['name' => 'Entry', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Entry', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();
@@ -189,7 +189,7 @@ class StaticSiteController extends AbstractController
      */
     public function cookies()
     {
-        $site = $this->repository->findOneBy(['name' => 'Cookies', 'status' => true]);
+        $site = $this->repository->findOneBy(['route' => 'Cookies', 'status' => true]);
 
         if (!$site) {
             throw $this->createNotFoundException();

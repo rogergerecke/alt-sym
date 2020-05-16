@@ -18,9 +18,9 @@ class StaticSite
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $route;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -57,14 +57,14 @@ class StaticSite
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getRoute(): ?string
     {
-        return $this->name;
+        return $this->route;
     }
 
-    public function setName(string $name): self
+    public function setRoute(string $route): self
     {
-        $this->name = $name;
+        $this->route = $route;
 
         return $this;
     }
