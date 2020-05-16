@@ -183,6 +183,30 @@ class StaticSiteController extends AbstractController
     }
 
     /**
+     * The cookies disclaimer
+     *
+     * @Route("/cookies", name="static_site_cookies")
+     */
+    public function cookies()
+    {
+        $site = $this->repository->findOneBy(['name' => 'Cookies', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render(
+            'static_site/index.html.twig',
+            [
+                'heading'          => false,
+                'meta_title'       => $site->getMetaTitle(),
+                'meta_description' => $site->getMetaDescription(),
+                'content'          => $site->getContent(),
+            ]
+        );
+    }
+
+    /**
      * The handler of dynamic content sites
      * @param $site
      * @return Response

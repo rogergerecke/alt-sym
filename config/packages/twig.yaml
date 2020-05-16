@@ -3,3 +3,5 @@ twig:
     globals:
         # make the OpenWeatherService vars global public
         openweather: '@App\Service\OpenWeatherService'
+
+    form_themes: ['bootstrap_4_layout.html.twig']

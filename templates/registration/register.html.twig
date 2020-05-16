@@ -3,12 +3,29 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Mitglied werden</h1>
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-   <p> Indem du auf „Mitglied werden“ klickst, stimmst du unseren <a href="{{ path('static_site_privacy') }}">Datenschutz</a> zu.</p>
-        <input class="btn btn-primary" type="submit" value="Mitglied werden">
-    {{ form_end(registrationForm) }}
+    <div class="container pt-5 pb-5">
+        <div class="row">
+           <div class="col-md-6">
+               <div class="card">
+                   <div class="card-header bg-white">
+                       <h1>Neu beim Portal? <small>Jetzt Mitglied werden</small></h1>
+                   </div>
+                   <div class="card-body">
+
+                       {{ form_start(registrationForm) }}
+                       {{ form_row(registrationForm.name) }}
+                       {{ form_row(registrationForm.email) }}
+                       {{ form_row(registrationForm.plainPassword) }}
+                       {{ form_row(registrationForm.agreeTerms) }}
+                       <p> Indem du auf „Jetzt Mitglied werden“ klickst, stimmst du unseren <a
+                                   href="{{ path('static_site_privacy') }}">Allgemeinen Geschäftsbedingung</a> und den <a
+                                   href="{{ path('static_site_privacy') }}">Datenschutzrichtlinien</a> so wie der <a
+                                   href="{{ path('static_site_privacy') }}">Nutzung von Cookies</a> zu.</p>
+                       <input class="btn btn-primary" type="submit" value="Jetzt Mitglied werden">
+                       {{ form_end(registrationForm) }}
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
 {% endblock %}

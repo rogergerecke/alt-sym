@@ -54,6 +54,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="integer", unique=true)
      * @Assert\Unique
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $partner_id;
 
@@ -87,6 +88,8 @@ class User implements UserInterface
 
     /**
      * A visual identifier that represents this user.
+     *
+     * Email Address is login user name
      *
      * @see UserInterface
      */
