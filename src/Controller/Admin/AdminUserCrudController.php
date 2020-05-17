@@ -37,6 +37,7 @@ class AdminUserCrudController extends AbstractCrudController
                     $partner_id,
                     $name,
                     $hostel_name,
+                    $status
                 ];
                 break;
             case Crud::PAGE_NEW:

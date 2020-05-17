@@ -8,6 +8,7 @@ use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\MediaGallery;
 use App\Entity\Regions;
+use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
 use App\Entity\StaticSite;
 use App\Entity\User;
@@ -67,6 +68,8 @@ class AdminDashboardController extends AbstractDashboardController
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linktoRoute('Zur Website','fa fa-home','index');
+        yield MenuItem::section('Inhalt', 'fa fa-anchor');
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
             ->setController(AdminUserCrudController::class);
@@ -79,6 +82,12 @@ class AdminDashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class)->setController(
                 AdminHostelCrudController::class
             ),
+            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', Hostel::class)->setController(
+                AdminHostelCrudController::class
+            ),// todo add func
+            yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
+                AdminHostelCrudController::class
+            ),// todo add func
         ];
 
 
@@ -91,14 +100,14 @@ class AdminDashboardController extends AbstractDashboardController
 
         /* System Config section */
         yield MenuItem::section('Grundeinstellung', 'fa fa-fan');
-        yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
+        yield MenuItem::linkToCrud('PLZ Regionen', 'fa fa-globe', Regions::class);
+        yield MenuItem::linkToCrud('Hoteltypen', 'fa fa-caravan', AmenitiesTypes::class);
+        yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
         yield MenuItem::subMenu('Sprachen', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
         );
-        yield MenuItem::linkToCrud('Hoteltypen', 'fa fa-caravan', AmenitiesTypes::class);
-
     }
 
     public function configureUserMenu(UserInterface $user): UserMenu
