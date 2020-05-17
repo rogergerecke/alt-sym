@@ -52,6 +52,11 @@ class StaticSite
      */
     private $url;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeletable;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -141,10 +146,26 @@ class StaticSite
         return $this;
     }
 
+
+    public function getIsDeletable(): ?bool
+    {
+        return $this->isDeletable;
+    }
+
+    public function setIsDeletable(bool $isDeletable): self
+    {
+        $this->isDeletable = $isDeletable;
+
+        return $this;
+    }
+
     /**
      * @ORM\PrePersist
      */
     public function addDefaultStatus(){
         $this->status = 1;
+        $this->isDeletable = 1;
     }
+
+
 }

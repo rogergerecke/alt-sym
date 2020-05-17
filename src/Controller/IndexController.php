@@ -21,10 +21,10 @@ class IndexController extends AbstractController
     public function index(StaticSiteRepository $repository, HostelRepository $hostelRepository)
     {
         // load content from database for the start page seo text
-        $content = $repository->findOneBy(['name' => 'Index']);
+        $content = $repository->findOneBy(['route' => 'Index']);
 
         // load the self marketing for entry
-        $self_marketing = $repository->findOneBy(['name' => 'Entry']);
+        $self_marketing = $repository->findOneBy(['route' => 'Entry']);
 
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
