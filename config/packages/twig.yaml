@@ -5,3 +5,6 @@ twig:
         openweather: '@App\Service\OpenWeatherService'
 
     form_themes: ['bootstrap_4_layout.html.twig']
+
+    paths:
+        '%kernel.project_dir%/vendor/helios-ag/fm-elfinder-bundle/src/Resources/views': FMElfinderBundle

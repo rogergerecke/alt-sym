@@ -3,7 +3,7 @@
 {% block title %}Reset your password{% endblock %}
 
 {% block body %}
-   <div class="container">
+   <div class="container mt-5" style="min-height: 40rem">
        {% for flashError in app.flashes('reset_password_error') %}
            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
        {% endfor %}
@@ -11,7 +11,7 @@
          <div class="col-md-6">
              <div class="card">
                  <div class="card-header">
-                     <h1>Reset your password</h1>
+                     <h1>Zurücksetzen Ihres Passworts</h1>
                  </div>
                  <div class="card-body">
 
@@ -20,11 +20,11 @@
                      {{ form_row(requestForm.email) }}
                      <div>
                          <small>
-                             Geben Sie Ihre E-Mail Adresse ein und wir senden Ihnen einen Link zum Password zurücksetzen.
+                             Geben Sie Ihre E-Mail Adresse ein und wir senden Ihnen einen Link zum Passwort zurücksetzen.
                          </small>
                      </div>
 
-                     <button class="btn btn-primary">Sende Password reset Mail</button>
+                     <button class="btn btn-primary">Sende Passwort reset Mail</button>
                      {{ form_end(requestForm) }}
                  </div>
              </div>

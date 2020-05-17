@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}Die Passwort reset Email wurde gesendet{% endblock %}
 
 {% block body %}
-   <div class="container">
+   <div class="container mt-5" style="min-height: 40rem">
        <div class="row">
            <div class="col-md-12 border border-success">
                <p class="mt-2">
-                   Wir haben Ihnen eine E-Mail geschickt mit einem Link um Ihr Password zurückzusetzen.  Dieser Link ist {{ tokenLifetime|date('g') }} Stunden lang gültig.
+                   Wir haben Ihnen eine E-Mail geschickt mit einem Link um Ihr Passwort zurückzusetzen.  Dieser Link ist {{ tokenLifetime|date('g') }} Stunden lang gültig.
                </p>
                <p>
                    Wenn Sie keine E-Mail erhalten haben kontrollieren Sie Ihren Spam-Ordner oder versuchen Sie es <a href="{{ path('app_forgot_password_request') }}">noch einmal</a>.

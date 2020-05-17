@@ -25,6 +25,7 @@ class ElfinderController extends AbstractController
     use TargetPathTrait;
 
     /**
+     * This only affected by use of instance with the ckeditor
      * @Route("/elfinder")
      * @param UserInterface $user
      * @return Response
@@ -46,6 +47,47 @@ class ElfinderController extends AbstractController
                 break;
             case 'ROLE_USER':
                 $instance = 'user';
+                $homeFolder = 'user_at_'.$user->getId();
+                break;
+            default:
+                $instance = 'default';
+                $homeFolder = 'dumm'; // empty not used
+        }
+
+        // $instance and forward
+        return $this->forward(
+            'FM\ElfinderBundle\Controller\ElFinderController:show',
+            array(
+                'instance'   => $instance,
+                'homeFolder' => $homeFolder,
+            )
+        );
+
+    }
+
+    /**
+     * This affected only by use of the ->setFormType(ElFinderType::class)
+     * @Route("/elfinder/{instance}")
+     * @param $instance
+     * @param UserInterface $user
+     * @param Request $request
+     * @return Response
+     */
+    public function show_with($instance, UserInterface $user, Request $request)
+    {
+        // get the logged in user [ROLE_]
+        $role = $this->get('security.token_storage')->getToken()->getUser()->getRoles();
+
+        if (!$role[0]) {
+            echo 'Must be logged in for use this service';
+        }
+
+        // set the $instance for the setting from packages/fm_elfinder.yaml
+        switch ($instance) {
+            case 'form_admin':
+                $homeFolder = '';
+                break;
+            case 'form_user':
                 $homeFolder = 'user_at_'.$user->getId();
                 break;
             default:

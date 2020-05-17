@@ -2,6 +2,16 @@
 
 {% block body %}
 
+    <div class="container mt-5" style="min-height: 40rem">
+        <div class="row">
+            <h1 class="bg-success text-white p-3">{{ finish }}</h1>
+            <div class="col-md-12">
+                <h2 class="mt-3">Was möchten Sie als nächstes tun?</h2>
+                <h3 class="mt-3">Wollen Sie zum Administrations-Bereich wechsel und sich dort <a href="{{ path('app_login') }}">Einloggen</a></h3>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block title %}

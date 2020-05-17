@@ -198,10 +198,10 @@ class ResetPasswordController extends AbstractController
 
         $absence = $_ENV['MAIL_SYSTEM_ABSENCE_ADDRESS'];
 
-        $email = (new \Swift_Message('Altm hlsee Password Reset'))
+        $email = (new \Swift_Message('Altmühlsee Passwort zurücksetzen'))
             ->setFrom($absence)
             ->setTo($user->getEmail())
-            ->setSubject('Your password reset request')
+            ->setSubject('Ihre Passwort reset anfrage')
             ->setBody(
                 $this->renderView(
                     'reset_password/email.html.twig',
@@ -220,7 +220,7 @@ class ResetPasswordController extends AbstractController
 
 
     /**
-     * @Route(name="password_reset_success")
+     * @Route("/success", name="password_reset_success")
      */
     public function success()
     {
@@ -228,7 +228,7 @@ class ResetPasswordController extends AbstractController
         return $this->render(
             'reset_password/success.html.twig',
             [
-                'finish' => '$form->createView()',
+                'finish' => 'Herzlichen Glückwunsch,  Ihr Passwort wurde zurückgesetzt.',
             ]
         );
     }
