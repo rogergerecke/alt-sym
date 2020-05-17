@@ -38,6 +38,4 @@ yarn-error.log
 /docker/temp/
 /docker/sql/
 /docker/logs/
-/sql-backup/sym_muehlsee_customer_address.sql
-/sql-backup/sym_muehlsee_hostel.sql
-/sql-backup/sym_muehlsee_user.sql
+/sql-backup/*
