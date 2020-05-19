@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,36 +26,51 @@ class ElfinderController extends AbstractController
     use TargetPathTrait;
 
     /**
-     * This only affected by use of instance with the ckeditor
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    /**
+     * Select the config instance by the logged in user
+     * ROLE and create the home folder for the user
+     *
      * @Route("/elfinder")
      * @param UserInterface $user
      * @return Response
+     * @throws Exception
      */
     public function show(UserInterface $user, Request $request)
     {
-        // get the logged in user [ROLE_]
-        $role = $this->get('security.token_storage')->getToken()->getUser()->getRoles();
+        $user = $this->security->getUser();
 
-        if (!$role[0]) {
-            echo 'Must be logged in for use this service';
+        if (null == $user) {
+            exit('Not Logged in');
         }
 
-        // set the $instance for the setting from packages/fm_elfinder.yaml
+        // if get the logged in user [ROLE_]
+        $role = $user->getRoles();
+
+
+        // load instance from config fm_elfinder.yaml
         switch ($role[0]) {
             case 'ROLE_ADMIN':
                 $instance = 'admin';
-                $homeFolder = '';
+                $homeFolder = '';// show the admin all dirs
                 break;
             case 'ROLE_USER':
                 $instance = 'user';
                 $homeFolder = 'user_at_'.$user->getId();
                 break;
             default:
-                $instance = 'default';
-                $homeFolder = 'dumm'; // empty not used
+                throw new Exception('ROLE not exist in config'.$role[0]);
         }
 
-        // $instance and forward
+        // forward with instance and home folder to the real controller
         return $this->forward(
             'FM\ElfinderBundle\Controller\ElFinderController:show',
             array(
@@ -66,7 +82,12 @@ class ElfinderController extends AbstractController
     }
 
     /**
-     * This affected only by use of the ->setFormType(ElFinderType::class)
+     * The route to control direct include in form by the Crud Controller
+     * by use of the ->setFormType(ElFinderType::class) in Crud Controller.
+     *
+     * Catch the $instance parameter from uri to load the defined instance
+     * from the config file fm_elfinder.yaml
+     *
      * @Route("/elfinder/{instance}")
      * @param $instance
      * @param UserInterface $user
@@ -75,27 +96,23 @@ class ElfinderController extends AbstractController
      */
     public function show_with($instance, UserInterface $user, Request $request)
     {
+        $user = $this->security->getUser();
+
+        if (null == $user) {
+            exit('Not Logged in');
+        }
+
         // get the logged in user [ROLE_]
-        $role = $this->get('security.token_storage')->getToken()->getUser()->getRoles();
+        $role = $user->getRoles();
 
-        if (!$role[0]) {
-            echo 'Must be logged in for use this service';
+        // load instance from config fm_elfinder.yaml
+        if ($role[0] == 'ROLE_ADMIN'){
+            $homeFolder = '';
+        }else{
+            $homeFolder = 'user_at_'.$user->getId();
         }
 
-        // set the $instance for the setting from packages/fm_elfinder.yaml
-        switch ($instance) {
-            case 'form_admin':
-                $homeFolder = '';
-                break;
-            case 'form_user':
-                $homeFolder = 'user_at_'.$user->getId();
-                break;
-            default:
-                $instance = 'default';
-                $homeFolder = 'dumm'; // empty not used
-        }
-
-        // $instance and forward
+        // forward with instance and home folder to the real controller
         return $this->forward(
             'FM\ElfinderBundle\Controller\ElFinderController:show',
             array(

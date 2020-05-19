@@ -40,7 +40,7 @@ class AdvertisingCrudController extends AbstractCrudController
 
         $image = TextField::new('image')
             ->setFormType(ElFinderType::class)
-            ->setFormTypeOptions(['instance' => 'form_user', 'enable' => true]);
+            ->setFormTypeOptions(['instance' => 'banner', 'enable' => true]);
 
         $status = BooleanField::new('status');
         $start_date = DateField::new('start_date_advertising');
