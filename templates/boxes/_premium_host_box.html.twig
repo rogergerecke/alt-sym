@@ -1,32 +1,26 @@
-{% for hostel in start_page_hostels %}
-    <p class="btn-link">TODO premuim host box </p>
-{% else %}
-    {# Nothing Hostels have a Startpage Listing ordered #}
-{% endfor %}
-
+<!-- Premium host place box -->
 <div class="row">
-    <div class="col-md-3">
-        <img src="https://altmuehlsee.com/images/unterkuenfte/big/78_1530011549_7.jpg" class="card-img-top" alt="">
-        <h4>Ferienhaus Falkenlust</h4>
-        <div class="sub-line">Ferienhaus mit Terrasse und Garten</div>
-        <div class="location-box"><i class="fas fa-map-marker-alt"></i> Haundorf, 7 km zum See</div>
-    </div>
-    <div class="col-md-3">
-        <img src="https://altmuehlsee.com/images/unterkuenfte/big/4_1534173290_8.jpg" class="card-img-top" alt="">
-        <h4>Parkhotel Altmühltal</h4>
-        <div class="sub-line">4-Sterne Superior Wohlfühl-Hotel</div>
-        <div class="location-box"><i class="fas fa-map-marker-alt"></i> Haundorf, 2 km zum See</div>
-    </div>
-    <div class="col-md-3">
-        <img src="https://altmuehlsee.com/images/unterkuenfte/big/57_1530178280_1.jpg" class="card-img-top" alt="">
-        <h4>Gasthof Kleemann</h4>
-        <div class="sub-line">Fränkische Spezialitäten</div>
-        <div class="location-box"><i class="fas fa-map-marker-alt"></i> Haundorf, 7 km zum See</div>
-    </div>
-    <div class="col-md-3">
-        <img src="https://altmuehlsee.com/images/unterkuenfte/big/78_1530011549_7.jpg" class="card-img-top" alt="">
-        <h4>Ferienhaus Falkenlust</h4>
-        <div class="sub-line">Ferienhaus mit Terrasse und Garten</div>
-        <div class="location-box"><i class="fas fa-map-marker-alt"></i> Haundorf, 7 km zum See</div>
-    </div>
+
+    <!-- advertising list before first class -->
+    {% for advertising in advertisings %}
+        <div class="col-md-3">
+            {{ include('boxes/_advertising_item_box.html.twig') }}
+        </div>
+    {% endfor %}
+    <!-- advertising list before #END -->
+
+    <!-- start page second place -->
+    {% for hostel in start_page_hostels %}
+        <div class="col-md-3">
+            <img src=".//" class="card-img-top" alt="">
+            <h4>{{ hostel.hostelName }}</h4>
+            <div class="sub-line">Super Hostel {#{{ hostel.amenities.0 }}#}</div>
+            <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} km zum See</div>
+        </div>
+    {% else %}
+        <!-- albrecht webservice advertising -->
+        {# werbung wb service albrecht #}
+    {% endfor %}
+    <!-- start page second place #END -->
+
 </div>

@@ -170,6 +170,11 @@ class Hostel
      */
     private $mobile;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $distance_to_see;
+
 
     public function getId(): ?int
     {
@@ -496,6 +501,18 @@ class Hostel
     public function setMobile(?string $mobile): self
     {
         $this->mobile = $mobile;
+
+        return $this;
+    }
+
+    public function getDistanceToSee(): ?float
+    {
+        return $this->distance_to_see;
+    }
+
+    public function setDistanceToSee(float $distance_to_see): self
+    {
+        $this->distance_to_see = $distance_to_see;
 
         return $this;
     }
