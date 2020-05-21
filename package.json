@@ -1,7 +1,7 @@
 {
   "name": "altmuehlsee",
-  "version": "1.0.0",
-  "description": "Hotelsite",
+  "version": "1.0.1",
+  "description": "Hostel-View-Site",
   "main": "index.js",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^19.0.0",
@@ -10,8 +10,9 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
-    "@symfony/webpack-encore": "^0.28.3",
-    "autoprefixer": "^9.7.6",
+    "@google/markerclustererplus": "^5.0.3",
+    "@symfony/webpack-encore": "^0.30.2",
+    "autoprefixer": "^9.8.0",
     "bootstrap": "^4.5.0",
     "core-js": "^3.6.4",
     "install": "^0.13.0",
@@ -20,14 +21,14 @@
     "popper.js": "^1.16.1",
     "postcss-loader": "^3.0.0",
     "raw-loader": "^3.1.0",
-    "sass-loader": "^7.0.1",
+    "sass-loader": "^8.0.0",
     "style-loader": "^1.2.1",
     "tui-image-editor": "^3.9.0",
     "webpack-cli": "^3.3.11",
     "webpack-notifier": "^1.8.0"
   },
   "devDependencies": {
-    "@types/bootstrap": "^4.3.3",
+    "@types/bootstrap": "^4.5.0",
     "less": "^3.11.1",
     "less-loader": "4.1.0",
     "node-sass": "^4.14.1"
