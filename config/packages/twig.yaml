@@ -3,6 +3,7 @@ twig:
     globals:
         # make the OpenWeatherService vars global public
         openweather: '@App\Service\OpenWeatherService'
+        ga_tracking: '%env(GOOGLE_ANALYTICS_KEY)%'
 
     form_themes: ['bootstrap_4_layout.html.twig']
 
