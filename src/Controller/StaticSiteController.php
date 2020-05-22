@@ -137,7 +137,7 @@ class StaticSiteController extends AbstractController
     /**
      * The leisure entry only with payment
      *
-     * @Route("/freizeit", name="static_site_leisure")
+     * @Route("/freizeitangebote", name="static_site_leisure")
      */
     public function leisure()
     {
@@ -181,6 +181,31 @@ class StaticSiteController extends AbstractController
             ]
         );
     }
+
+    /**
+     * The Marketing Page for free event entry
+     *
+     * @Route("/event-kostenlos-eintragen", name="static_site_event_entry")
+     */
+    public function event_entry()
+    {
+        $site = $this->repository->findOneBy(['route' => 'Event_Entry', 'status' => true]);
+
+        if (!$site) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render(
+            'static_site/index.html.twig',
+            [
+                'heading'          => false,
+                'meta_title'       => $site->getMetaTitle(),
+                'meta_description' => $site->getMetaDescription(),
+                'content'          => $site->getContent(),
+            ]
+        );
+    }
+
 
     /**
      * The cookies disclaimer
