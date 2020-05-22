@@ -179,6 +179,9 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
+                $startpage,
+                $toplisting,
+                $top_placement_finished,
                 $status,
             ];
         } elseif (Crud::PAGE_EDIT === $pageName) {
@@ -204,6 +207,9 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
+                $startpage,
+                $toplisting,
+                $top_placement_finished,
                 $status,
             ];
         }

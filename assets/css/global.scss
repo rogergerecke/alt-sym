@@ -61,6 +61,11 @@ h5, .h5 {
   padding-right: 0 !important;
 }
 
+/* Background */
+.bg-light-blue{
+  background-color: lighten($kompliment-2-2-rgba, 10);
+}
+
 /* Header Banner */
 #header-banner a {
   text-decoration: underline;

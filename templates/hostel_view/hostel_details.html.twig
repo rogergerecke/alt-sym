@@ -8,7 +8,7 @@
             <div class="col-md-9">
 <span>Stars ****</span>
                 <h1>{{ hostel.hostelName }}</h1>
-                <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}, {{ hostel.country }} <a href="#map">auf Karte zeigen.</a></small>
+                <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}, {{ hostel.country }} {{ hostel.address}} <a href="#map">auf Karte zeigen.</a></small>
                 <!-- Image Slider -->
                 <div class="MagicSlideshow" data-options="selectors: bottom; selectors-style: thumbnails;">
                     <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg" alt="basic html slideshow">
@@ -30,11 +30,11 @@ ab 75 EUR/Nacht
         </div>
         <div class="row">
             <h2>Beschreibung</h2>
-            {{ hostel.description }}
+            {{ hostel.description|raw }}
         </div>
         <div class="row">
             <h3>Ausstattung</h3>
-            {{ hostel.amenities }}
+            {#{{ hostel.amenities }}#}
         </div>
         <div class="row">
             <h4>Zimmer</h4>

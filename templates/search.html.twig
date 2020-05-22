@@ -52,19 +52,21 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
                             <div class="custom-control custom-checkbox">
-                                {{ form_widget(form.handicap, {'id': 'customCheck1', 'attr': {'class':'custom-control-input'}}) }}
+                                <input type="checkbox" name="{{ form.handicap.vars.full_name }}"
+                                       class="custom-control-input"
+                                       id="customCheck1">
                                 <label class="custom-control-label" for="customCheck1">Barrierefrei</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_widget(form.bread_service, {'id': 'customCheck2', 'attr': {'class':'custom-control-input'}}) }}
+                                <input type="checkbox" name="{{ form.bread_service.vars.full_name }}" class="custom-control-input" id="customCheck2">
                                 <label class="custom-control-label" for="customCheck2">Brötchenservice</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_widget(form.half_board, {'id': 'customCheck3', 'attr': {'class':'custom-control-input'}}) }}
+                                <input type="checkbox" name="{{ form.half_board.vars.full_name }}" class="custom-control-input" id="customCheck3">
                                 <label class="custom-control-label" for="customCheck3">Halbpension</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                {{ form_widget(form.breakfast, {'id': 'customCheck4', 'attr': {'class':'custom-control-input'}}) }}
+                                <input type="checkbox" name="{{ form.breakfast.vars.full_name }}" class="custom-control-input" id="customCheck4">
                                 <label class="custom-control-label" for="customCheck4">Frühstück</label>
                             </div>
                             <hr>
@@ -85,4 +87,4 @@
         </div>
     </div>
 </div>
-{{ form_end(form) }}
+{{ form_end(form, {'render_rest': false}) }}

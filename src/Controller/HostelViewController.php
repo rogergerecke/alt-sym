@@ -26,36 +26,31 @@ class HostelViewController extends AbstractController
     public function listing(HostelRepository $hostelRepository, Request $request)
     {
 
+        $hostels = null;
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
 
-        if ($request->isMethod('POST')) {
+        // we have a search query
+        if ($request->isMethod('POST') and $request->request->get($form->getName())) {
 
-            /* $form->submit($request->request->get($form->getName()));*/
+            // todo validate form
 
-            if ($form->isSubmitted() and $form->isValid()) {
-                // send user to /gastgeber
-                return $this->redirectToRoute('hostel_view');
-            } else {
-                $this->addFlash('danger', 'Diese Anfrage war nicht valide bitte tun Sie das nicht.');
-            }
+                $q = $request->request->get($form->getName());
+                print_r($q);
+               /* $hostels = $hostelRepository->findHostelsWithFilter($q);*/
+
+                if ($hostels !== null) {
+                    // do output
+                    /*print_r($hostels);*/
+                } else {
+                    $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
+                }
+
+
+            //return $this->redirectToRoute('hostel_view');
         }
 
 
-// todo pagination
-        $hostels = null;
-        // get the request
-        if ($request->request->get($form->getName())) {
-            $q = $request->query->get('search_hostel');
-            $hostels = $hostelRepository->findHostelsWithFilter($q);
-
-            if ($hostels !== null) {
-                // do output
-                /*print_r($hostels);*/
-            } else {
-                $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
-            }
-        }
 
         // no request default show all
         if (null === $request->request->get('search_hostel')) {

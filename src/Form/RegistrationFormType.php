@@ -17,40 +17,67 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     { //todo remove manuel translate to de
         $builder
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Bitte nehmen Sie unsere bedingungen an.',
-                    ]),
-                ],
-                'label'=>'Aktzeptieren Sie bitte:'
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Bitte ein Password eingeben',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-                'label' => 'Password',
-            ])
-        ;
+            ->add(
+                'name',
+                null,
+                [
+                    'attr'     => ['placeholder' => 'Dein Name'],
+                    'required' => true,
+                    'label'    => false,
+                ]
+            )
+            ->add('email', null, ['attr' => ['placeholder' => 'Email'], 'label' => false,])
+            ->add(
+                'agreeTerms',
+                CheckboxType::class,
+                [
+                    'mapped'      => false,
+                    'constraints' => [
+                        new IsTrue(
+                            [
+                                'message' => 'please.agree.terms.of.use',
+                            ]
+                        ),
+                    ],
+                    'label'       => 'please.agree:',
+
+
+                ]
+            )
+            ->add(
+                'plainPassword',
+                PasswordType::class,
+                [
+                    'attr'        => ['placeholder' => 'Password'],
+                    // instead of being set onto the object directly,
+                    // this is read and encoded in the controller
+                    'mapped'      => false,
+                    'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => 'Bitte ein Password eingeben',
+                            ]
+                        ),
+                        new Length(
+                            [
+                                'min'        => 6,
+                                'minMessage' => 'Your password should be at least {{ limit }} characters',
+                                // max length allowed by Symfony for security reasons
+                                'max'        => 4096,
+                            ]
+                        ),
+                    ],
+                    'label'       => false,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => User::class,
+            ]
+        );
     }
 }

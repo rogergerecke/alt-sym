@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,11 +20,10 @@ class User implements UserInterface
 {
 
     /**
-     * @var Hostel
-     * @ORM\OneToMany(targetEntity="App\Entity\Hostel", mappedBy="user_id")
-     * @ORM\JoinColumn(name="user_id")
+     * One user has many hostels. This is the inverse side.
+     * @ORM\OneToMany(targetEntity=Hostel::class, mappedBy="user")
      */
-    protected $hostel;
+    private $hostels;
 
     /**
      * @ORM\Id()
@@ -53,7 +53,7 @@ class User implements UserInterface
     /**
      *
      * @ORM\Column(type="integer", unique=true)
-     * @Assert\Unique
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $partner_id;
 
@@ -66,6 +66,47 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $status;
+
+    public function __construct()
+    {
+        $this->hostels = new ArrayCollection();
+    }
+
+    public function getHostels(): Collection
+    {
+        return $this->hostels;
+    }
+
+
+    public function setHostels(Hostel $hostels): self
+    {
+        $this->hostels = $hostels;
+
+        return $this;
+    }
+
+    public function addHostel(Hostel $hostels): self
+    {
+        if (!$this->hostels->contains($hostels)) {
+            $this->hostels[] = $hostels;
+            $hostels->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHostel(Hostel $hostels): self
+    {
+        if ($this->hostels->contains($hostels)) {
+            $this->hostels->removeElement($hostels);
+            // set the owning side to null (unless already changed)
+            if ($hostels->getUser() === $this) {
+                $hostels->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 
 
     public function getId(): ?int
@@ -87,6 +128,8 @@ class User implements UserInterface
 
     /**
      * A visual identifier that represents this user.
+     *
+     * Email Address is login user name
      *
      * @see UserInterface
      */

@@ -40,15 +40,19 @@
                value="{{ csrf_token('authenticate') }}"
         >
         <img class="mb-4 img-thumbnail" src="{{ asset('build/images/icon.svg') }}" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
+        <h1 class="h3 mb-3 font-weight-normal">Bitte anmelden</h1>
+        <p>Die neue Mitglider-Seite jetzt mit Ihrer <b>E-Mail Adresse</b> und Ihrem <b>Passwort</b> anmelden.</p>
+        <label for="inputEmail" class="sr-only">Email Adresse</label>
         <input type="email" name="email" value="{% if last_username is defined %}{{ last_username }}{% endif %}"
                id="inputEmail" class="form-control"
-               placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+               placeholder="Email" required autofocus>
+        <label for="inputPassword" class="sr-only">Passwort</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Passwort"
                required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Jetzt einloggen</button>
+        <p class="mt-2"><b>Passwort oder Account-Email</b> vergessen? </p>
+        <p>Hilfe: info@webservice-albrecht.de oder <a
+                    href="{{ path('app_forgot_password_request') }}">Passwort zurücksetzen</a></p>
         <p class="mt-5 mb-3 text-muted"><span class="text-muted">2007 - {{ "now"|date('Y') }} ©</span> <a
                     href="http://webservice-albrecht.de"
                     target="_blank" class="text-muted">Webservice

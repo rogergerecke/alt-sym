@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,14 +19,18 @@ class RegistrationController extends AbstractController
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param Swift_Mailer $mailer
+     * @param UserRepository $userRepository
      * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, Swift_Mailer $mailer): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        Swift_Mailer $mailer,
+        UserRepository $userRepository
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
 
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -37,8 +42,10 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setCustomerId(rand(1111,9999));
-
+            // creat the new partner id
+            /*$last_id = $userRepository->findOneBy([],['partner_id'=>'A']);
+            $user->setPartnerId(rand(1111,9999));*/
+            $user->setName($form->get('name'));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -48,17 +55,17 @@ class RegistrationController extends AbstractController
             $message = new \Swift_Message('Wilkommen bei Altmühlsee');
 
             // send a copy to (set in .env)
-            if (isset($_ENV['CC_EMAIL'])){
+            if (isset($_ENV['CC_EMAIL'])) {
                 $message->setCc($_ENV['CC_EMAIL']);
             }
 
             // if developer mode
-            if (isset($_ENV['TEST_MAIL_ADDRESS'])){
+            if (isset($_ENV['TEST_MAIL_ADDRESS'])) {
                 $message->setTo($_ENV['TEST_MAIL_ADDRESS']);
-            }else{
+            } else {
                 $message->setTo($form->get('email'));
             }
-            
+
             $message
                 ->setFrom($_ENV['MAIL_SYSTEM_ABSENCE_ADDRESS'])
                 ->setBody(
@@ -66,14 +73,13 @@ class RegistrationController extends AbstractController
                     // Email-Template templates/emails/registration.html.twig
                         'emails/registration.html.twig',
                         [
-                            'name'        => $form->get('name'),
-                            'registration_member_email'=> $form->get('email'),
+                            'name' => $form->get('name'),
+                            'registration_member_email' => $form->get('email'),
                             'support_email_address' => $_ENV['SUPPORT_EMAIL_ADDRESS'],
                         ]
                     ),
                     'text/html'
-                )
-            ;
+                );
 
             $mailer->send($message);
 
@@ -82,12 +88,15 @@ class RegistrationController extends AbstractController
         }
 
         // open route /register is login true redirect to member aria
-        if($this->isGranted('IS_AUTHENTICATED_FULLY')){
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('member');
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->render(
+            'registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
+            ]
+        );
     }
 }

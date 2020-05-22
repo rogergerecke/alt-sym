@@ -51,8 +51,7 @@
                                                         aria-controls="collapseOne">
                                                     <div class="listing-icon-location">
                                                         <i class="fa fa-map-marker-alt"></i>
-                                                    </div>{{ hostel.city }}
-                                                    , 10 KM vom See
+                                                    </div> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} KM vom See
                                                     entfernt <i class="fas fa-angle-down rotate-icon"></i>
                                                 </button>
                                             </h2>

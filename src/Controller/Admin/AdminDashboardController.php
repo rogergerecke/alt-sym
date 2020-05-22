@@ -8,6 +8,7 @@ use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\MediaGallery;
 use App\Entity\Regions;
+use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
 use App\Entity\StaticSite;
 use App\Entity\User;
@@ -67,38 +68,44 @@ class AdminDashboardController extends AbstractDashboardController
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linktoRoute('Zur Website','fa fa-home','index');
+        yield MenuItem::section('Inhalt', 'fa fa-anchor');
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
             ->setController(AdminUserCrudController::class);
-        yield MenuItem::linkToCrud('Event', 'fa fa-glass-cheers', Events::class);
+        yield MenuItem::linkToCrud('Events', 'fa fa-glass-cheers', Events::class);
 
 
-        /* Hostel section */
-        yield MenuItem::section('Hostel Menu', 'fa fa-house-user');
-        yield MenuItem::subMenu('Hostels', 'fa fa-hotel')->setSubItems(
-            [
-                MenuItem::linkToCrud('Hostel Manager', 'fa fa-hotel', Hostel::class)->setController(
-                    AdminHostelCrudController::class
-                ),
-                MenuItem::linkToCrud('Hostel Typen', 'fa fa-caravan', AmenitiesTypes::class),
-            ]
-        );
+        /* Hostel Manager section */
+        [
+            yield MenuItem::section('Hostel Manager', 'fa fa-house-user'),
+            yield MenuItem::linkToCrud('Hostels', 'fa fa-hotel', Hostel::class)->setController(
+                AdminHostelCrudController::class
+            ),
+            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', Hostel::class)->setController(
+                AdminHostelCrudController::class
+            ),// todo add func
+            yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
+                AdminHostelCrudController::class
+            ),// todo add func
+        ];
 
-        /* System config section */
-        yield MenuItem::section('System Einstellung', 'fa fa-fan');
-        yield MenuItem::linkToCrud('Regionen', 'fa fa-globe', Regions::class);
-        yield MenuItem::subMenu('Übersetzung', 'fa fa-language')->setSubItems(
+
+            /* Media Manager section */
+        [yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
+            yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder'),
+            yield MenuItem::linkToCrud('Dateien', 'fa fa-image', Media::class),
+            yield MenuItem::linkToCrud('Gallery', 'fa fa-images', MediaGallery::class),
+        ];
+
+        /* System Config section */
+        yield MenuItem::section('Grundeinstellung', 'fa fa-fan');
+        yield MenuItem::linkToCrud('PLZ Regionen', 'fa fa-globe', Regions::class);
+        yield MenuItem::linkToCrud('Hoteltypen', 'fa fa-caravan', AmenitiesTypes::class);
+        yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
+        yield MenuItem::subMenu('Sprachen', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
-            ]
-        );
-
-        /* Media Manager section */
-        yield MenuItem::section('Media Manager', 'fa fa-photo-video');
-        yield MenuItem::subMenu('Gallery', 'fa fa-tags')->setSubItems(
-            [
-                MenuItem::linkToCrud('Media', 'fa fa-image', Media::class),
-                MenuItem::linkToCrud('Media Gallery', 'fa fa-images', MediaGallery::class),
             ]
         );
     }

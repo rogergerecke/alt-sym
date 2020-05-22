@@ -56,7 +56,7 @@
     <!-- Header with Navigation #END -->
 
     <!-- Main Content -->
-    <main id="main">
+    <main id="main" class="{% if app.request.get('_route') == 'app_register' %}bg-light-blue{% endif %}">
         <!-- Error Messages -->
         {% for label, messages in app.flashes %}
             {% for message in messages %}
@@ -76,23 +76,15 @@
         {% endfor %}
         <!-- Error Messages #END -->
 
+        <!-- Show Content Extension BODY -->
         {% block body %}
 
         {% endblock %}
+        <!-- Show Content Extension #BODY -->
     </main>
 
 
-    <!-- Ads -->
-    {#  {% if app.request.get('_route') == 'index' or app.request.get('_route') == 'gastgeber' %}
-          #}{# only show search on index and gastgeber page #}{#
-          <div class="col-md-3">
-              <aside id="ads">
-                  {{ include('advertising.html.twig') }}
-                  {{ include('wetter.html.twig') }}
-              </aside>
-          </div>
-      {% endif %}#}
-    <!-- Ads #END -->
+
 
 </div>
 
@@ -100,7 +92,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            {{ content }}
+            {{ content|raw }}
 
         </div>
         <div class="col-md-6">
@@ -122,5 +114,8 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
+
+{{ include('boxes/_google_analytics.html.twig') }}
+
 </body>
 </html>

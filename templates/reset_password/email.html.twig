@@ -1,0 +1,11 @@
+<h1>Hallo Ihr angeforderter Password Reset Link!</h1>
+
+<p>
+    Um Ihr Password zurückzusetzen, besuchen Sie bitte
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">diese Seite hier.</a>
+    Der Link zum Password-Reset ist {{ tokenLifetime|date('g') }} Stunden lang gültig.
+</p>
+
+<p>
+    Bitte!
+</p>

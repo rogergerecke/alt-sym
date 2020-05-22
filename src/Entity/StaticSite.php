@@ -18,9 +18,9 @@ class StaticSite
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $route;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -52,19 +52,24 @@ class StaticSite
      */
     private $url;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeletable;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getRoute(): ?string
     {
-        return $this->name;
+        return $this->route;
     }
 
-    public function setName(string $name): self
+    public function setRoute(string $route): self
     {
-        $this->name = $name;
+        $this->route = $route;
 
         return $this;
     }
@@ -141,10 +146,26 @@ class StaticSite
         return $this;
     }
 
+
+    public function getIsDeletable(): ?bool
+    {
+        return $this->isDeletable;
+    }
+
+    public function setIsDeletable(bool $isDeletable): self
+    {
+        $this->isDeletable = $isDeletable;
+
+        return $this;
+    }
+
     /**
      * @ORM\PrePersist
      */
     public function addDefaultStatus(){
         $this->status = 1;
+        $this->isDeletable = 1;
     }
+
+
 }
