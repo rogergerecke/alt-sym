@@ -19,15 +19,22 @@ class HostelRepository extends ServiceEntityRepository
         parent::__construct($registry, Hostel::class);
     }
 
-    public function findHostelsWithFilter(?string $filter)
+    public function findHostelsWithFilter(?array $filter)
     {
-        print_r($filter);
+        // first idee
+       /* [regions] => 61 [hostel_types] => 4 [quantity_person] => 1 [submit] => [price_range] => 10;80 [see_distance] => 1;5 )*/
         $qb = $this->createQueryBuilder('h');
 
-        if ($filter) {
+        if ($filter['regions']) {
             $qb
                 ->andWhere('h.room_types LIKE :filter OR h.partner_id LIKE :filter')
-                ->setParameter('filter', '%'.$filter.'%');
+                ->setParameter('filter', '%'.$filter['regions'].'%');
+        }
+
+        if ($filter['hostel_types']) {
+            $qb
+                ->andWhere('h.room_types LIKE :filter OR h.partner_id LIKE :filter')
+                ->setParameter('filter', '%'.$filter['hostel_types'].'%');
         }
 
         return $qb
@@ -38,7 +45,9 @@ class HostelRepository extends ServiceEntityRepository
 
 
     /**
-     * Find the hostels for the Start Page Listing
+     * Find all the hostels for the Start Page Listing
+     * with
+     *
      * @return int|mixed|string
      */
     public function findStartPageHostels()

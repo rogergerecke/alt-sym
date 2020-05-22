@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -13,6 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Hostel
 {
+
+
+    /**
+     * Many hostels have one user. This is the owning side.
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="hostels")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     /**
      * @ORM\Id()
@@ -179,6 +190,18 @@ class Hostel
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getUserId(): ?int

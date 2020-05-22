@@ -56,7 +56,7 @@ class UserDashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Member Admin');
+            ->setTitle('Benutzer Bereich');
     }
 
 

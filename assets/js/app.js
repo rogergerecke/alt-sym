@@ -28,8 +28,13 @@ jQuery(function ($) {
         // POS_LOAD the script is inserted in the window.onload(). Can use $
         /*$('[data-toggle="popover"]').popover();*/
 
-        /* prevent dropdown before close in the hostel_search */
+        /* prevent dropdown before close in the hostel_search on start page */
         $('#soapy .dropdown-menu').on('click',function (e) {
+            e.stopPropagation();
+        });
+
+        /* prevent dropdown before close in the view hostel list side bar */
+        $('#search-sidebar .dropdown-menu').on('click',function (e) {
             e.stopPropagation();
         });
 
