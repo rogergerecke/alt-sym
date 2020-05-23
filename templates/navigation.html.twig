@@ -7,20 +7,17 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-               <a class="nav-link" href="{{ path('index') }}">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+               <a class="nav-link {% if app.request.get('_route') == 'hostel_view' %}active{% endif %}" href="{{ path('hostel_view') }}">Gastgeber</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="{{ path('hostel_view') }}">Gastgeber</a>
+               <a class="nav-link {% if app.request.get('_route') == 'static_site_region' %}active{% endif %}" href="{{ path('static_site_region') }}">Region</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="{{ path('static_site_region') }}">Region</a>
+               <a class="nav-link {% if app.request.get('_route') == 'static_site_leisure' %}active{% endif %}" href="{{ path('static_site_leisure') }}">Freizeitangebote</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link" href="{{ path('static_site_leisure') }}">Freizeit</a>
-            </li>
-            <li class="nav-item">
-               <a class="nav-link" href="{{ path('event') }}">Veranstaltungen</a>
+               <a class="nav-link {% if app.request.get('_route') == 'event' %}active{% endif %}" href="{{ path('event') }}">Veranstaltung</a>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -28,8 +25,8 @@
                </a>
                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{{ path('static_site_entry') }}">Premium-Mitgliedschaft</a>
-                  <a class="dropdown-item" href="{{ path('static_site_leisure') }}">Werbung</a>
-                  <a class="dropdown-item" href="{{ path('static_site_leisure') }}">Inserat</a>
+                  <a class="dropdown-item" href="{{ path('static_site_entry') }}#werbung">Werbung</a>
+                  <a class="dropdown-item" href="{{ path('static_site_entry') }}">Inserat</a>
                   <a class="dropdown-item" href="{{ path('static_site_event_entry') }}">Event eintragen <span
                              class="badge badge-pill badge-primary">FREI</span></a>
                   <div class="dropdown-divider"></div>

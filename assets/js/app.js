@@ -49,7 +49,7 @@ jQuery(function ($) {
         $("a").on('click', function (event) {
             // if a# not empty prevent and save it
             if (this.hash !== "") {
-                event.preventDefault();
+                /*event.preventDefault();*/
                 var hash = this.hash;
 
                 // and smooth scroll to #hash
@@ -59,6 +59,7 @@ jQuery(function ($) {
 
                     window.location.hash = hash;
                 });
+                return false;
             }
         });
 

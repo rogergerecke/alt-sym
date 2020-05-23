@@ -124,7 +124,7 @@ class StaticSiteController extends AbstractController
         }
 
         return $this->render(
-            'static_site/index.html.twig',
+            'static_site/region.html.twig',
             [
                 'heading'          => $site->getHeading(),
                 'meta_title'       => $site->getMetaTitle(),
@@ -172,7 +172,7 @@ class StaticSiteController extends AbstractController
         }
 
         return $this->render(
-            'static_site/index.html.twig',
+            'static_site/entry.html.twig',
             [
                 'heading'          => false,
                 'meta_title'       => $site->getMetaTitle(),

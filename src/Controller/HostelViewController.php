@@ -92,7 +92,7 @@ class HostelViewController extends AbstractController
                 'hostels'         => '$hostels',
                 'top_hostels'     => '$hostelRepository->findTopListingHostels()',
                 'hostel'          => $hostel,
-                'go_maps_api_key' => $_ENV['GOOGLE_MAPS_API_KEY'],
+
             ]
         );
     }
