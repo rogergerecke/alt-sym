@@ -181,6 +181,7 @@ class HostelCrudController extends AbstractCrudController
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
+            echo '1<br>';
             return [$user_id, $hostel_name, $address, $postcode, $city, $status];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [

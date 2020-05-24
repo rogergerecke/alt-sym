@@ -4,6 +4,9 @@
 {% block description %}{{ meta_description }}{% endblock %}
 
 {% block body %}
+    <form action="{{ path('app_register') }}" method="post" id="register">
+
+    </form>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -39,9 +42,7 @@
                                     <li class="text-danger">ohne Geolocation</li>
                                     <li class="text-danger">ohne Zimmer Detail Seite</li>
                                 </ul>
-                                <a class="btn btn-lg btn-block btn-outline-primary"
-                                   href="/admin2/checkout.php?page_action=create_login&amp;entry_type=0">Umsonst
-                                    Starten</a>
+                                <input type="submit" name="register[free_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Umsonst starten">
 
                                 <!-- Collapse more Information -->
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -85,9 +86,7 @@
                                     <li class="text-danger">ohne Geolocation</li>
                                     <li class="text-danger">ohne Zimmer Detail Seite</li>
                                 </ul>
-                                <a class="btn btn-lg btn-block btn-primary"
-                                   href="/admin2/checkout.php?page_action=create_login&amp;entry_type=1">Sie sind
-                                    Profi</a>
+                                <input type="submit" name="register[base_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Sie sind Profi">
 
                                 <!-- Collapse more Information -->
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -140,9 +139,7 @@
                                     <li class="text-success">+ Geolocation</li>
                                     <li class="text-success">+ Zimmer Detail Seite</li>
                                 </ul>
-                                <a class="btn btn-lg btn-block btn-primary"
-                                   href="/admin2/checkout.php?page_action=create_login&amp;entry_type=2">Ich bin
-                                    Experte</a>
+                                <input type="submit" name="register[premium_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Ich bin Experte">
 
                                 <!-- Collapse more Information -->
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -176,6 +173,7 @@
                 </div>
             </div>
 
+            <!-- Adverting offer-->
             <div class="container">
                 <div class="card-deck mb-3 text-center">
                     <div class="col-md-6">
@@ -194,6 +192,7 @@
                                 <li>+ Hompage Link</li>
                                 <li>+ Geolocation</li>
                             </ul>
+                            <input type="submit" name="register[leisure_offer]" form="register" class="btn btn-lg btn-block btn-primary" value="Freizeitangebot eintragen">
                         </div>
                     </div></div>
                     <div class="col-md-6">
@@ -212,6 +211,7 @@
                                     <li>+ Kontakt</li>
                                     <li>+ Hompage Link</li>
                                 </ul>
+                                <input type="submit" name="register[banner_advertising]" form="register" class="btn btn-lg btn-block btn-primary" value="Werbebanner schalten">
                             </div>
                         </div>
                     </div>

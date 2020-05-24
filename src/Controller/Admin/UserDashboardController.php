@@ -8,6 +8,7 @@ use App\Entity\Advertising;
 use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\Media;
+use App\Entity\MediaGallery;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -23,7 +24,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserDashboardController extends AbstractDashboardController
 {
-
 
 
     /**
@@ -74,49 +74,50 @@ class UserDashboardController extends AbstractDashboardController
     }
 
 
-
-
     public function configureMenuItems(): iterable
     {
 
+        yield MenuItem::linktoDashboard('Upgrade to Premium','fa fa-star');
 
         yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
             ->setAction('detail')
             ->setEntityId($this->user_id);
 
-        yield MenuItem::section('Einstellung', 'fa fa-tasks');
-        yield MenuItem::subMenu('Hostel', 'fa fa-hotel')
-            ->setSubItems(
-            [
-                // todo add show only from logged in user
-                MenuItem::linkToCrud('Meine Hostels', 'fa fa-hotel', Hostel::class)
-                    ->setQueryParameter(
-                    'user_id',
-                        $this->user_id
-                ),
-                MenuItem::linkToCrud('Add Hostel', 'fa fa-hotel', Hostel::class)
-                    ->setAction('new'),
-                MenuItem::linkToCrud('Add Room', 'fa fa-hotel', Hostel::class),
-                MenuItem::linkToCrud('Add Images', 'fa fa-hotel', Hostel::class),
-            ]
-        );
+        /* Hostel menu */
+        yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
+
+        // todo add show only from logged in user
+        yield MenuItem::linkToCrud('Meine Unterkunft', 'fa fa-hotel', Hostel::class)
+            ->setQueryParameter(
+                'user_id',
+                $this->user_id
+            );
+        yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
+            ->setAction('new');
+        yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', Hostel::class);
+        yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class);
+
+
+        /* Media section */
+        yield MenuItem::section('Media-Einstellung', 'fa fa-image');
+        yield MenuItem::linkToCrud('Galerie bearbeiten', 'fa fa-image', MediaGallery::class);
+        yield MenuItem::linkToCrud('Bilder bearbeiten', 'fa fa-image', Media::class);
 
         /* Marketing section */
-        yield MenuItem::subMenu('Marketing', 'fa fa-bullhorn')->setSubItems(
-            [
-                MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class),
-                MenuItem::linkToCrud('Banner Werbung', 'fa fa-ad', Advertising::class),
-            ]
-        );
+        yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
+        yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);// todo upgrade info
+        yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
+        yield MenuItem::linkToCrud('Banner Werbung', 'fa fa-ad', Advertising::class);
 
-        yield MenuItem::linkToCrud('Media', 'fa fa-media', Media::class);
 
         /* Information section */
-        yield MenuItem::section('Information', 'fa fa-info-circle');
+        yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
         yield MenuItem::linkToUrl('Werbung', 'fa fa-question', '/');
-        yield MenuItem::linkToUrl('Bild Formate', 'fa fa-question', '/');
-        yield MenuItem::linkToUrl('Preise', 'fa fa-question', '/');
+        yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
         yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
+        yield MenuItem::linktoRoute('Datenschutz', 'fa fa-question', 'static_site_privacy');
+        yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
     }
 
     public function configureUserMenu(UserInterface $user): UserMenu
@@ -148,7 +149,6 @@ class UserDashboardController extends AbstractDashboardController
                 ]
             );
     }
-
 
 
 }
