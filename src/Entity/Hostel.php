@@ -22,6 +22,7 @@ class Hostel
      */
     private $user;
 
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -182,6 +183,11 @@ class Hostel
      * @ORM\Column(type="float")
      */
     private $distance_to_see;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
 
     public function getId(): ?int
@@ -533,6 +539,18 @@ class Hostel
     public function setDistanceToSee(float $distance_to_see): self
     {
         $this->distance_to_see = $distance_to_see;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

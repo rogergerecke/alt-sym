@@ -11,13 +11,13 @@
                <a class="nav-link {% if app.request.get('_route') == 'hostel_view' %}active{% endif %}" href="{{ path('hostel_view') }}">Gastgeber</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link {% if app.request.get('_route') == 'static_site_region' %}active{% endif %}" href="{{ path('static_site_region') }}">Region</a>
-            </li>
-            <li class="nav-item">
                <a class="nav-link {% if app.request.get('_route') == 'static_site_leisure' %}active{% endif %}" href="{{ path('static_site_leisure') }}">Freizeitangebote</a>
             </li>
             <li class="nav-item">
                <a class="nav-link {% if app.request.get('_route') == 'event' %}active{% endif %}" href="{{ path('event') }}">Veranstaltung</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link {% if app.request.get('_route') == 'static_site_region' %}active{% endif %}" href="{{ path('static_site_region') }}">Region</a>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

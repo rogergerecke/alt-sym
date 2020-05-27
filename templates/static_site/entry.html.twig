@@ -7,11 +7,11 @@
     <form action="{{ path('app_register') }}" method="post" id="register">
 
     </form>
-    <div class="container">
+    <div class="container" id="hostel-entry">
         <div class="row">
             <div class="col-md-12">
                 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                    <h1 class="display-4">Preise für Unterkunft Eintrag</h1>
+                    <h1 class="display-4">Preise für Unterkunft's Eintrag</h1>
                     <p class="lead">Schnell und einfach das passende Paket für Sie auswählen vom kleinen ohne Bilder bis
                         zum Profi Paket
                         mit bis zu 20 Bilder und priorisierten Listing.</p>
@@ -198,20 +198,20 @@
                     <div class="col-md-6">
                         <div class="card mb-4 box-shadow">
                             <div class="card-header">
-                                <h6 class="h4 my-0 font-weight-normal">Startseiten Werbebanner</h6>
+                                <h6 class="h4 my-0 font-weight-normal">Unterkunft's Eintrag</h6>
                             </div>
                             <div class="card-body">
-                                <span class="h1 card-title pricing-card-title">??,?? € <small class="text-muted">/
+                                <span class="h1 card-title pricing-card-title">ab 0,00 € <small class="text-muted">/
                                         Jahr*</small></span>
                                 <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li>+ Startseiten Platzierung</li>
-                                    <li>+ Text</li>
-                                    <li>+ Bild</li>
-                                    <li>+ Kontakt</li>
-                                    <li>+ Hompage Link</li>
+                                    <li class="text-danger">ohne Bilder</li>
+                                    <li>mit Adresse</li>
+                                    <li>mit Email</li>
+                                    <li>mit Telefon</li>
+                                    <li class="text-danger">ohne Beschreibungstext</li>
                                 </ul>
-                                <input type="submit" name="register[banner_advertising]" form="register" class="btn btn-lg btn-block btn-primary" value="Werbebanner schalten">
+                                <a href="#hostel-entry" class="btn btn-lg btn-block btn-primary">Mehr Angebote</a>
                             </div>
                         </div>
                     </div>

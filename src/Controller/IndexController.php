@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Advertising;
 use App\Entity\Hostel;
 use App\Form\SearchHostelType;
 use App\Repository\AdvertisingRepository;
@@ -14,23 +15,39 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
-     * @param StaticSiteRepository $repository
-     * @param HostelRepository $hostelRepository
-     * @param AdvertisingRepository $advertisingRepository
-     * @return Response
+     * @var StaticSiteRepository
      */
-    public function index(
-        StaticSiteRepository $repository,
+    private $siteRepository;
+    /**
+     * @var HostelRepository
+     */
+    private $hostelRepository;
+    /**
+     * @var AdvertisingRepository
+     */
+    private $advertisingRepository;
+
+    public function __construct(
+        StaticSiteRepository $siteRepository,
         HostelRepository $hostelRepository,
         AdvertisingRepository $advertisingRepository
     ) {
+        $this->siteRepository = $siteRepository;
+        $this->hostelRepository = $hostelRepository;
+        $this->advertisingRepository = $advertisingRepository;
+    }
+
+    /**
+     * @Route("/", name="index")
+     * @return Response
+     */
+    public function index()
+    {
 
         // index content for start page
-        $content = $repository->findOneBy(['route' => 'Index']);
+        $content = $this->siteRepository->findOneBy(['route' => 'Index']);
 
-        // load the self marketing for entry
-        $self_marketing = $repository->findOneBy(['route' => 'Entry']);
+
 
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
@@ -41,9 +58,26 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('hostel_view');
         }
 
-        // get advertising for start page
-        $advertisings = $advertisingRepository->findBy(['status' => true]);
 
+        $ads = null;
+
+        // build advertising for start page bax first place
+        if (null !== $advertising = $this->advertisingRepository->getAdvertising()) {
+
+            // extend with address
+            foreach ($advertising as $item) {
+
+                $user_hostel = $this->hostelRepository->findOneBy(['user_id' => $item->getUserId()]);
+                $ads[] = [
+                    'title'           => $item->getTitle(),
+                    'text'            => $item->getText(),
+                    'link'            => $item->getLink(),
+                    'image'           => $item->getImage(),
+                    'city'            => $user_hostel->getCity(),
+                    'distance_to_see' => $user_hostel->getDistanceToSee(),
+                ];
+            }
+        }
 
         return $this->render(
             'index/index.html.twig',
@@ -53,9 +87,8 @@ class IndexController extends AbstractController
                 'heading'            => $content->getHeading(),
                 'content'            => $content->getContent(),
                 'form'               => $form->createView(),
-                'start_page_hostels' => $hostelRepository->findStartPageHostels(),
-                'self_marketing'     => $self_marketing->getContent(),
-                'advertisings'        => $advertisings,
+                'start_page_hostels' => $this->hostelRepository->findStartPageHostels(),
+                'advertisings'       => $ads,
             ]
         );
     }

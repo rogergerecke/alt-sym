@@ -39,9 +39,11 @@ class UserDashboardController extends AbstractDashboardController
     public function __construct(Security $security)
     {
 
-        $this->security = $security;
+       /* $this->security = $security;
 
-        $this->user_id = $this->security->getUser()->getId();
+        $this->user_id = $this->security->getUser()->getId();*/
+
+        $this->user_id = '1';
     }
 
     /**

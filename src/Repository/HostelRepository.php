@@ -48,16 +48,18 @@ class HostelRepository extends ServiceEntityRepository
      * Find all the hostels for the Start Page Listing
      * with
      *
+     * @param int $limit
      * @return int|mixed|string
      */
-    public function findStartPageHostels()
+    public function findStartPageHostels(int $limit = 3)
     {
         $qb = $this->createQueryBuilder('hsp')
             ->where('hsp.status = 1')
             ->andWhere('hsp.startpage = 1')
             ->andWhere('hsp.top_placement_finished >= :time')
             ->setParameter('time', new \DateTime('now'))
-            ->addOrderBy('hsp.sort','DESC');
+            ->addOrderBy('hsp.sort','DESC')
+            ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();
 

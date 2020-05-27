@@ -25,6 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use FM\ElfinderBundle\Form\Type\ElFinderType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -74,6 +75,12 @@ class AdminHostelCrudController extends AbstractCrudController
 
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
+
+        $image = TextField::new('image','Erstes Bild')
+            ->setFormType(ElFinderType::class)
+            ->setFormTypeOptions(['instance' => 'admin', 'enable' => true])
+            ->setTemplatePath('@FMElfinderBundle/Form/elfinder_widget.html.twig');
+
         $address = TextField::new('address', 'Straße');
         $address_sub = TextField::new('address_sub', 'Adress zusatz');
         $postcode = IntegerField::new('postcode', 'PLZ');
@@ -159,6 +166,7 @@ class AdminHostelCrudController extends AbstractCrudController
             return [
                 $user_id,
                 $hostel_name,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
@@ -187,6 +195,7 @@ class AdminHostelCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [
                 $hostel_name,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,

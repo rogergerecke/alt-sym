@@ -22,7 +22,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class HostelCrudController extends AbstractCrudController
 {
@@ -47,11 +49,15 @@ class HostelCrudController extends AbstractCrudController
      */
     private $federalStateRepository;
 
-    public static function getEntityFqcn(): string
-    {
-        return Hostel::class;
-    }
 
+    /**
+     * HostelCrudController constructor.
+     * @param UserRepository $userRepository
+     * @param RoomAmenitiesRepository $roomAmenities
+     * @param CountrysRepository $countrysRepository
+     * @param CurrencyRepository $currencyRepository
+     * @param FederalStateRepository $federalStateRepository
+     */
     public function __construct(
         UserRepository $userRepository,
         RoomAmenitiesRepository $roomAmenities,
@@ -61,10 +67,14 @@ class HostelCrudController extends AbstractCrudController
     ) {
         $this->userRepository = $userRepository;
         $this->roomAmenities = $roomAmenities;
-        $this->buildRoomAmenitiesOptions();// todo remove
         $this->countrysRepository = $countrysRepository;
         $this->currencyRepository = $currencyRepository;
         $this->federalStateRepository = $federalStateRepository;
+    }
+
+    public static function getEntityFqcn(): string
+    {
+        return Hostel::class;
     }
 
     /**
@@ -77,17 +87,25 @@ class HostelCrudController extends AbstractCrudController
      */
     public function createEntity(string $entityFqcn)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+       /* $user = $this->get('security.token_storage')->getToken()->getUser();*/
 
-        $hostel = new Hostel();
-        $hostel->setUserId((int)$user->getId());
+        $user = $this->userRepository->findOneBy(['email'=>$this->getUser()->getUsername()]);
 
-        return $hostel;
+        if (null !== $user){
+            $hostel = new Hostel();
+            $hostel->setUserId($user->getId());
+            return $hostel;
+        }
+
     }
 
     public function configureCrud(Crud $crud): Crud
     {
-        return parent::configureCrud($crud);
+        return $crud
+            ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
+            ->setPageTitle(Crud::PAGE_NEW,'Unterkunft anlegen')
+            ->setHelp(Crud::PAGE_NEW,'Hier können Sie eine Unterkunft anlegen');
+
     }
 
 
@@ -96,10 +114,14 @@ class HostelCrudController extends AbstractCrudController
 
         // id fields
         $id = IdField::new('id');
-        $user_id = IdField::new('user_id');
+        $user_id = IntegerField::new('user_id')->setFormType(HiddenType::class);
 
         // data fields
         $hostel_name = TextField::new('hostel_name');
+
+        $image = TextField::new('image','Erstes Bild')
+            ->setFormType(ElFinderType::class)
+            ->setFormTypeOptions(['instance' => 'banner', 'enable' => true]);
 
         $address = TextField::new('address', 'Straße');
         $address_sub = TextField::new('address_sub', 'Adress zusatz');
@@ -181,13 +203,13 @@ class HostelCrudController extends AbstractCrudController
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
-            echo '1<br>';
             return [$user_id, $hostel_name, $address, $postcode, $city, $status];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [
                 $id,
                 $user_id,
                 $hostel_name,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
@@ -215,7 +237,9 @@ class HostelCrudController extends AbstractCrudController
             ];
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [
+                $user_id,
                 $hostel_name,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
@@ -240,6 +264,7 @@ class HostelCrudController extends AbstractCrudController
             ];
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [
+                $user_id,
                 $hostel_name,
                 $address,
                 $address_sub,
