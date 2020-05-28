@@ -19,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SelectConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -60,8 +61,8 @@ class AdminHostelCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('new','Hostel Manager')
-            ->setHelp('new','Hier ein Hostel für ein Benutzer anlegen.')
+            ->setPageTitle('edit','Admin: Hostel-Manager')
+            ->setHelp('edit','Hier ein Hostel für ein Benutzer anlegen.')
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
@@ -79,7 +80,9 @@ class AdminHostelCrudController extends AbstractCrudController
         $image = TextField::new('image','Erstes Bild')
             ->setFormType(ElFinderType::class)
             ->setFormTypeOptions(['instance' => 'admin', 'enable' => true])
-            ->setTemplatePath('@FMElfinderBundle/Form/elfinder_widget.html.twig');
+            /*->setTemplatePath('@FMElfinderBundle/Form/elfinder_widget.html.twig')*/;
+
+            $preview_image = ImageField::new('image');
 
         $address = TextField::new('address', 'Straße');
         $address_sub = TextField::new('address_sub', 'Adress zusatz');
@@ -131,7 +134,7 @@ class AdminHostelCrudController extends AbstractCrudController
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$user_id, $hostel_name, $address, $postcode, $city, $status];
+            return [$user_id, $hostel_name, $preview_image, $address, $postcode, $city, $status];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [
                 $id,

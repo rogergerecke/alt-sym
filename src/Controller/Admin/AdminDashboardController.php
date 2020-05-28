@@ -39,7 +39,7 @@ class AdminDashboardController extends AbstractDashboardController
     public function __construct(Security $security)
     {
 
-        /*$this->security = $security;*/
+        $this->security = $security;
 
         $this->user_id = '1';
     }
@@ -56,7 +56,7 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<strong>Altmühlsee</strong>');
+            ->setTitle('<strong>Admin Altmühlsee</strong>');
     }
 
     public function configureCrud(): Crud
@@ -69,7 +69,7 @@ class AdminDashboardController extends AbstractDashboardController
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoRoute('Zur Website','fa fa-home','index');
+        yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
         yield MenuItem::section('Navigator', 'fa fa-anchor');
         yield MenuItem::linkToCrud('Inhalts-Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
@@ -82,9 +82,10 @@ class AdminDashboardController extends AbstractDashboardController
         /* Hostel Manager section */
         [
             yield MenuItem::section('Hostel Manager', 'fa fa-house-user'),
-            yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)->setController(
-                AdminHostelCrudController::class
-            ),
+
+            yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
+                ->setController(AdminHostelCrudController::class),
+
             yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', Hostel::class)->setController(
                 AdminHostelCrudController::class
             ),
@@ -94,8 +95,9 @@ class AdminDashboardController extends AbstractDashboardController
         ];
 
 
-            /* Media Manager section */
-        [yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
+        /* Media Manager section */
+        [
+            yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
             yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder'),
             yield MenuItem::linkToCrud('Dateien', 'fa fa-image', Media::class),
             yield MenuItem::linkToCrud('Gallery', 'fa fa-images', MediaGallery::class),
