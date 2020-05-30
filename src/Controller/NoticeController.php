@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Hostel;
+use App\Repository\HostelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class NoticeController extends AbstractController
 {
@@ -15,13 +19,24 @@ class NoticeController extends AbstractController
      * Index for showing the notice hostel
      *
      * @Route("/notice", name="notice")
+     * @param HostelRepository $hostelRepository
+     * @param SessionInterface $session
+     * @return Response
      */
-    public function index()
+    public function index(HostelRepository $hostelRepository, SessionInterface $session)
     {
+        $hostels = false;
+
+       if ($session->has(self::NOTICE_SESSION_KEY)){
+
+           $hostels = $hostelRepository->findAllHostelWithId($session->get(self::NOTICE_SESSION_KEY));
+
+       }
+
         return $this->render(
             'notice/index.html.twig',
             [
-                'controller_name' => 'NoticeController',
+                'hostels' => $hostels,
             ]
         );
     }
