@@ -3,7 +3,7 @@
 {% block title %}Altmühlsee Unterkünfte{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container" id="hostel-listing">
         <div class="row">
             <div class="col-md-3">
                 {{ include('search_sidebar.html.twig') }}
@@ -18,6 +18,17 @@
                     <div class="card card-list-hotels mb-2">
                         <div class="row">
                             <div class="img-thumb-box col-md-4">
+
+                                <!-- Notice Heart Button Ajax submit -->
+                                {% if hostel.id in app.session.get('notice') %}
+                                    <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i
+                                                class="fas fa-heart"></i></a>
+                                {% else %}
+                                    <a href="{{ path('notice_add',{'id':hostel.id}) }}" class="notice-button"><i
+                                                class="far fa-heart"></i></a>
+                                {% endif %}
+                                <!-- Notice Heart Button Ajax submit #END -->
+
                                 <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
                                     {#<img src="{{ hostel.id }}" alt="" class="rounded float-left card-img-left">#}
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
@@ -30,7 +41,8 @@
                                 </a>
                             </div>
                             <div class="card-body col-md-8 align-top">
-                                <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}">{{ hostel.hostelName }}</a></h3>
+                                <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}">{{ hostel.hostelName }}</a>
+                                </h3>
                                 <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
                                 <div class="row mb-1">
                                     <div class="col-md-12">
@@ -51,7 +63,8 @@
                                                         aria-controls="collapseOne">
                                                     <div class="listing-icon-location">
                                                         <i class="fa fa-map-marker-alt"></i>
-                                                    </div> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} KM vom See
+                                                    </div> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.') }}
+                                                    KM vom See
                                                     entfernt <i class="fas fa-angle-down rotate-icon"></i>
                                                 </button>
                                             </h2>
@@ -63,9 +76,12 @@
                                             <div class="card-body">
                                                 <p>{{ hostel.address }}</p>
                                                 <p>{{ hostel.address }} {{ hostel.city }}</p>
-                                                <p>Tel.: <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a></p>
+                                                <p>Tel.:
+                                                    <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a>
+                                                </p>
                                                 <p>Fax.: {{ hostel.fax }}</p>
-                                                <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's anzeigen</a></p>
+                                                <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's
+                                                        anzeigen</a></p>
                                             </div>
                                         </div>
                                     </div>

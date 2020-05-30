@@ -9,8 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class NoticeController extends AbstractController
 {
+    const NOTICE_SESSION_KEY = 'notice';
 
     /**
+     * Index for showing the notice hostel
+     *
      * @Route("/notice", name="notice")
      */
     public function index()
@@ -27,7 +30,9 @@ class NoticeController extends AbstractController
     # Submitted by ajax request
 
     /**
-     * @Route("/notice/add/{id}", name="notice", requirements={"id"="\d+"})
+     * Add a new id value to the session
+     *
+     * @Route("/notice/add/{id}", name="notice_add", requirements={"id"="\d+"})
      * @param $id
      * @param Request $request
      * @return Response
@@ -35,35 +40,50 @@ class NoticeController extends AbstractController
     public function add(int $id, Request $request)
     {
 
-
+        // get session instance
         $session = $request->getSession();
 
-        if (!$session->has('notice')) {
-            $session->set('notice', []);
+        if (!$session->has(self::NOTICE_SESSION_KEY)) {
+            $session->set(self::NOTICE_SESSION_KEY, [$id]);
         }
 
-        $session->set('notice', array_merge($session->get('notice'), $id));
-        print_r($session->get('notice'));
+        // add the new id to
+        $array = $session->get(self::NOTICE_SESSION_KEY);
+        $array[] = $id;
 
-        return new Response('test');
+        $session->set(self::NOTICE_SESSION_KEY, $array);
+
+        return new Response('/notice/remove/'.$id);
     }
 
     /**
-     * @Route("/notice/remove/{id}", name="notice", requirements={"id"="\d+"})
+     * Remove a id from session
+     *
+     * @Route("/notice/remove/{id}", name="notice_remove", requirements={"id"="\d+"})
      * @param $id
      * @param Request $request
      * @return Response
      */
     public function remove(int $id, Request $request)
     {
-        $session = $request->getSession();
 
-        if (!$session->has('notice')) {
-            $session->set('notice', []);
+        // get session instance
+        $session = $request->getSession();
+        $notice_ids = [];
+
+        if ($session->has(self::NOTICE_SESSION_KEY)) {
+
+            // search in array and remove id
+            foreach ($session->get(self::NOTICE_SESSION_KEY) as $value) {
+                if ($value != $id) {
+                    $notice_ids[] = $value;
+                }
+            }
+
+            $session->set(self::NOTICE_SESSION_KEY, $notice_ids);
         }
 
-        $session->set('notice', array_merge($session->get('notice'), $id));
 
-        return new Response('test');
+        return new Response('/notice/add/'.$id);
     }
 }
