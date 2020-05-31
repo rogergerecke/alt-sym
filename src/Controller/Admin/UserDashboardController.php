@@ -39,11 +39,10 @@ class UserDashboardController extends AbstractDashboardController
     public function __construct(Security $security)
     {
 
-       /* $this->security = $security;
+       $this->security = $security;
 
-        $this->user_id = $this->security->getUser()->getId();*/
+        $this->user_id = $this->security->getUser()->getId();
 
-        $this->user_id = '1';
     }
 
     /**
@@ -102,8 +101,11 @@ class UserDashboardController extends AbstractDashboardController
 
         /* Media section */
         yield MenuItem::section('Media-Einstellung', 'fa fa-image');
-        yield MenuItem::linkToCrud('Galerie bearbeiten', 'fa fa-image', MediaGallery::class);
-        yield MenuItem::linkToCrud('Bilder bearbeiten', 'fa fa-image', Media::class);
+        yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
+            ->setLinkTarget('_blank')
+            ->setQueryParameter('instance','user');
+        yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
+        yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 
         /* Marketing section */
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
@@ -114,7 +116,7 @@ class UserDashboardController extends AbstractDashboardController
 
         /* Information section */
         yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
-        yield MenuItem::linkToUrl('Werbung', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
         yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
         yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
         yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');

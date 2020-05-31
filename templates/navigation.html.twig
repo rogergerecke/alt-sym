@@ -19,6 +19,12 @@
             <li class="nav-item">
                <a class="nav-link {% if app.request.get('_route') == 'static_site_region' %}active{% endif %}" href="{{ path('static_site_region') }}">Region</a>
             </li>
+            <!-- Notice link -->
+            <li class="nav-item">
+               <a class="nav-link {% if app.request.get('_route') == 'notice' %}active{% endif %}" href="{{ path('notice') }}">Merkzettel {% if app.session.get('notice') is not empty %}<span class="badge badge-pill badge-success">{{ app.session.get('notice')|length }}</span>{% endif %}</a>
+            </li>
+
+            <!-- Sub Dropdown -->
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Info

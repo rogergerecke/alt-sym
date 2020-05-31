@@ -15,6 +15,8 @@ class NoticeController extends AbstractController
 {
     const NOTICE_SESSION_KEY = 'notice';
 
+    // TODO add statistic counter for id
+
     /**
      * Index for showing the notice hostel
      *
@@ -27,11 +29,11 @@ class NoticeController extends AbstractController
     {
         $hostels = false;
 
-       if ($session->has(self::NOTICE_SESSION_KEY)){
+        if ($session->has(self::NOTICE_SESSION_KEY)) {
 
-           $hostels = $hostelRepository->findAllHostelWithId($session->get(self::NOTICE_SESSION_KEY));
+            $hostels = $hostelRepository->findAllHostelWithId($session->get(self::NOTICE_SESSION_KEY));
 
-       }
+        }
 
         return $this->render(
             'notice/index.html.twig',
@@ -62,12 +64,20 @@ class NoticeController extends AbstractController
             $session->set(self::NOTICE_SESSION_KEY, [$id]);
         }
 
-        // add the new id to
-        $array = $session->get(self::NOTICE_SESSION_KEY);
-        $array[] = $id;
+        // if id not set add the new id to session
+        if (!in_array($id, $session->get(self::NOTICE_SESSION_KEY))) {
+            $array = $session->get(self::NOTICE_SESSION_KEY);
+            $array[] = $id;
 
-        $session->set(self::NOTICE_SESSION_KEY, $array);
+            //set
+            $session->set(self::NOTICE_SESSION_KEY, $array);
 
+            // write to the hostel statistik /performance killer customer want it
+            /**/
+        }
+
+
+        // response for the ajax handle the new a:href
         return new Response('/notice/remove/'.$id);
     }
 
@@ -98,7 +108,7 @@ class NoticeController extends AbstractController
             $session->set(self::NOTICE_SESSION_KEY, $notice_ids);
         }
 
-
+        // response for the ajax handle the new a:href
         return new Response('/notice/add/'.$id);
     }
 }

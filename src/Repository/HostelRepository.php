@@ -83,6 +83,12 @@ class HostelRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Find all hostel with the $id_array of hostel ids
+     *
+     * @param array $id_array
+     * @return int|mixed|string
+     */
     public function findAllHostelWithId(array $id_array)
     {
 

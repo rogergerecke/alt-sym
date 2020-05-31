@@ -56,19 +56,19 @@ fm_elfinder:
                         upload_max_size: 5M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
-                    detailt:
+                    detail:
                         #show_hidden: true|false # defaults to false, hides dotfiles
                         driver: LocalFileSystem
                         path: uploads/detailt
                         plugins:
                             AutoResize:
                                 enable: true
-                                maxWidth: 255
-                                maxHeight: 255
+                                maxWidth: 900
+                                maxHeight: 400
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     info:
@@ -83,7 +83,7 @@ fm_elfinder:
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     thumb:
@@ -98,7 +98,7 @@ fm_elfinder:
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     icon:
@@ -113,7 +113,7 @@ fm_elfinder:
                                 quality: 50 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
 
@@ -149,10 +149,10 @@ fm_elfinder:
                                 quality: 95 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
-                    detailt:
+                    detail:
                         #show_hidden: true|false # defaults to false, hides dotfiles
                         driver: LocalFileSystem
                         path: uploads/detailt
@@ -164,7 +164,7 @@ fm_elfinder:
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     info:
@@ -179,7 +179,7 @@ fm_elfinder:
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     thumb:
@@ -194,7 +194,7 @@ fm_elfinder:
                                 quality: 70 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     icon:
@@ -209,7 +209,7 @@ fm_elfinder:
                                 quality: 50 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg','application/x-shockwave-flash','audio/mpeg','audio/mp4','audio/ogg','application/pdf']
                         upload_deny: ['all']
-                        upload_max_size: 5M # also file upload sizes restricted in php.ini
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
 
@@ -248,6 +248,6 @@ fm_elfinder:
                         plugins:
                             AutoResize: # resize configuraion
                                 enable: true
-                                maxWidth: 255
+                                maxWidth: 355
                                 maxHeight: 255
                                 quality: 80 # JPEG image save quality

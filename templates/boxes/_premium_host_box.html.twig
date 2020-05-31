@@ -12,7 +12,33 @@
     <!-- start page second place -->
     {% for hostel in start_page_hostels %}
         <div class="col-md-3">
-            <img src="{{ hostel.image }}" class="card-img-top" alt="">
+
+            <!-- Notice Heart Button Ajax submit -->
+            {% if hostel.id in app.session.get('notice') %}
+                <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i
+                            class="fas fa-heart"></i></a>
+            {% else %}
+                <a href="{{ path('notice_add',{'id':hostel.id}) }}" class="notice-button"><i
+                            class="far fa-heart"></i></a>
+            {% endif %}
+            <!-- Notice Heart Button Ajax submit #END -->
+
+            <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
+                {% if hostel.image is not empty %}
+                    <!-- Image -->
+                    <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
+                         class="card-img-top">
+                {% else %}
+                    <!-- Place Holder -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                         class="card-img-top">
+                        <rect fill="#ddd" width="225" height="225"/>
+                        <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                              font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                        </text>
+                    </svg>
+                {% endif %}
+            </a>
             <h4>{{ hostel.hostelName }}</h4>
             <div class="sub-line">Super Hostel {#{{ hostel.amenities.0 }}#}</div>
             <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} km zum See</div>

@@ -266,6 +266,7 @@ class HostelCrudController extends AbstractCrudController
             return [
                 $user_id,
                 $hostel_name,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
