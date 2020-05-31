@@ -22,10 +22,8 @@
 
                         <!-- Free Entry -->
                         <div class="card mb-4 box-shadow">
-                            <div class="card-header">
-                                <h5 class="h4 my-0 font-weight-normal">Free</h5>
-                            </div>
-                            <div class="card-body">
+                            <div class="card-body mt-5">
+                                <h5 class="h4 my-0 font-weight-normal text-primary mt-2">Free</h5>
                                 <span class="h1 card-title pricing-card-title">0 € <small
                                             class="text-muted">/ Jahr*</small>
                                 </span>
@@ -42,18 +40,14 @@
                                     <li class="text-danger">ohne Geolocation</li>
                                     <li class="text-danger">ohne Zimmer Detail Seite</li>
                                 </ul>
-                                <input type="submit" name="register[free_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Umsonst starten">
+                                <input type="submit" name="register[free_account]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Umsonst starten">
 
                                 <!-- Collapse more Information -->
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
                                         data-target="#collapseFree" aria-expanded="false" aria-controls="collapseFree">
                                     Mehr Details
-                                    <svg class="svg-inline--fa fa-angle-down fa-w-10" aria-hidden="true"
-                                         focusable="false" data-prefix="fas" data-icon="angle-down" role="img"
-                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
-                                        <path fill="currentColor"
-                                              d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path>
-                                    </svg><!-- <i class="fas fa-angle-down"></i> -->
+                                    <i class="fas fa-angle-down"></i>
                                 </button>
                                 <div class="collapse multi-collapse" id="collapseFree">
                                     <div class="card card-body">
@@ -65,12 +59,60 @@
                             </div>
                         </div>
 
-                        <!-- Basis Entry -->
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-header">
-                                <h5 class="h4 my-0 font-weight-normal">Basis</h5>
+                        <!-- Premium Entry -->
+                        <div class="card mb-4 box-shadow border-success">
+                            <div class="card-header bg-success">
+                                <div class="h5 text-white"><i class="fas fa-star"></i> <i class="fas fa-star"></i> Das
+                                    beliebteste Paket <i class="fas fa-star"></i> <i class="fas fa-star"></i></div>
                             </div>
                             <div class="card-body">
+                                <h5 class="h4 my-0 font-weight-normal text-success">Premium</h5>
+                                <span class="h1 card-title pricing-card-title">99,96 € <small class="text-muted">/
+                                        Jahr*</small></span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>Unterkunft Premium Eintrag</li>
+                                    <li class="text-success"><span class="text-bold">Priorisierten Listing</span>
+                                        <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="top"
+                                           title="Priorisierte Einträge werden vor den Basis-Einträgen angezeigt"></i>
+                                    </li>
+                                    <li class="text-success">20 Bilder</li>
+                                    <li>+ Adresse</li>
+                                    <li>+ Email</li>
+                                    <li>+ Telefon</li>
+                                    <li>+ Beschreibungstext</li>
+                                    <li>+ Entfernung zum See</li>
+                                    <li class="text-success">+ Geolocation</li>
+                                    <li class="text-success">+ Zimmer Detail Seite</li>
+                                </ul>
+                                <input type="submit" name="register[premium_account]" form="register"
+                                       class="btn btn-lg btn-block btn-success" value="Ich bin Experte">
+
+                                <!-- Collapse more Information -->
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapsePremium" aria-expanded="false"
+                                        aria-controls="collapsePremium">
+                                    Mehr Details
+                                    <i class="fas fa-angle-down"></i>
+                                </button>
+                                <div class="collapse multi-collapse" id="collapsePremium">
+                                    <div class="card card-body">
+                                        Ihre Unterkunft erscheint mit allen Funktionen wie beim Basiseintrag, zusätzlich
+                                        sind bis zu 20
+                                        Bilder möglich. Die Unterkünfte mit Premiumeintrag werden bei der
+                                        Ergebnisausgabe vor den
+                                        Unterkünften mit Basiseintrag aufgelistet.
+                                    </div>
+                                </div>
+                                <!-- Collapse more Information #END -->
+
+                            </div>
+                        </div>
+
+                        <!-- Basis Entry -->
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body mt-5">
+                                <h5 class="h4 my-0 font-weight-normal text-primary mt-2">Basis</h5>
                                 <span class="h1 card-title pricing-card-title">49,98 € <small class="text-muted">/
                                         Jahr*</small></span>
                                 <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
@@ -86,7 +128,8 @@
                                     <li class="text-danger">ohne Geolocation</li>
                                     <li class="text-danger">ohne Zimmer Detail Seite</li>
                                 </ul>
-                                <input type="submit" name="register[base_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Sie sind Profi">
+                                <input type="submit" name="register[base_account]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Sie sind Profi">
 
                                 <!-- Collapse more Information -->
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -114,53 +157,6 @@
 
                             </div>
                         </div>
-
-                        <!-- Premium Entry -->
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-header">
-                                <h5 class="h4 my-0 font-weight-normal">Premium</h5>
-                            </div>
-                            <div class="card-body">
-                                <span class="h1 card-title pricing-card-title">99,96 € <small class="text-muted">/
-                                        Jahr*</small></span>
-                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
-                                <ul class="list-unstyled mt-3 mb-4">
-                                    <li>Unterkunft Premium Eintrag</li>
-                                    <li class="text-success"><span class="text-bold">Priorisierten Listing</span>
-                                        <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="top"
-                                           title="Priorisierte Einträge werden vor den Basis-Einträgen angezeigt"></i>
-                                    </li>
-                                    <li class="text-success">20 Bilder</li>
-                                    <li>+ Adresse</li>
-                                    <li>+ Email</li>
-                                    <li>+ Telefon</li>
-                                    <li>+ Beschreibungstext</li>
-                                    <li>+ Entfernung zum See</li>
-                                    <li class="text-success">+ Geolocation</li>
-                                    <li class="text-success">+ Zimmer Detail Seite</li>
-                                </ul>
-                                <input type="submit" name="register[premium_account]" form="register" class="btn btn-lg btn-block btn-primary" value="Ich bin Experte">
-
-                                <!-- Collapse more Information -->
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
-                                        data-target="#collapsePremium" aria-expanded="false"
-                                        aria-controls="collapsePremium">
-                                    Mehr Details
-                                    <i class="fas fa-angle-down"></i>
-                                </button>
-                                <div class="collapse multi-collapse" id="collapsePremium">
-                                    <div class="card card-body">
-                                        Ihre Unterkunft erscheint mit allen Funktionen wie beim Basiseintrag, zusätzlich
-                                        sind bis zu 20
-                                        Bilder möglich. Die Unterkünfte mit Premiumeintrag werden bei der
-                                        Ergebnisausgabe vor den
-                                        Unterkünften mit Basiseintrag aufgelistet.
-                                    </div>
-                                </div>
-                                <!-- Collapse more Information #END -->
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -173,28 +169,30 @@
                 </div>
             </div>
 
-            <!-- Adverting offer-->
+            <!-- Adverting Offer Group -->
             <div class="container">
                 <div class="card-deck mb-3 text-center">
                     <div class="col-md-6">
-                    <div class="card mb-4 box-shadow">
-                        <div class="card-header">
-                            <h6 class="h4 my-0 font-weight-normal">Eintrag Freizeitangebot</h6>
-                        </div>
-                        <div class="card-body">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                <h6 class="h4 my-0 font-weight-normal">Eintrag Freizeitangebot</h6>
+                            </div>
+                            <div class="card-body">
                             <span class="h1 card-title pricing-card-title">49,98 € <small class="text-muted">/
                                     Jahr*</small></span>
-                            <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
-                            <ul class="list-unstyled mt-3 mb-4">
-                                <li>+ Text</li>
-                                <li>+ 5 Bilder</li>
-                                <li>+ Kontakt</li>
-                                <li>+ Hompage Link</li>
-                                <li>+ Geolocation</li>
-                            </ul>
-                            <input type="submit" name="register[leisure_offer]" form="register" class="btn btn-lg btn-block btn-primary" value="Freizeitangebot eintragen">
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>+ Text</li>
+                                    <li>+ 5 Bilder</li>
+                                    <li>+ Kontakt</li>
+                                    <li>+ Hompage Link</li>
+                                    <li>+ Geolocation</li>
+                                </ul>
+                                <input type="submit" name="register[leisure_offer]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Freizeitangebot eintragen">
+                            </div>
                         </div>
-                    </div></div>
+                    </div>
                     <div class="col-md-6">
                         <div class="card mb-4 box-shadow">
                             <div class="card-header">
@@ -211,7 +209,7 @@
                                     <li>mit Telefon</li>
                                     <li class="text-danger">ohne Beschreibungstext</li>
                                 </ul>
-                                <a href="#hostel-entry" class="btn btn-lg btn-block btn-primary">Mehr Angebote</a>
+                                <a href="#hostel-entry" class="btn btn-lg btn-block btn-primary">Alle Angebote</a>
                             </div>
                         </div>
                     </div>

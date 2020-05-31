@@ -36,13 +36,19 @@ class UserDashboardController extends AbstractDashboardController
      */
     private $user_id;
 
+
+    /**
+     * UserDashboardController constructor.
+     * @param Security $security
+     */
     public function __construct(Security $security)
     {
 
-       $this->security = $security;
+        $this->security = $security;
 
-        $this->user_id = $this->security->getUser()->getId();
-
+        if (null !== $this->security->getUser()) {
+            $this->user_id = $this->security->getUser()->getId();
+        }
     }
 
     /**
@@ -78,7 +84,7 @@ class UserDashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
 
-        yield MenuItem::linktoDashboard('Upgrade to Premium','fa fa-star');
+        yield MenuItem::linktoDashboard('Upgrade to Premium', 'fa fa-star');
 
         yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
             ->setAction('detail')
@@ -103,7 +109,7 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::section('Media-Einstellung', 'fa fa-image');
         yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
             ->setLinkTarget('_blank')
-            ->setQueryParameter('instance','user');
+            ->setQueryParameter('instance', 'user');
         yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
         yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 

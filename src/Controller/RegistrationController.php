@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController
         // create additional text to register form for more personality
         $packed_type_selection = false;
         $packed_type_massage = false;
-        $packed_type_selection = $request->get('register');//entry came from entry page
+        $packed_type_selection = $request->request->all('register');//entry came from entry page
 
 
         if (null !== $packed_type_selection) {

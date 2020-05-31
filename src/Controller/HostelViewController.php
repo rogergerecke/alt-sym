@@ -34,11 +34,11 @@ class HostelViewController extends AbstractController
         $form = $this->createForm(SearchHostelType::class);
 
         // we have a search query
-        if ($request->isMethod('POST') and $request->request->get($form->getName())) {
+        if ($request->isMethod('POST') and $request->request->all($form->getName())) {
 
             // todo validate form
 
-            $q = $request->request->get($form->getName());
+            $q = $request->request->all($form->getName());
             // TODO form function
             /* $hostels = $hostelRepository->findHostelsWithFilter($q);*/
 
@@ -55,7 +55,7 @@ class HostelViewController extends AbstractController
 
 
         // no request default show all
-        if (null === $request->request->get('search_hostel')) {
+        if (null === $request->request->all('search_hostel')) {
             $hostels = $hostelRepository->findBy(['status' => true]);
         }
 
