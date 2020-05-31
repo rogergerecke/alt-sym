@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Hostel;
+use App\Entity\Statistics;
 use App\Repository\HostelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,11 +70,30 @@ class NoticeController extends AbstractController
             $array = $session->get(self::NOTICE_SESSION_KEY);
             $array[] = $id;
 
-            //set
+            //set id to session
             $session->set(self::NOTICE_SESSION_KEY, $array);
 
             // write to the hostel statistik /performance killer customer want it
-            /**/
+            // build em for statistic counter
+            $em = $this->getDoctrine()->getManager();
+            $hostel_statistic = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
+
+            // if hostel id in statistics or save new
+            if (!$hostel_statistic) {
+                // new statistics entry
+                $statistic = new Statistics();
+                $statistic->setHostelId((int)$id);
+                $statistic->setNoticeHostel(1);
+                $em->persist($statistic);
+                $em->flush();
+            } else {
+                // update statistics entry
+                $count = $hostel_statistic->getNoticeHostel() + 1;
+                $hostel_statistic->setNoticeHostel($count);
+                $em->persist($hostel_statistic);
+                $em->flush();
+            }
+
         }
 
 
