@@ -55,10 +55,14 @@ h5, .h5 {
   font-family: $font-family-sans-serif
 }
 
-
+/* Bootstrap Container */
 .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+#main{
+  min-height: 33rem;
 }
 
 /* Background */
@@ -149,10 +153,10 @@ h5, .h5 {
   padding-bottom: 0.25rem;
 }
 
-.clh-top-position {
+/*.clh-top-position {
   border-top: $headings-color solid 8px !important;
   border-bottom: $headings-color solid 8px !important;
-}
+}*/
 
 .listing-icon-location {
   float: left;
@@ -183,6 +187,27 @@ h5, .h5 {
   left: 230px;
   top: 3px;
   color: #fff;
+}
+
+#hostel-listing .fa-heart:hover {
+  background-color: rgba(111, 110, 110, 0.4);
+}
+
+/* Premium Host Box Start Page */
+#premium-host-box .fa-heart {
+  border-radius: 0.1rem;
+  padding: 0.2rem;
+  font-size: 1.5rem;
+  background-color: rgba(111, 110, 110, 0.2);
+  position: absolute;
+  left: 230px;
+  top: 3px;
+  color: #fff;
+
+}
+
+#premium-host-box .fa-heart:hover {
+  background-color: rgba(111, 110, 110, 0.4);
 }
 
 /* Event Listing */

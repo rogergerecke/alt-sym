@@ -189,6 +189,11 @@ class Hostel
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hostel_type;
+
 
     public function getId(): ?int
     {
@@ -551,6 +556,18 @@ class Hostel
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getHostelType(): ?string
+    {
+        return $this->hostel_type;
+    }
+
+    public function setHostelType(?string $hostel_type): self
+    {
+        $this->hostel_type = $hostel_type;
 
         return $this;
     }

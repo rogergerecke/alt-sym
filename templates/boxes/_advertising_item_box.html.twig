@@ -1,9 +1,9 @@
 <!-- Advertising start page place one -->
 <a href="{{ advertising.link }}">
-    <img src="{{ advertising.image }}" class="card-img-top" alt="">
+    <img src="{{ advertising.image }}" class="card-img-top" alt="{{ advertising.text|striptags }}">
 </a>
 <h4>{{ advertising.title }}</h4>
-<div class="sub-line">{{ advertising.text }}</div>
+<div class="sub-line">{{ advertising.text|raw }}</div>
 <div class="location-box"><i
             class="fas fa-map-marker-alt"></i> {{ advertising.city }}  {{ advertising.distance_to_see|number_format('1',',','.') }}
     km zum See

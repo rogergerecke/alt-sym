@@ -1,5 +1,5 @@
 {% block elfinder_widget %}
-    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} data-type="elfinder-input-field" class="form-control" />
+    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} data-type="elfinder-input-field" />
     {% if enable and instance is defined %}
         <script type="text/javascript" charset="utf-8">
             live('click', '[data-type="elfinder-input-field"][id="{{ id }}"]', function (event) {
@@ -26,3 +26,4 @@
         </script>
     {% endif %}
 {% endblock %}
+

@@ -98,7 +98,8 @@ class AdminDashboardController extends AbstractDashboardController
         /* Media Manager section */
         [
             yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
-            yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder'),
+            yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder')
+                ->setQueryParameter('instance', 'admin'),
             yield MenuItem::linkToCrud('Dateien', 'fa fa-image', Media::class),
             yield MenuItem::linkToCrud('Gallery', 'fa fa-images', MediaGallery::class),
         ];

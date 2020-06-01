@@ -32,6 +32,7 @@
     "symfony/swiftmailer-bundle": "^3.4",
     "symfony/translation": "5.1.*",
     "symfony/twig-pack": "*",
+    "symfony/uid": "5.1.*",
     "symfony/validator": "5.1.*",
     "symfony/web-link": "5.1.*",
     "symfony/webpack-encore-bundle": "^1.7",
@@ -76,8 +77,8 @@
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
       "ckeditor:install --clear=drop": "symfony-cmd",
-      "elfinder:install": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+      "elfinder:install": "symfony-cmd"
     },
     "post-install-cmd": [
       "@auto-scripts"

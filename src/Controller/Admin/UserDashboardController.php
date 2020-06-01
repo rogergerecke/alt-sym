@@ -102,7 +102,7 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
             ->setAction('new');
         yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', Hostel::class);
-        yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class);
+        yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
 
 
         /* Media section */
@@ -113,11 +113,10 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
         yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 
-        /* Marketing section */
+        /* Marketing section */  // todo add role_handling if(user_privileges)
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
         yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);// todo upgrade info
         yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
-        yield MenuItem::linkToCrud('Banner Werbung', 'fa fa-ad', Advertising::class);
 
 
         /* Information section */

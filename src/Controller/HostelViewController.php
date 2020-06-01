@@ -2,15 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\RoomAmenitiesDescription;
 use App\Entity\Statistics;
 use App\Form\SearchHostelType;
 use App\Repository\HostelRepository;
+use App\Repository\RoomAmenitiesDescriptionRepository;
+use App\Repository\RoomAmenitiesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 /**
  * Class HostelViewController
@@ -55,7 +59,7 @@ class HostelViewController extends AbstractController
 
 
         // no request default show all
-        if (null === $request->request->all('search_hostel')) {
+        if (!$request->request->all('search_hostel')) {
             $hostels = $hostelRepository->findBy(['status' => true]);
         }
 
@@ -101,21 +105,41 @@ class HostelViewController extends AbstractController
      * @Route("/gastgeber/details/{id}", name="hostel_details", requirements={"id"="\d+"})
      * @param int $id
      * @param HostelRepository $hostelRepository
+     * @param RoomAmenitiesRepository $roomAmenitiesRepository
+     * @return Response
      */
-    public function details(int $id, HostelRepository $hostelRepository)
-    {
+    public function details(
+        int $id,
+        HostelRepository $hostelRepository,
+        RoomAmenitiesRepository $roomAmenitiesRepository
+    ) {
 
         $hostel = $hostelRepository->find($id);
+        $services = false;
 
+        // if nothing hostel data exist
         if (null === $hostel) {
             $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
-        }else{
+        } else {
+
+            // Create the Amenities Description
+            if ($amenities = $hostel->getAmenities()) {
+                // lang code DE
+                $roomAmenities = $roomAmenitiesRepository->getRoomAmenitiesWithDescription();
+
+                foreach ($roomAmenities as $amenity) {
+
+                    if (in_array($amenity['name'], $amenities)) {
+                        $services[] = $amenity;
+                    }
+                }
+            }
 
             // Statistics detail page_view counter
             // write to the hostel statistik /performance killer customer want it
             // build em for statistic counter
             $em = $this->getDoctrine()->getManager();
-            $statistics = $em->getRepository(Statistics::class)->findOneBy(['hostel_id'=>$id]);
+            $statistics = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
 
             // if hostel id in statistics
             // if hostel id in statistics or save new
@@ -136,16 +160,11 @@ class HostelViewController extends AbstractController
         }
 
 
-
-
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'controller_name' => 'HostelViewController',
-                'form'            => '$form->createView()',
-                'hostels'         => '$hostels',
-                'top_hostels'     => '$hostelRepository->findTopListingHostels()',
                 'hostel'          => $hostel,
+                'services'         => $services,
 
             ]
         );

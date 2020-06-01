@@ -6,7 +6,7 @@
     <div class="container">
         <h1 class="display-4 text-center">Gastgeber Vergleichen</h1>
 
-        <p class="lead">Vergleichen Sie Ihre Unterkünfte</p>
+        {% if hostels is not empty %}<p class="lead">Vergleichen Sie Ihre Unterkünfte</p>{% endif %}
         <div class="row">
 
             <!-- Notice Hostels Loop -->
@@ -98,7 +98,12 @@
                     </div>
                 </div>
             {% else %}
-                <span class="lead">Keine Gastgeber auf dem Merkzettel gespeichert</span>
+                <div class="col-md-12 mt-5 mb-5">
+                    <div class="h4">
+                        <p class="border-left border-info pl-3">Sie haben noch keine Unterkünfte auf Ihrem Merkzettel!</p>
+                        <p class="border-left border-info pl-3">Um eine Unterkunft auf den Merkzettel zu speichern klicken Sie einfach auf das <i class="fas fa-heart"></i> Symbol.</p>
+                    </div>
+                </div>
             {% endfor %}
             <!-- Notice Hostels Loop #END -->
 

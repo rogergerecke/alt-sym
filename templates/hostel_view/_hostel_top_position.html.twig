@@ -1,5 +1,5 @@
 {% for hostel in top_hostels %}
-    <div class="clh-top-position card card-list-hotels mb-4">
+    <div class="border-info card card-list-hotels mb-4">
         <div class="row">
             <div class="img-thumb-box col-md-4">
 
@@ -31,9 +31,14 @@
                     {% endif %}
                 </a>
             </div>
+
+            <!-- Hostel Detail Part -->
             <div class="card-body col-md-8 align-top">
-                <h3>{{ hostel.hostelName }}</h3>
-                <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
+                <!-- Heading -->
+                <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
+                       class="text-decoration-none">{{ hostel.hostelName }}</a></h3>
+                <!-- Hostel Type -->
+                <strong>{{ hostel.hostelType }}</strong>
                 <div class="row mb-1">
                     <div class="col-md-12">
                         {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>

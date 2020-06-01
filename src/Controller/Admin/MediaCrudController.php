@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use FM\ElfinderBundle\Form\Type\ElFinderType;
 
@@ -40,7 +41,7 @@ class MediaCrudController extends AbstractCrudController
 
         $type = TextField::new('type')->setFormTypeOption('disabled' ,true);
         $class = TextField::new('class')->setFormTypeOption('disabled' ,true);
-        $user_id = TextField::new('user_id')->setFormTypeOption('disabled' ,true);
+        $user_id = IntegerField::new('user_id')->setFormTypeOption('disabled' ,true);
         $status = BooleanField::new('status');
 
         // output fields by page

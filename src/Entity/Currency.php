@@ -37,6 +37,11 @@ class Currency
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $sort;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Currency
     public function setStatus(bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    public function setSort(?int $sort): self
+    {
+        $this->sort = $sort;
 
         return $this;
     }
