@@ -25,7 +25,7 @@ class AdvertisingCrudController extends AbstractCrudController
         return $crud
             ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
             ->setPageTitle(Crud::PAGE_EDIT, 'Banner Werbung')
-            ->setHelp(Crud::PAGE_EDIT, 'Lassen Sie sich für Banner Werbung freischalten');// todo massege by state of payment
+            ->setHelp(Crud::PAGE_EDIT, 'Werbebanner bearbeiten');
 
     }
 

@@ -15,7 +15,7 @@ $triade-4-rgba: rgba(157, 191, 11, 1);
 $triade-5-rgba: rgba(95, 115, 13, 1);
 
 /* Color Theme Swatches in RGBA */
-$kompliment-2-1-rgba: rgba(9, 55, 115, 1);
+$kompliment-2-1-rgba: rgb(9, 55, 115);
 $kompliment-2-2-rgba: rgba(66, 148, 255, 1);
 $kompliment-2-3-rgba: rgba(31, 100, 191, 1);
 $kompliment-2-4-rgba: rgba(115, 75, 0, 1);
@@ -55,14 +55,18 @@ h5, .h5 {
   font-family: $font-family-sans-serif
 }
 
-
+/* Bootstrap Container */
 .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
 
+#main{
+  min-height: 33rem;
+}
+
 /* Background */
-.bg-light-blue{
+.bg-light-blue {
   background-color: lighten($kompliment-2-2-rgba, 10);
 }
 
@@ -80,6 +84,19 @@ h5, .h5 {
 .nav-item {
   text-transform: uppercase;
   font-weight: bold;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: darken($headings-color, 30);
+}
+
+.navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
+  color: $kompliment-2-2-rgba !important;
+}
+
+#navbarSupportedContent .badge-success{
+  color: #fff;
+  font-size: 60%;
 }
 
 /* Search module */
@@ -100,6 +117,7 @@ h5, .h5 {
 .soapy-heading, .soapy-sub-heading {
   color: #fff;
 }
+
 /* Hostel Listing */
 /* on hostel view */
 #search-sidebar {
@@ -110,7 +128,7 @@ h5, .h5 {
   color: lighten($body-color, 20);
 }
 
-#search-sidebar .dropdown-menu{
+#search-sidebar .dropdown-menu {
   padding-right: 2rem;
   padding-left: 2rem;
 }
@@ -135,28 +153,61 @@ h5, .h5 {
   padding-bottom: 0.25rem;
 }
 
-.clh-top-position{
+/*.clh-top-position {
   border-top: $headings-color solid 8px !important;
   border-bottom: $headings-color solid 8px !important;
-}
+}*/
 
-.listing-icon-location{
+.listing-icon-location {
   float: left;
   padding-right: 0.3rem;
 }
 
-.card-list-hotels h3 a{
+.card-list-hotels h3 a {
   color: $headings-color;
 }
 
-.card-list-hotels .accordion .card-header{
+.card-list-hotels .accordion .card-header {
   background-color: inherit;
 }
 
-.card-list-hotels .accordion .card{
+.card-list-hotels .accordion .card {
   border-left: none;
   border-right: none;
   border-radius: 0;
+}
+
+/* Hostel listing */
+#hostel-listing .fa-heart {
+  border-radius: 0.1rem;
+  padding: 0.2rem;
+  font-size: 1.5rem;
+  background-color: rgba(111, 110, 110, 0.2);
+  position: absolute;
+  left: 230px;
+  top: 3px;
+  color: #fff;
+}
+
+#hostel-listing .fa-heart:hover {
+  background-color: rgba(111, 110, 110, 0.4);
+}
+
+/* Premium Host Box Start Page */
+#premium-host-box .fa-heart {
+  border-radius: 0.1rem;
+  padding: 0.2rem;
+  font-size: 1.5rem;
+  background-color: rgba(111, 110, 110, 0.2);
+  position: absolute;
+  left: 230px;
+  top: 3px;
+  color: #fff;
+
+}
+
+#premium-host-box .fa-heart:hover {
+  background-color: rgba(111, 110, 110, 0.4);
 }
 
 /* Event Listing */
@@ -169,39 +220,40 @@ h5, .h5 {
   color: #404040;
 }
 
-#weather-widget .card-header{
+#weather-widget .card-header {
   background-color: #fcfcfc;
   border-bottom: none;
 }
 
-#weather-widget .info-ow{
+#weather-widget .info-ow {
   font-size: 0.5rem;
 }
 
-#weather-current{
+#weather-current {
   font-size: 0.8rem;
 }
 
-#weather-current .ow-temp{
+#weather-current .ow-temp {
   font-size: 1rem;
 }
 
-#weather-forecast{
+#weather-forecast {
   font-size: 0.6rem;
 }
 
-#weather-forecast img{
+#weather-forecast img {
   margin-bottom: 1rem;
 }
 
-#weather-forecast .ow-date{
+#weather-forecast .ow-date {
   font-size: 0.8rem;
 }
-#weather-forecast .ow-temp{
+
+#weather-forecast .ow-temp {
   font-size: 0.9rem;
 }
 
-.ow-date{
+.ow-date {
   font-weight: bold;
 }
 
@@ -233,7 +285,7 @@ h5, .h5 {
   border: none;
 }
 
-#footer-member .badge-pill{
+#footer-member .badge-pill {
   font-family: Verdana, serif;
   color: #fff;
 }
@@ -245,6 +297,10 @@ h5, .h5 {
 }
 
 
-
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+
+// fontawesome fonts include
+@import "~@fortawesome/fontawesome-free";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";

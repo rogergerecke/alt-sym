@@ -2,10 +2,7 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -24,6 +21,7 @@ class Hostel
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
 
     /**
      * @ORM\Id()
@@ -185,6 +183,16 @@ class Hostel
      * @ORM\Column(type="float")
      */
     private $distance_to_see;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hostel_type;
 
 
     public function getId(): ?int
@@ -536,6 +544,30 @@ class Hostel
     public function setDistanceToSee(float $distance_to_see): self
     {
         $this->distance_to_see = $distance_to_see;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getHostelType(): ?string
+    {
+        return $this->hostel_type;
+    }
+
+    public function setHostelType(?string $hostel_type): self
+    {
+        $this->hostel_type = $hostel_type;
 
         return $this;
     }

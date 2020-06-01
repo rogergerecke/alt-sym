@@ -22,7 +22,7 @@ class HostelRepository extends ServiceEntityRepository
     public function findHostelsWithFilter(?array $filter)
     {
         // first idee
-       /* [regions] => 61 [hostel_types] => 4 [quantity_person] => 1 [submit] => [price_range] => 10;80 [see_distance] => 1;5 )*/
+        /* [regions] => 61 [hostel_types] => 4 [quantity_person] => 1 [submit] => [price_range] => 10;80 [see_distance] => 1;5 )*/
         $qb = $this->createQueryBuilder('h');
 
         if ($filter['regions']) {
@@ -48,16 +48,18 @@ class HostelRepository extends ServiceEntityRepository
      * Find all the hostels for the Start Page Listing
      * with
      *
+     * @param int $limit
      * @return int|mixed|string
      */
-    public function findStartPageHostels()
+    public function findStartPageHostels(int $limit = 3)
     {
         $qb = $this->createQueryBuilder('hsp')
             ->where('hsp.status = 1')
             ->andWhere('hsp.startpage = 1')
             ->andWhere('hsp.top_placement_finished >= :time')
             ->setParameter('time', new \DateTime('now'))
-            ->addOrderBy('hsp.sort','DESC');
+            ->addOrderBy('hsp.sort', 'DESC')
+            ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();
 
@@ -74,10 +76,42 @@ class HostelRepository extends ServiceEntityRepository
             ->andWhere('tlh.toplisting = 1')
             ->andWhere('tlh.top_placement_finished >= :time')
             ->setParameter('time', new \DateTime('now'))
-            ->addOrderBy('tlh.sort','DESC');
+            ->addOrderBy('tlh.sort', 'DESC');
 
         return $qb->getQuery()->getResult();
 
+    }
+
+
+    /**
+     * Find all hostel with the $id_array of hostel ids
+     *
+     * @param array $id_array
+     * @return int|mixed|string
+     */
+    public function findAllHostelWithId(array $id_array)
+    {
+
+        $qb = $this->createQueryBuilder('hn');
+
+        $i = 1;
+        foreach ($id_array as $id) {
+            if ($i == 1) {
+                $qb
+                    ->where("hn.id = :id$i")
+                    ->setParameter("id$i", $id);
+            } else {
+                $qb
+                    ->orWhere("hn.id = :id$i")
+                    ->setParameter("id$i", $id);
+            }
+
+            $i++;
+        }
+
+        return $qb
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
@@ -66,6 +67,7 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
 
+        $id = IdField::new('id');
         $email = TextField::new('email');
 
         $password = TextField::new('password')->setFormType(PasswordType::class);
@@ -94,6 +96,7 @@ class UserCrudController extends AbstractCrudController
                 $email,
                 $password,
                 $status,
+                $id
             ];
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [

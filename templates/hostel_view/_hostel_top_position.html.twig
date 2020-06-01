@@ -1,18 +1,44 @@
 {% for hostel in top_hostels %}
-    <div class="clh-top-position card card-list-hotels mb-4">
+    <div class="border-info card card-list-hotels mb-4">
         <div class="row">
             <div class="img-thumb-box col-md-4">
+
+                <!-- Notice Heart Button Ajax submit -->
+                {% if hostel.id in app.session.get('notice') %}
+                    <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i
+                                class="fas fa-heart"></i></a>
+                {% else %}
+                    <a href="{{ path('notice_add',{'id':hostel.id}) }}" class="notice-button"><i
+                                class="far fa-heart"></i></a>
+                {% endif %}
+                <!-- Notice Heart Button Ajax submit #END -->
+
                 <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
-                    {#<img src="{{ hostel.id }}" alt="" class="rounded float-left card-img-left">#}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225" class="rounded float-left card-img-left">
-                        <rect fill="#ddd" width="225" height="225"/>
-                        <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5" font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225</text>
-                    </svg>
+                    <!-- Hostel Image -->
+                    {% if hostel.image is not empty %}
+                        <!-- Image -->
+                        <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
+                             class="rounded float-left card-img-left img-fluid">
+                    {% else %}
+                        <!-- Place Holder -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                             class="rounded float-left card-img-left">
+                            <rect fill="#ddd" width="225" height="225"/>
+                            <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                                  font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                            </text>
+                        </svg>
+                    {% endif %}
                 </a>
             </div>
+
+            <!-- Hostel Detail Part -->
             <div class="card-body col-md-8 align-top">
-                <h3>{{ hostel.hostelName }}</h3>
-                <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
+                <!-- Heading -->
+                <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
+                       class="text-decoration-none">{{ hostel.hostelName }}</a></h3>
+                <!-- Hostel Type -->
+                <strong>{{ hostel.hostelType }}</strong>
                 <div class="row mb-1">
                     <div class="col-md-12">
                         {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>

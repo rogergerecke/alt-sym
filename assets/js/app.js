@@ -4,12 +4,13 @@ const jQuery = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap'); // todo remove slider add magictoolbox
 require('ion-rangeslider');
-require('@fortawesome/fontawesome-free');
+/*require('@fortawesome/fontawesome-free');*/
 require('@google/markerclustererplus');
 
 
 /* Include only icons we need from fontawesome */
 // https://fontawesome.com/how-to-use/with-the-api/setup/importing-icons
+/*
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
     faAngleDown,
@@ -17,11 +18,15 @@ import {
     faEnvelope,
     faMapMarkerAlt,
     faHome,
-    faUserFriends
+    faUserFriends,
+    faHeart,
+    faHeartBroken,
+    faInfoCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 // load only the selected icons from fontawesome
-library.add(faAngleDown, faAddressBook, faEnvelope, faMapMarkerAlt, faHome, faUserFriends);
+library.add(faAngleDown, faAddressBook, faEnvelope, faMapMarkerAlt, faHome, faUserFriends, faHeart, faHeartBroken, faInfoCircle);
+*/
 
 jQuery(function ($) {
     $(window).on('load', function () {
@@ -29,12 +34,12 @@ jQuery(function ($) {
         /*$('[data-toggle="popover"]').popover();*/
 
         /* prevent dropdown before close in the hostel_search on start page */
-        $('#soapy .dropdown-menu').on('click',function (e) {
+        $('#soapy .dropdown-menu').on('click', function (e) {
             e.stopPropagation();
         });
 
         /* prevent dropdown before close in the view hostel list side bar */
-        $('#search-sidebar .dropdown-menu').on('click',function (e) {
+        $('#search-sidebar .dropdown-menu').on('click', function (e) {
             e.stopPropagation();
         });
 
@@ -44,12 +49,30 @@ jQuery(function ($) {
         });
 
 
+        /* ajax request the notice hostel id */
+        $('a.notice-button').click(function (event) {
+            event.preventDefault();
+
+            // toggle the heart icon
+            $(this).find('i').toggleClass('fas far');
+
+            // must save the link before ajax
+            let link = $(this);
+            $.ajax({
+                url: $(this).attr('href'),
+                success: function (response) {
+                    link.attr('href',response)
+                }
+            });
+
+            return false; // for good measure
+        });
 
         /* add smooth cross browser scroll to a#anker */
         $("a").on('click', function (event) {
             // if a# not empty prevent and save it
             if (this.hash !== "") {
-                event.preventDefault();
+                /*event.preventDefault();*/
                 var hash = this.hash;
 
                 // and smooth scroll to #hash
@@ -59,6 +82,7 @@ jQuery(function ($) {
 
                     window.location.hash = hash;
                 });
+                return false;
             }
         });
 

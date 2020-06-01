@@ -67,6 +67,11 @@ class User implements UserInterface
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $user_privileges = [];
+
     public function __construct()
     {
         $this->hostels = new ArrayCollection();
@@ -221,6 +226,18 @@ class User implements UserInterface
     public function setStatus(?bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUserPrivileges(): ?array
+    {
+        return $this->user_privileges;
+    }
+
+    public function setUserPrivileges(array $user_privileges): self
+    {
+        $this->user_privileges = $user_privileges;
 
         return $this;
     }

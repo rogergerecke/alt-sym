@@ -1,0 +1,219 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ meta_title }}{% endblock %}
+{% block description %}{{ meta_description }}{% endblock %}
+
+{% block body %}
+    <form action="{{ path('app_register') }}" method="post" id="register">
+
+    </form>
+    <div class="container" id="hostel-entry">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                    <h1 class="display-4">Preise für Unterkunft's Eintrag</h1>
+                    <p class="lead">Schnell und einfach das passende Paket für Sie auswählen vom kleinen ohne Bilder bis
+                        zum Profi Paket
+                        mit bis zu 20 Bilder und priorisierten Listing.</p>
+                </div>
+
+                <div class="container">
+                    <div class="card-deck mb-3 text-center">
+
+                        <!-- Free Entry -->
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body mt-5">
+                                <h5 class="h4 my-0 font-weight-normal text-primary mt-2">Free</h5>
+                                <span class="h1 card-title pricing-card-title">0 € <small
+                                            class="text-muted">/ Jahr*</small>
+                                </span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>Unterkunft gratis Eintrag</li>
+                                    <li class="text-danger">ohne Bilder</li>
+                                    <li>mit Adresse</li>
+                                    <li>mit Email</li>
+                                    <li>mit Telefon</li>
+                                    <li class="text-danger">ohne Beschreibungstext</li>
+                                    <li class="text-danger">ohne Entfernung zum See</li>
+                                    <li class="text-danger">ohne Detailseite</li>
+                                    <li class="text-danger">ohne Geolocation</li>
+                                    <li class="text-danger">ohne Zimmer Detail Seite</li>
+                                </ul>
+                                <input type="submit" name="register[free_account]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Umsonst starten">
+
+                                <!-- Collapse more Information -->
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseFree" aria-expanded="false" aria-controls="collapseFree">
+                                    Mehr Details
+                                    <i class="fas fa-angle-down"></i>
+                                </button>
+                                <div class="collapse multi-collapse" id="collapseFree">
+                                    <div class="card card-body">
+                                        Ihre Unterkunft wird mit Adresse, Telefon und E-Mail eingetragen.
+                                    </div>
+                                </div>
+                                <!-- Collapse more Information #END -->
+
+                            </div>
+                        </div>
+
+                        <!-- Premium Entry -->
+                        <div class="card mb-4 box-shadow border-success">
+                            <div class="card-header bg-success">
+                                <div class="h5 text-white"><i class="fas fa-star"></i> <i class="fas fa-star"></i> Das
+                                    beliebteste Paket <i class="fas fa-star"></i> <i class="fas fa-star"></i></div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="h4 my-0 font-weight-normal text-success">Premium</h5>
+                                <span class="h1 card-title pricing-card-title">99,96 € <small class="text-muted">/
+                                        Jahr*</small></span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>Unterkunft Premium Eintrag</li>
+                                    <li class="text-success"><span class="text-bold">Priorisierten Listing</span>
+                                        <i class="fas fa-info-circle fa-sm" data-toggle="tooltip" data-placement="top"
+                                           title="Priorisierte Einträge werden vor den Basis-Einträgen angezeigt"></i>
+                                    </li>
+                                    <li class="text-success">20 Bilder</li>
+                                    <li>+ Adresse</li>
+                                    <li>+ Email</li>
+                                    <li>+ Telefon</li>
+                                    <li>+ Beschreibungstext</li>
+                                    <li>+ Entfernung zum See</li>
+                                    <li class="text-success">+ Geolocation</li>
+                                    <li class="text-success">+ Zimmer Detail Seite</li>
+                                </ul>
+                                <input type="submit" name="register[premium_account]" form="register"
+                                       class="btn btn-lg btn-block btn-success" value="Ich bin Experte">
+
+                                <!-- Collapse more Information -->
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapsePremium" aria-expanded="false"
+                                        aria-controls="collapsePremium">
+                                    Mehr Details
+                                    <i class="fas fa-angle-down"></i>
+                                </button>
+                                <div class="collapse multi-collapse" id="collapsePremium">
+                                    <div class="card card-body">
+                                        Ihre Unterkunft erscheint mit allen Funktionen wie beim Basiseintrag, zusätzlich
+                                        sind bis zu 20
+                                        Bilder möglich. Die Unterkünfte mit Premiumeintrag werden bei der
+                                        Ergebnisausgabe vor den
+                                        Unterkünften mit Basiseintrag aufgelistet.
+                                    </div>
+                                </div>
+                                <!-- Collapse more Information #END -->
+
+                            </div>
+                        </div>
+
+                        <!-- Basis Entry -->
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body mt-5">
+                                <h5 class="h4 my-0 font-weight-normal text-primary mt-2">Basis</h5>
+                                <span class="h1 card-title pricing-card-title">49,98 € <small class="text-muted">/
+                                        Jahr*</small></span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>Unterkunft Basis Eintrag</li>
+                                    <li class="text-success">1 Bild</li>
+                                    <li>mit Adresse</li>
+                                    <li>mit Email</li>
+                                    <li>mit Telefon</li>
+                                    <li>mit Beschreibungstext</li>
+                                    <li>mit Entfernung zum See</li>
+                                    <li>mit Detailseite</li>
+                                    <li class="text-danger">ohne Geolocation</li>
+                                    <li class="text-danger">ohne Zimmer Detail Seite</li>
+                                </ul>
+                                <input type="submit" name="register[base_account]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Sie sind Profi">
+
+                                <!-- Collapse more Information -->
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseBasis" aria-expanded="false"
+                                        aria-controls="collapseBasis">
+                                    Mehr Details
+                                    <i class="fas fa-angle-down"></i>
+                                </button>
+                                <div class="collapse multi-collapse" id="collapseBasis">
+                                    <div class="card card-body">
+                                        Ihre Unterkunft erscheint mit Adresse, Telefon, E-Mail und einem Bild.
+                                        Verschiedene Preisangaben
+                                        für Ferienwohnungen oder Zimmer werden angezeigt. Ausführlicher
+                                        Beschreibungstext unter Details
+                                        mit Entfernung zum See, Formular für direkte Buchungsanfrage, Link auf die
+                                        Gastgeber Homepage,
+                                        Lage und Belegungsplan. Jeden Monat erhalten Sie als Gastgeber eine Statistik
+                                        über die Aufrufe
+                                        Ihrer Unterkunft und die Anzahl der genutzten "merken" Funktion. Außerdem können
+                                        Sie
+                                        Veranstaltungen eintragen.
+                                    </div>
+                                </div>
+                                <!-- Collapse more Information #END -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                    <h5 class="h1 display-4" id="werbung">Preise für Werbung</h5>
+                    <p class="lead">Werbepakete auf Altmühlsee.</p>
+                </div>
+            </div>
+
+            <!-- Adverting Offer Group -->
+            <div class="container">
+                <div class="card-deck mb-3 text-center">
+                    <div class="col-md-6">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                <h6 class="h4 my-0 font-weight-normal">Eintrag Freizeitangebot</h6>
+                            </div>
+                            <div class="card-body">
+                            <span class="h1 card-title pricing-card-title">49,98 € <small class="text-muted">/
+                                    Jahr*</small></span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>+ Text</li>
+                                    <li>+ 5 Bilder</li>
+                                    <li>+ Kontakt</li>
+                                    <li>+ Hompage Link</li>
+                                    <li>+ Geolocation</li>
+                                </ul>
+                                <input type="submit" name="register[leisure_offer]" form="register"
+                                       class="btn btn-lg btn-block btn-primary" value="Freizeitangebot eintragen">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                <h6 class="h4 my-0 font-weight-normal">Unterkunft's Eintrag</h6>
+                            </div>
+                            <div class="card-body">
+                                <span class="h1 card-title pricing-card-title">ab 0,00 € <small class="text-muted">/
+                                        Jahr*</small></span>
+                                <p class="font-weight-lighter h6 text-muted">*inkl. 19% MwSt.</p>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li class="text-danger">ohne Bilder</li>
+                                    <li>mit Adresse</li>
+                                    <li>mit Email</li>
+                                    <li>mit Telefon</li>
+                                    <li class="text-danger">ohne Beschreibungstext</li>
+                                </ul>
+                                <a href="#hostel-entry" class="btn btn-lg btn-block btn-primary">Alle Angebote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

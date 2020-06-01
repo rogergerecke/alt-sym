@@ -29,6 +29,7 @@ class RoomAmenitiesRepository extends ServiceEntityRepository
      */
     public function getRoomAmenitiesWithDescription($_lang = 'de')
     {
+
         $em = $this->getEntityManager();
 
         $query = $em->createQuery(

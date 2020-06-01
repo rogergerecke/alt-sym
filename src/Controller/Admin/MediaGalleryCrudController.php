@@ -6,6 +6,7 @@ use App\Entity\MediaGallery;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MediaGalleryCrudController extends AbstractCrudController
@@ -17,8 +18,10 @@ class MediaGalleryCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
-            TextField::new('sort'),
+            IntegerField::new('sort'),
             BooleanField::new('status'),
+            TextField::new('class'),
+            IntegerField::new('user_id')
         ];
     }
 

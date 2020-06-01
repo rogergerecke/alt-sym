@@ -53,6 +53,7 @@ class SearchHostelType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices'    => [
+                        'alle'=>'',
                         $this->regions->getRegionsForForm(),
                     ],
                     'label'      => false,
@@ -66,6 +67,7 @@ class SearchHostelType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices'    => [
+                        'alle'=>'',
                         $this->amenitiesTypesRepository->getAmenitiesTypesForForm(),
                     ],
                     'label'      => false,

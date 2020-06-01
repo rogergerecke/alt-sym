@@ -72,7 +72,7 @@ class ElfinderController extends AbstractController
 
         // forward with instance and home folder to the real controller
         return $this->forward(
-            'FM\ElfinderBundle\Controller\ElFinderController:show',
+            'FM\ElfinderBundle\Controller\ElFinderController::show',
             array(
                 'instance'   => $instance,
                 'homeFolder' => $homeFolder,
@@ -114,7 +114,7 @@ class ElfinderController extends AbstractController
 
         // forward with instance and home folder to the real controller
         return $this->forward(
-            'FM\ElfinderBundle\Controller\ElFinderController:show',
+            'FM\ElfinderBundle\Controller\ElFinderController::show',
             array(
                 'instance'   => $instance,
                 'homeFolder' => $homeFolder,
