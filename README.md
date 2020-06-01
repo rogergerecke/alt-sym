@@ -46,8 +46,7 @@ Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs
 
 # Der Admin- und Member Bereich
 
-Der Admin und die Benutzer haben einen Login: **/login** die Inhalte werden durch unterschiedliche Benutzer Rechte ausgespielt.
-
+Login ist im Footer.  Eingeloggt wird mit E-Mail und Passwort
 # Kernkomponenten
 Da man zum Glück das Rad nicht neu erfinden muss nutzen wir z.b. für die Datenbank eine leistungsstarke 
 Komponente https://www.doctrine-project.org/ . 
@@ -62,49 +61,23 @@ und Wünsche äußern über weiter Funktionen die diese zur verfügung stellen s
 - [OpenWeather](https://openweathermap.org/api)
 - [Magic Tool Box Slider](https://www.magictoolbox.com/magicslideshow/)
 - [elFinder 2](https://studio-42.github.io/elFinder/#elf_l1_Lw)
+- [TOAST UI](https://ui.toast.com/tui-image-editor/)
 
-# [Fahrplan Projekt Status](#timelimit)
-
-Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es Abgeschloßen sein.  Durchgestrichene Ziele sind ereicht.
-## (18.04.20)
-~~1. Mobil Bootstrap 4 Design~~
-
-~~2. Anbindung OpenWeather API Cronjob~~
-
-~~- cronjob und chaching~~
-
-## (21.04.20)
-
-~~**1** Datenbank Update~~
-
-~~**3.** Admin Bereich~~
-
-~~**a** Integration Dateiupload mit~~ [elFinder 2][https://studio-42.github.io/elFinder/#elf_l1_Lw]
-
-~~**4.** Statische Seiten Impressum Datenschutz ect.~~
-
-~~**5a.** Hostel Detailt Seite mit~~ [Magic Tool Box Slider][https://www.magictoolbox.com/magicslideshow/]
-
+#### Project status
+## (30.07.20) Rollout
 **5c.** Hostel SEO Urls Generator für Detailtseiten
-
 - Integration dynamische URLs (80%)
 
-~~**5b.** CKEditor 4 Inhaltsbearbeitung im Admin~~
+~~**6.** Checkout~~
 
-## (17.05.20)
-**6.** Checkout
-
-**7.** Member Aria (70%)
-- Meine Konto Bereich
-- Anlegen und Bearbeiten von Hostel
-- Anlegen von Veranstalltung (kostenpflichtig)
-- Anlegen von Banner-Werbung auf der Startseite (kostenpflichtig)
-- Eintragen von Events (kostenlos)
+**7.** Member Aria (90%)
+- ~~Meine Konto Bereich~~
+- ~~Anlegen und Bearbeiten von Hostel~~
+- ~~Anlegen von Veranstalltung (kostenpflichtig)~~
+- ~~Anlegen von Banner-Werbung auf der Startseite (kostenpflichtig)~~
+- ~~Eintragen von Events (kostenlos)~~
 - Zimmer anlegen mit eigenschaften
 
-
-## (31.05.20)
-~~**8.** Integration https://ui.toast.com/tui-image-editor/ integriert in elFinder~~
 - Media Manager 
 - Bearbeitung von Bilder in Format und Farbe
 
@@ -112,7 +85,7 @@ Was habe ich bis jetzt gemacht was ist noch zu tun.  Zu welcher Zeit sollte es A
 **iCalendar** Kalender integration für Veranstalltungen **im - und export**
 - Abgreifen von Events und Veranstalltung mit klick in Kalender übernehmen
 
-## Deadline 01.10.20
+## Deadline 01.10.20 inclusive brombach
 
 # Benutzer Bereich
 Der Benutzer kann mehre Hostels anlegen. Jedes Hostel kann mehre Zimmer haben.  
