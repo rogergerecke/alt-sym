@@ -3,7 +3,7 @@
 
     <!-- advertising list before first class -->
     {% for advertising in advertisings %}
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
             {{ include('boxes/_advertising_item_box.html.twig') }}
         </div>
     {% endfor %}
@@ -11,7 +11,7 @@
 
     <!-- start page second place -->
     {% for hostel in start_page_hostels %}
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4" id="heart-overflow">
 
             <!-- Notice Heart Button Ajax submit -->
             {% if hostel.id in app.session.get('notice') %}
@@ -40,7 +40,6 @@
                 {% endif %}
             </a>
             <h4>{{ hostel.hostelName }}</h4>
-            <div class="sub-line">Super Hostel {#{{ hostel.amenities.0 }}#}</div>
             <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} km zum See</div>
         </div>
     {% else %}

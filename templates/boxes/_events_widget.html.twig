@@ -1,0 +1,28 @@
+<div id="events-widget">
+    {% for event in events %}
+        <div class="row mb-4">
+            <div class="col-md-2 mr-2">
+                <div class="event-date-cycle border-color-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">
+                    {{ event.event_start_date|date('d.m H:i') }} UHR
+                </div>
+            </div>
+            <div class="col-md-9 ml-2">
+                <div class="card border-color-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }} shadow-sm">
+                    <div class="card-header">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Placeholder_no_text.svg" alt=""
+                             class="rounded-circle float-left" width="45">
+                        <h5 class="mb-1"> {{ event.title }}</h5>
+                        <p><i class="fa fa-map-marker-alt"></i> {{ event.address }}
+                            den {{ event.event_start_date|date('d.m.Y') }}</p>
+                    </div>
+                    <div class="card-body">
+                        <p> {{ event.short_description }}</p>
+                        <a href="{{ path('event_details',{'id':event.id}) }}"
+                           class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">Zur Detailseite
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

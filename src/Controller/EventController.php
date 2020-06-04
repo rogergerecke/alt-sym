@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\EventsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -46,12 +47,17 @@ class EventController extends AbstractController
 
         $event = $eventsRepository->find((int)$id);
 
+        // entry not more exist RedirectResponse to index
+        if (!$event) {
+            new RedirectResponse($this->generateUrl('index'));
+        }
+
         if (!$event){
             $this->addFlash('info','Keine Event Details vorhanden.');
         }
 
         return $this->render('event/event_details.html.twig', [
-            'event' => $event,
+            'content' => $event,
         ]);
     }
 }

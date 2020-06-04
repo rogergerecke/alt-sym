@@ -1,15 +1,14 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ content.title|striptags }}{% endblock %}
-{% block description %}{{ content.shortDescription|striptags }}{% endblock %}
-
 {% block body %}
+
 
     <div class="container">
         <div class="row mb-3">
             <!-- Heading -->
             <h1 class="display-4 text-success mb-3">{{ content.title|striptags }}</h1>
             <!-- Content -->
-            {{ content.description|raw }}
+            {{ content.text|raw }}
         </div>
 
         <!-- Location -->

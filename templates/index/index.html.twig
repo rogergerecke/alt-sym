@@ -1,17 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block description %}{{ description }}{% endblock %}
+{% block description %}{{ content.metaDescription }}{% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ content.metaTitle }}{% endblock %}
 
 {% block body %}
 
+    <!-- Image -->
+    <div id="start-page-image" class="mb-2">
+    <div class="container">
+        <div>
+
+        </div>
+    </div>
+    </div>
+    <!-- Image #END -->
     <!-- Soapy -->
     <div id="soapy" class="mb-2">
         <div class="container">
             <div>
-                <h1 class="soapy-heading text-center">Finden Sie den perfekten Gastgeber</h1>
-                <div class="soapy-sub-heading text-center">Suchen Sie den Gastgeber der am besten zu Ihnen passt.</div>
                 {% include('search.html.twig') %}
             </div>
         </div>
@@ -20,90 +27,15 @@
 
 
     <div class="container mt-3 mb-5">
-
-        <!-- Premium Member Aria -->
-        <h2 class="mt-5 mb-5">Gastgeber <small class="font-weight-lighter text-muted"
-                                               style="font-size: 0.8rem">Werbung</small></h2>
-        {{ include('boxes/_premium_host_box.html.twig') }}
-        <!-- Premium Member Aria #END -->
-
-        <!-- Top Activity -->
-        <style>
-            #top-activity .fly-content p, #top-activity .fly-content h4 {
-                font-family: "Open Sans", Verdana, Geneva, sans-serif;
-                font-size: 1.5rem;
-                color: #fff;
-            }
-
-            #top-activity .fly-content {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 1;
-                text-align: center;
-
-            }
-        </style>
-        <h3 class="mb-5 mt-5">Top Aktivitäten</h3>
-        <div id="top-activity">
-            <div class="row mb-4 text-center">
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <img src="https://www.campdudomaine.com/wp-content/uploads/2016/10/Camping-camp-du-domaine-097@2x.jpg"
-                         alt="" class="img-fluid">
-                    <div class="fly-content">
-                        <h4>Campen</h4>
-                        <p>Fantastische ruhe</p>
-                    </div>
-                </div>
-            </div>
+        <div class="row">
+            <!-- Leisure Time -->
+            <h1><a href="{{ path('leisure') }}" class="text-decoration-none">Freizeitangebote</a></h1>
         </div>
-        <!-- Top Activity #END -->
-
-        <hr class="clearfix">
-
+        <div class="row">
+            {% for leisure in leisures %}
+                {{ include('boxes/_leisure_item_box.html.twig') }}
+            {% endfor %}
+        </div>
     </div>
 
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block title %}Altmühlsee Unterkünfte{% endblock %}
 
 {% block body %}
-    <div class="container" id="hostel-listing">
+    <div class="container">
         <div class="row">
             <div class="col-md-3">
                 {{ include('search_sidebar.html.twig') }}
@@ -20,7 +20,7 @@
                             <div class="row">
 
                                 <!-- Hostel Image -->
-                                <div class="img-thumb-box col-md-4">
+                                <div class="img-thumb-box col-md-4" id="heart-overflow">
                                     <!-- Notice Heart Button Ajax submit -->
                                     {% if hostel.id in app.session.get('notice') %}
                                         <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i

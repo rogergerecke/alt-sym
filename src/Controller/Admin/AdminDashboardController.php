@@ -41,7 +41,9 @@ class AdminDashboardController extends AbstractDashboardController
 
         $this->security = $security;
 
-        $this->user_id = '1';
+        if (null !== $this->security->getUser()) {
+            $this->user_id = $this->security->getUser()->getId();
+        }
     }
 
     /**

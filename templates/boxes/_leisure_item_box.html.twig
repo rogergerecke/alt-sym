@@ -1,0 +1,21 @@
+<div class="col-md-3">
+    {#<a href="{{ path('static_site_leisure',{'id':hostel.id}) }}">#}
+        <a href="{{ path('leisure_detail',{'id':leisure.id}) }}">
+            {% if leisure.image is not empty %}
+                <!-- Image -->
+                <img src="{{ leisure.image }}" alt="{{ leisure.title }}"
+                     class="card-img-top">
+            {% else %}
+                <!-- Place Holder -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                     class="card-img-top">
+                    <rect fill="#ddd" width="225" height="225"/>
+                    <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                          font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                    </text>
+                </svg>
+            {% endif %}
+        </a>
+    <h4><a href="{{ path('leisure_detail',{'id':leisure.id}) }}">{{ leisure.title }}</a></h4>
+        <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ leisure.address }}</div>
+    </div>

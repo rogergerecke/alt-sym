@@ -84,22 +84,49 @@
     </main>
 
 
-
-
 </div>
 
 {% if app.request.get('_route') == 'index' %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            {{ content|raw }}
 
+    <!-- More Fun Container -->
+    <div class="container">
+        <div class="row">
+            <h6 class="h5">Veranstaltungen <small><a href="{{ path('event') }}" class="text-success">Alle Veranstaltungen anzeigen</a></small></h6>
         </div>
-        <div class="col-md-6">
-            {{ include('boxes/_openweather_widget.twig') }}
+        <div class="row">
+            <!-- Events Box -->
+            <div class="col-md-6">
+                {{ include('boxes/_events_widget.html.twig') }}
+            </div>
+            <!-- Weather Box -->
+            <div class="col-md-6">
+                {{ include('boxes/_openweather_widget.twig') }}
+            </div>
         </div>
     </div>
+    <!-- More Fun Container #END -->
+
+    <!-- Premium Member Aria -->
+    <div class="container mb-5">
+    <h2 class="mt-5 mb-5">Gastgeber <small class="font-weight-lighter text-muted"
+                                           style="font-size: 0.8rem">Werbung</small></h2>
+    {{ include('boxes/_premium_host_box.html.twig') }}
 </div>
+    <!-- Premium Member Aria #END -->
+
+    <!-- Index Content -->
+    <div class="container">
+    <div class="row">
+        <h1>{{ content.heading }}</h1>
+    </div>
+        <div class="row">
+            <div class="col-md-12">
+                <small class="h6 text-muted">{{ content.subHeading }}</small>
+                <div class="mt-3">{{ content.content|raw }}</div>
+            </div>
+        </div>
+    </div>
+    <!-- Index Content #END -->
 {% endif %}
 
 <!-- Footer -->

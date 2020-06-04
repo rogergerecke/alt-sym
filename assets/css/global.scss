@@ -51,6 +51,10 @@ h1, .h1 {
   font-size: 3rem;
 }
 
+a {
+  color: $headings-color !important;
+}
+
 h5, .h5 {
   font-family: $font-family-sans-serif
 }
@@ -61,7 +65,38 @@ h5, .h5 {
   padding-right: 0 !important;
 }
 
-#main{
+/* Move the sopy container by resolution */
+/* Search module */
+#start-page-image {
+  height: 22rem;
+  padding-bottom: 20px !important;
+  background-image: url(../../assets/images/_altmühlsee-gunzenhausen_05885911_high.webp) !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+
+#soapy .container {
+  margin-top: -12rem;
+}
+
+@media (min-width: 1200px) {
+
+  #soapy {
+    padding-bottom: 0;
+  }
+
+  #soapy .container {
+    margin-top: -5rem;
+    -webkit-box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.24);
+    box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.24);
+  }
+
+
+}
+
+#main {
   min-height: 33rem;
 }
 
@@ -94,29 +129,11 @@ h5, .h5 {
   color: $kompliment-2-2-rgba !important;
 }
 
-#navbarSupportedContent .badge-success{
+#navbarSupportedContent .badge-success {
   color: #fff;
   font-size: 60%;
 }
 
-/* Search module */
-#soapy {
-  padding-bottom: 20px !important;
-  background-image: url(../../assets/images/_altmühlsee-gunzenhausen_05885911_high.webp) !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-}
-
-#soapy .container {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  margin-bottom: 4rem;
-}
-
-.soapy-heading, .soapy-sub-heading {
-  color: #fff;
-}
 
 /* Hostel Listing */
 /* on hostel view */
@@ -178,35 +195,18 @@ h5, .h5 {
 }
 
 /* Hostel listing */
-#hostel-listing .fa-heart {
+#heart-overflow .fa-heart {
   border-radius: 0.1rem;
   padding: 0.2rem;
   font-size: 1.5rem;
   background-color: rgba(111, 110, 110, 0.2);
   position: absolute;
-  left: 230px;
-  top: 3px;
+  right: 22px;
+  top: 8px;
   color: #fff;
 }
 
-#hostel-listing .fa-heart:hover {
-  background-color: rgba(111, 110, 110, 0.4);
-}
-
-/* Premium Host Box Start Page */
-#premium-host-box .fa-heart {
-  border-radius: 0.1rem;
-  padding: 0.2rem;
-  font-size: 1.5rem;
-  background-color: rgba(111, 110, 110, 0.2);
-  position: absolute;
-  left: 230px;
-  top: 3px;
-  color: #fff;
-
-}
-
-#premium-host-box .fa-heart:hover {
+#heart-overflow .fa-heart:hover {
   background-color: rgba(111, 110, 110, 0.4);
 }
 
@@ -294,6 +294,60 @@ h5, .h5 {
   padding-top: 1rem;
   padding-bottom: 2rem;
   border-top: $border-color solid 1px;
+}
+
+/* Masonry test */
+/* ---- grid ---- */
+
+.grid {
+  background: #d4e9f529;
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+// Remy function
+@function remy($value) {
+  @return ($value / 16px) *1rem;
+}
+
+#masonry-grid{
+  padding-top: .9375rem;
+  padding-left: .9375rem;
+  padding-right: .9375rem;
+}
+
+.grid-sizer,
+.grid-item {
+  position: relative;
+  width: 31%;
+  min-width: remy(280px);
+}
+
+.grid-item {
+  margin-bottom: .9375rem;
+  border-radius: remy(4px);
+  overflow: hidden;
+}
+
+.grid-item img {
+  display: block;
+  max-width: 100%;
+}
+
+.grid-item--high,
+.grid-item--high img {
+  height: remy(470px);
+}
+
+.grid-item--high-2,
+.grid-item--high-2 img {
+  height: remy(335px);
 }
 
 

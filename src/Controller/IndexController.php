@@ -6,7 +6,9 @@ use App\Entity\Advertising;
 use App\Entity\Hostel;
 use App\Form\SearchHostelType;
 use App\Repository\AdvertisingRepository;
+use App\Repository\EventsRepository;
 use App\Repository\HostelRepository;
+use App\Repository\LeisureRepository;
 use App\Repository\StaticSiteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,12 +43,16 @@ class IndexController extends AbstractController
      * @Route("/", name="index")
      * @return Response
      */
-    public function index()
+    public function index(LeisureRepository $leisureRepository, EventsRepository $eventsRepository)
     {
 
         // index content for start page
         $content = $this->siteRepository->findOneBy(['route' => 'Index']);
 
+        // get all leisure entry's
+        $leisure = $leisureRepository->findBy(['status' => true]);
+
+        $events = $eventsRepository->getAllActiveEvent();
 
 
         // creat a new hostel search form
@@ -82,13 +88,12 @@ class IndexController extends AbstractController
         return $this->render(
             'index/index.html.twig',
             [
-                'title'              => $content->getMetaTitle(),
-                'description'        => $content->getMetaDescription(),
-                'heading'            => $content->getHeading(),
-                'content'            => $content->getContent(),
+                'content'            => $content,
                 'form'               => $form->createView(),
                 'start_page_hostels' => $this->hostelRepository->findStartPageHostels(),
                 'advertisings'       => $ads,
+                'leisures'           => $leisure,
+                'events'             => $events,
             ]
         );
     }

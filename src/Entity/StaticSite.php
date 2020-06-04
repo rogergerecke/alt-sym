@@ -57,6 +57,11 @@ class StaticSite
      */
     private $isDeletable;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $sub_heading;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -165,6 +170,18 @@ class StaticSite
     public function addDefaultStatus(){
         $this->status = 1;
         $this->isDeletable = 1;
+    }
+
+    public function getSubHeading(): ?string
+    {
+        return $this->sub_heading;
+    }
+
+    public function setSubHeading(?string $sub_heading): self
+    {
+        $this->sub_heading = $sub_heading;
+
+        return $this;
     }
 
 
