@@ -8,7 +8,7 @@
             <div class="col-md-3">
                 {{ include('search_sidebar.html.twig') }}
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" id="heart-overflow">
 
                 <!-- Hostel view Premium Position -->
                 {{ include('hostel_view/_hostel_top_position.html.twig') }}
@@ -20,7 +20,7 @@
                             <div class="row">
 
                                 <!-- Hostel Image -->
-                                <div class="img-thumb-box col-md-4" id="heart-overflow">
+                                <div class="img-thumb-box col-md-4">
                                     <!-- Notice Heart Button Ajax submit -->
                                     {% if hostel.id in app.session.get('notice') %}
                                         <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i
