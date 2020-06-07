@@ -1,0 +1,12 @@
+{# templates/emails/registration.html.twig #}
+<h3>Es wurde ein neuer Unterkunfts-Eintrag angelegt</h3>
+
+Hallo! Es wurde ein neuer Unterkunfts-Eintrag angelegt und muss bearbeitet werden.
+
+{# example, assuming you have a route named "login" #}
+Zum Login, gehen Sie auf: <a href="{{ url('login') }}">Admin-Bereich</a>.
+
+Danke!
+
+{# Makes an absolute URL to the /images/logo.png file #}
+<img src="{{ absolute_url(asset('images/logo.png')) }}">
