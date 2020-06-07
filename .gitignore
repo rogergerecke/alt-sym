@@ -39,3 +39,6 @@ yarn-error.log
 /docker/sql/
 /docker/logs/
 /sql-backup/*
+/assets/magicslideshow/LIC.md
+/assets/magicslideshow/magicslideshow.css
+/assets/magicslideshow/magicslideshow.js

@@ -41,7 +41,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
 
-    //.addEntry('page2', './assets/js/page2.js')
+    .addEntry('ms-js', './assets/magicslideshow/magicslideshow.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -70,6 +70,7 @@ Encore
     })
 
     // enables Sass/SCSS support
+    .addStyleEntry('ms-css', './assets/magicslideshow/magicslideshow.css')
     // global style for frontend
     .addStyleEntry('global', './assets/css/global.scss')
     // admin style for backend

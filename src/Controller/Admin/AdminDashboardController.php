@@ -18,11 +18,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+
 
 class AdminDashboardController extends AbstractDashboardController
 {
@@ -35,6 +42,16 @@ class AdminDashboardController extends AbstractDashboardController
      * @var UserInterface|null
      */
     private $user_id;
+    /**
+     * @var CrudUrlGenerator
+     */
+    private $crudUrlGenerator;
+
+    private $routeBuilder;
+    /**
+     * @var string
+     */
+    private $user_route;
 
     public function __construct(Security $security)
     {
@@ -44,6 +61,7 @@ class AdminDashboardController extends AbstractDashboardController
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
+
     }
 
     /**
@@ -51,6 +69,9 @@ class AdminDashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
+        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
+
+        $this->user_route = $routeBuilder->setController(AdminUserCrudController::class)->generateUrl();
 
         return parent::index();
     }
@@ -68,14 +89,20 @@ class AdminDashboardController extends AbstractDashboardController
             ->setEntityPermission('ROLE_ADMIN');
     }
 
+
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
         yield MenuItem::section('Navigator', 'fa fa-anchor');
+
         yield MenuItem::linkToCrud('Inhalts-Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
             ->setController(AdminUserCrudController::class);
+
+        /* yield MenuItem::linkToUrl('Benutzer', 'fa fa-user', $this->user_route)
+             ->setQueryParameter('referer',$this->user_route);*/
+
         yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
         yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
         yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Repository\UserPrivilegesTypesRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -12,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+use Symfony\Component\Routing\Annotation\Route;
 
 class AdminUserCrudController extends AbstractCrudController
 {
@@ -27,9 +30,10 @@ class AdminUserCrudController extends AbstractCrudController
         $this->privilegesTypesRepository = $privilegesTypesRepository;
     }
 
+
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud;
+        return $crud->setPageTitle(Crud::PAGE_INDEX,'Benutzer');
     }
 
     public function configureFields(string $pageName): iterable

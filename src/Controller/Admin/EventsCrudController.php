@@ -24,6 +24,9 @@ class EventsCrudController extends AbstractCrudController
     {
         return $crud->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
             ->setPageTitle(Crud::PAGE_EDIT, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_INDEX, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_NEW, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Veranstaltung')
             ->setHelp(
                 Crud::PAGE_EDIT,
                 'Tragen Sie zu Ihrer Veranstaltung auch die Geo-Position ein von Google Maps aus der URL z.b. :@49.1345911,10.7017359 dies ist die Position für den Altmühlsee.'
@@ -52,7 +55,7 @@ class EventsCrudController extends AbstractCrudController
         $event_start_date = DateTimeField::new('event_start_date','Wann beginnt die Veranstaltung');
         $event_end_date = DateTimeField::new('event_end_date','Wann endet die Veranstaltung');
         $end_of_advertising = DateTimeField::new('end_of_advertising','Ende der Werbeanzeige');
-        $create_at = DateField::new('create_at');
+        $create_at = DateField::new('create_at','Erstellt am');
         $status = BooleanField::new('status');
 
         switch ($pageName) {

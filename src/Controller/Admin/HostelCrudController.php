@@ -4,12 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Hostel;
 use App\Entity\RoomAmenities;
+use App\Entity\User;
 use App\Repository\AmenitiesTypesRepository;
 use App\Repository\CountrysRepository;
 use App\Repository\CurrencyRepository;
 use App\Repository\FederalStateRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -26,6 +28,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Security\Core\Security;
 
 class HostelCrudController extends AbstractCrudController
 {
@@ -53,6 +56,15 @@ class HostelCrudController extends AbstractCrudController
      * @var AmenitiesTypesRepository
      */
     private $amenitiesTypesRepository;
+    /**
+     * @var Security
+     */
+    private $security;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+    private $user_id;
 
 
     /**
@@ -63,6 +75,8 @@ class HostelCrudController extends AbstractCrudController
      * @param CurrencyRepository $currencyRepository
      * @param FederalStateRepository $federalStateRepository
      * @param AmenitiesTypesRepository $amenitiesTypesRepository
+     * @param Security $security
+     * @param EntityManagerInterface $em
      */
     public function __construct(
         UserRepository $userRepository,
@@ -70,7 +84,9 @@ class HostelCrudController extends AbstractCrudController
         CountrysRepository $countrysRepository,
         CurrencyRepository $currencyRepository,
         FederalStateRepository $federalStateRepository,
-        AmenitiesTypesRepository $amenitiesTypesRepository
+        AmenitiesTypesRepository $amenitiesTypesRepository,
+        Security $security,
+        EntityManagerInterface $em
     ) {
         $this->userRepository = $userRepository;
         $this->roomAmenities = $roomAmenities;
@@ -78,6 +94,13 @@ class HostelCrudController extends AbstractCrudController
         $this->currencyRepository = $currencyRepository;
         $this->federalStateRepository = $federalStateRepository;
         $this->amenitiesTypesRepository = $amenitiesTypesRepository;
+
+        $this->security = $security;
+
+        $this->em = $em;
+        if (null !== $this->security->getUser()) {
+            $this->user_id = $this->security->getUser()->getId();
+        }
     }
 
     public static function getEntityFqcn(): string
@@ -113,7 +136,10 @@ class HostelCrudController extends AbstractCrudController
         return $crud
             ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
             ->setPageTitle(Crud::PAGE_NEW, 'Unterkunft anlegen')
-            ->setHelp(Crud::PAGE_NEW, 'Hier können Sie eine Unterkunft anlegen');
+            ->setHelp(
+                Crud::PAGE_NEW,
+                'Hier können Sie Ihre Unterkunft anlegen.  Die Felder mit rotem Punkt sind Pflichtfelder.'
+            );
 
     }
 
@@ -198,8 +224,12 @@ class HostelCrudController extends AbstractCrudController
         $description = TextEditorField::new('description', 'Beschreibung');
 
         // api connection parameter for hostel availability import
-        $api_key = TextField::new('api_key')->setHelp('Ihr API schlüssel für den Import');// todo only display autogenarate UUid
-        $hostel_availability_url = UrlField::new('hostel_availability_url')->setHelp('URL für den Import der Zimmerverfügbarkeit. Abruf 1x Stündlich.');
+        $api_key = TextField::new('api_key')->setHelp(
+            'Ihr API schlüssel für den Import'
+        );// todo only display autogenarate UUid
+        $hostel_availability_url = UrlField::new('hostel_availability_url')->setHelp(
+            'URL für den Import der Zimmerverfügbarkeit. Abruf 1x Stündlich.'
+        );
 
         // Extra cost field only by admin editable
         $sort = TextField::new('sort'); //todo add only by admin over extra pay
@@ -324,6 +354,17 @@ class HostelCrudController extends AbstractCrudController
     # Helper function protected
     #
     ##########################################
+
+    protected function getHostels(){
+
+        $user = $this->em
+            ->getRepository(User::class)
+            ->find($this->user_id);
+
+        $hostels = $user->getHostels();
+
+        return $hostels[0]->getPostcode();
+    }
 
     /**
      * Create the option array

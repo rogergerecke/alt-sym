@@ -5,17 +5,17 @@
 {% block title %}{{ content.metaTitle }}{% endblock %}
 
 {% block body %}
-
-    <!-- Image -->
+    <!-- Start Page Teaser Container -->
     <div id="start-page-image" class="mb-2">
-    <div class="container">
-        <div>
+        <div class="container">
+            <div>
 
+            </div>
         </div>
     </div>
-    </div>
-    <!-- Image #END -->
-    <!-- Soapy -->
+    <!-- Start Page Teaser Container #END -->
+
+    <!-- Soapy Search Container -->
     <div id="soapy" class="mb-2">
         <div class="container">
             <div>
@@ -23,20 +23,46 @@
             </div>
         </div>
     </div>
-    <!-- Soapy #END -->
+    <!-- Soapy Search Container #END -->
 
+    <div class="container mt-5 mb-5">
 
-    <div class="container mt-3 mb-5">
-        <div class="row">
-            <!-- Leisure Time -->
-            <h1><a href="{{ path('leisure') }}" class="text-decoration-none">Freizeitangebote</a></h1>
-        </div>
-        <div class="row">
+        <!-- Leisure Time Container -->
+        <h1 class="heading-sp"><a href="{{ path('leisure') }}" class="text-decoration-none">Freizeitangebote</a></h1>
+        <div class="row mb-5">
             {% for leisure in leisures %}
                 {{ include('boxes/_leisure_item_box.html.twig') }}
             {% endfor %}
         </div>
+        <!-- Leisure Time Container #END -->
+
+        <!-- Event Time Container -->
+        <h2 class="heading-sp">Veranstaltungen <small><a href="{{ path('event') }}" class="text-success">Alle
+                    Veranstaltungen anzeigen</a></small></h2>
+        <div class="row mb-5">
+            <!-- Events Box -->
+            <div class="col-md-6">
+                {{ include('boxes/_events_widget.html.twig') }}
+            </div>
+            <!-- Weather Box -->
+            <div class="col-md-6">
+                {{ include('boxes/_openweather_widget.twig') }}
+            </div>
+        </div>
+        <!-- Event Time Container #END -->
+
+        <!-- Premium Member Ads Container -->
+        <h3 class="heading-sp">Gastgeber <small class="font-weight-lighter text-muted">Werbung</small></h3>
+        {{ include('boxes/_premium_host_box.html.twig') }}
+        <!-- Premium Member Ads Container #END -->
+
+        <!-- Index Page Text Content Container -->
+        <h4 class="heading-sp">{{ content.heading }}</h4>
+        <div class="row mb-5">
+                <small class="h6 text-muted">{{ content.subHeading }}</small>
+                <div class="mt-3">{{ content.content|raw }}</div>
+        </div>
+        <!-- Index Page Text Content Container #END -->
+
     </div>
-
 {% endblock %}
-

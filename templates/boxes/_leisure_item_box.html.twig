@@ -16,6 +16,6 @@
                 </svg>
             {% endif %}
         </a>
-    <h4><a href="{{ path('leisure_detail',{'id':leisure.id}) }}">{{ leisure.title }}</a></h4>
-        <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ leisure.address }}</div>
+    <h2 class="h6"><a href="{{ path('leisure_detail',{'id':leisure.id}) }}">{{ leisure.title }}</a></h2>
+        <small class="location-box"><i class="fas fa-map-marker-alt"></i> {{ leisure.address }}</small>
     </div>

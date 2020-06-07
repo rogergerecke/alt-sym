@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Altmühlsee Unterkunft Details{% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('ms-css') }}{# magicslideshow #}
+{% endblock %}
 {% block body %}
     <div class="container">
         <div class="row">
@@ -39,7 +42,7 @@
                                     href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Buchungsanfrage {{ hostel.hostelName|striptags }}"
                                     class="btn btn-primary btn-sm"><i class="far fa-envelope"></i> Buchungsanfrage</a>
                         </li>
-                        <li class="list-group-item"><a href="{{ hostel.web }}" class="btn btn-primary btn-sm"><i
+                        <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank" class="btn btn-primary btn-sm"><i
                                         class="fas fa-globe"></i> Homepage</a>
                         </li>
                         <li class="list-group-item"><a href="#availability" class="btn btn-primary btn-sm"><i
@@ -77,8 +80,8 @@
         <h4 id="availability">Belegungsplan</h4>
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
-                    <h5 class="text-primary mb-2 ml-2 mt-3">Juli 2020</h5>
+                <div class="card availability-card">
+                    <h5 class="mb-2 ml-2 mt-3">Juli 2020</h5>
                     <table class="table table-bordered text-center">
                         <thead class="bg-light-blue text-white">
                         <tr>
@@ -149,8 +152,8 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
-                    <h5 class="text-primary mb-2 ml-2 mt-3">August 2020</h5>
+                <div class="card availability-card">
+                    <h5 class="mb-2 ml-2 mt-3">August 2020</h5>
                     <table class="table table-bordered text-center">
                         <thead class="bg-light-blue text-white">
                         <tr>
@@ -264,4 +267,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('ms-js') }}
 {% endblock %}

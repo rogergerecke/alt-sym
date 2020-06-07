@@ -3,25 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserCrudController extends AbstractCrudController
@@ -33,21 +23,17 @@ class UserCrudController extends AbstractCrudController
      */
     private $passwordEncoder;
 
-    /**
-     * @var Request
-     */
-    private $request;
-
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
 
+
     }
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud;
+        return $crud->setEntityPermission('ROLE_USER');
     }
 
 
@@ -77,8 +63,6 @@ class UserCrudController extends AbstractCrudController
         $status = BooleanField::new('status', 'Account Online');
         $id = IntegerField::new('id', 'ID');
 
-        $hostels = ArrayField::new('hostels');
-
 
         if (Crud::PAGE_INDEX === $pageName) {
             return [
@@ -86,7 +70,7 @@ class UserCrudController extends AbstractCrudController
                 $email,
                 $partner_id,
                 $name,
-                /* $hostels*/
+
             ];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [
@@ -96,7 +80,7 @@ class UserCrudController extends AbstractCrudController
                 $email,
                 $password,
                 $status,
-                $id
+                $id,
             ];
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [
@@ -107,7 +91,6 @@ class UserCrudController extends AbstractCrudController
                 $email,
                 $password,
                 $name,
-                /* $hostels*/
             ];
         }
     }

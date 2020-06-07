@@ -18,7 +18,7 @@ class Hostel
     /**
      * Many hostels have one user. This is the owning side.
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="hostels")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
