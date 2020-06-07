@@ -73,7 +73,7 @@ class AdminDashboardController extends AbstractDashboardController
 
         $this->user_route = $routeBuilder->setController(AdminUserCrudController::class)->generateUrl();
 
-        return $this->render('@EasyAdmin/start.html.twig');
+        return $this->render('bundles/EasyAdmin/start_admin.html.twig');
     }
 
     public function configureDashboard(): Dashboard

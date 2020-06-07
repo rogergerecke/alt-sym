@@ -32,7 +32,7 @@
                         <div class="card-body">
                             <!-- Event Description -->
                             <p> {{ event.short_description }}</p>
-                            <a href="{{ path('event_details',{'id':event.id}) }}"
+                            <a href="{{ path('event_details',{'id':event.id}) }}.ics"
                                class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">Mehr
                                 Info</a>
                         </div>

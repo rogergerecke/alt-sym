@@ -64,3 +64,4 @@ DirectoryIndex index.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+AddType text/calendar .ics

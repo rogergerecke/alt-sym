@@ -12,6 +12,7 @@
             {{ content.description|raw }}
         </div>
 
+        <p><a href="{{ path('event_details_ical',{'id':content.id}) }}"><i class="fa fa-calendar"></i> In Ihren Kalender übernehmen</a></p>
         <!-- Location -->
         <h3 class="h4 mb-2 border-bottom"><i class="fas fa-map"></i> Standort: {{ content.address }} </h3>
 
