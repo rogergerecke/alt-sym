@@ -39,7 +39,7 @@
                     </svg>
                 {% endif %}
             </a>
-            <h4>{{ hostel.hostelName }}</h4>
+            <a href="{{ path('hostel_details',{'id':hostel.id}) }}"><h4>{{ hostel.hostelName }}</h4></a>
             <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.')}} km zum See</div>
         </div>
     {% else %}

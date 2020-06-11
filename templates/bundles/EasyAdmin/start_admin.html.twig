@@ -1,0 +1,147 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+
+{% block content_body %}
+    <style>
+        .h3, h5{
+            font-weight: 100; color: #07a7e3
+        }
+        .card{
+            box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+            border: none;
+        }
+        .card-header{
+            background-color: #fff;
+        }
+    </style>
+    <!-- Admin Aria -->
+    <h1 class="h3 mb-4 border-bottom pb-2">Admin Bereich</h1>
+       <div class="row">
+           <!-- New Registration -->
+          <div class="col-md-4">
+              <div class="card">
+                  <div class="card-header">
+                      <h5>Neue Kunden Registrierung <span class="badge badge-pill badge-primary">3</span></h5>
+                  </div>
+                  <div class="card-body">
+                      <table class="table">
+                          <thead>
+                          <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">First</th>
+                              <th scope="col">Last</th>
+                              <th scope="col">Action</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <th scope="row">1</th>
+                              <td>Mark</td>
+                              <td>Otto</td>
+                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">2</th>
+                              <td>Jacob</td>
+                              <td>Thornton</td>
+                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">3</th>
+                              <td>Larry</td>
+                              <td>the Bird</td>
+                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                     <p class="card-text"> 1x Neue Registrierung</p>
+                  </div>
+              </div>
+          </div>
+           <!-- Account Upgrade -->
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-header">
+                       <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">3</span></h5>
+                   </div>
+                   <div class="card-body">
+                       <table class="table">
+                           <thead>
+                           <tr>
+                               <th scope="col">#</th>
+                               <th scope="col">First</th>
+                               <th scope="col">Last</th>
+                               <th scope="col">Action</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                               <th scope="row">1</th>
+                               <td>Mark</td>
+                               <td>Otto</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           <tr>
+                               <th scope="row">2</th>
+                               <td>Jacob</td>
+                               <td>Thornton</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           <tr>
+                               <th scope="row">3</th>
+                               <td>Larry</td>
+                               <td>the Bird</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           </tbody>
+                       </table>
+                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                   </div>
+               </div>
+           </div>
+           <!-- New Hostel Entry -->
+           <div class="col-md-4">
+               <div class="card">
+                   <div class="card-header">
+                       <h5>Neuer Unterkunft Eintrag <span class="badge badge-pill badge-primary">3</span></h5>
+                   </div>
+                   <div class="card-body">
+                       <table class="table">
+                           <thead>
+                           <tr>
+                               <th scope="col">#</th>
+                               <th scope="col">First</th>
+                               <th scope="col">Last</th>
+                               <th scope="col">Action</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                               <th scope="row">1</th>
+                               <td>Mark</td>
+                               <td>Otto</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           <tr>
+                               <th scope="row">2</th>
+                               <td>Jacob</td>
+                               <td>Thornton</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           <tr>
+                               <th scope="row">3</th>
+                               <td>Larry</td>
+                               <td>the Bird</td>
+                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                           </tr>
+                           </tbody>
+                       </table>
+                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+{% endblock %}

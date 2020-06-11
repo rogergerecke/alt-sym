@@ -230,7 +230,9 @@
         <h4>Zimmer</h4>
         <div class="row">
             <div class="col-md-12">
-                {{ hostel.roomTypes }}
+                {% for room in rooms %}
+                    {{ room.finalRate|number_format('2',',') }}
+                {% endfor %}
             </div>
         </div>
         <hr>

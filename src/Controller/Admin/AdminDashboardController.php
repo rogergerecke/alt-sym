@@ -12,6 +12,7 @@ use App\Entity\MediaGallery;
 use App\Entity\Regions;
 use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
+use App\Entity\RoomTypes;
 use App\Entity\StaticSite;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -73,7 +74,12 @@ class AdminDashboardController extends AbstractDashboardController
 
         $this->user_route = $routeBuilder->setController(AdminUserCrudController::class)->generateUrl();
 
-        return $this->render('bundles/EasyAdmin/start_admin.html.twig');
+        return $this->render(
+            'bundles/EasyAdmin/start_admin.html.twig',
+            [
+                'has_content_subtitle' => false,
+            ]
+        );
     }
 
     public function configureDashboard(): Dashboard
@@ -115,8 +121,8 @@ class AdminDashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
 
-            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', Hostel::class)->setController(
-                AdminHostelCrudController::class
+            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)->setController(
+                RoomTypesCrudController::class
             ),
             yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
                 AdminHostelCrudController::class
@@ -134,11 +140,11 @@ class AdminDashboardController extends AbstractDashboardController
         ];
 
         /* System Config section */
-        yield MenuItem::section('Grundeinstellung', 'fa fa-fan');
-        yield MenuItem::linkToCrud('PLZ Regionen', 'fa fa-globe', Regions::class);
-        yield MenuItem::linkToCrud('Hoteltypen', 'fa fa-caravan', AmenitiesTypes::class);
+        yield MenuItem::section('Einstellung', 'fa fa-fan');
+        yield MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class);
+        yield MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class);
         yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
-        yield MenuItem::subMenu('Sprachen', 'fa fa-language')->setSubItems(
+        yield MenuItem::subMenu('Übersetzung', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
