@@ -4,11 +4,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
+use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
@@ -27,10 +29,15 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var HostelRepository
      */
     private $hostelRepository;
+    /**
+     * @var RoomAmenitiesRepository
+     */
+    private $roomAmenitiesRepository;
 
-    public function __construct(HostelRepository $hostelRepository)
+    public function __construct(HostelRepository $hostelRepository,RoomAmenitiesRepository $roomAmenitiesRepository)
     {
         $this->hostelRepository = $hostelRepository;
+        $this->roomAmenitiesRepository = $roomAmenitiesRepository;
     }
 
     public static function getEntityFqcn(): string
@@ -43,6 +50,7 @@ class RoomTypesCrudController extends AbstractCrudController
 
         $id = IdField::new('id');
 
+        // The hostel owner id
         $hostel_id = IntegerField::new('hostel_id', 'Zimmer zu Unterkunft')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
@@ -55,14 +63,17 @@ class RoomTypesCrudController extends AbstractCrudController
             )
             ->setHelp('Hostel auswählen zu dem ein Zimmer angelegt werden soll');
 
+        // Additional booking fee
         $booking_fee = MoneyField::new('booking_fee', 'Zusätzliche Buchungsgebühren')
             ->setCurrency('EUR')
             ->setHelp(
                 'Zusätzliche Buchungsgebühren, die die Nutzer dem Werbetreibenden zahlen müssen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
+        // If the breakfast include or not
         $breakfast_included = BooleanField::new('breakfast_included', 'Frühstück inclusive');
 
+        // Simply the currency type
         $currency = TextField::new('currency', 'Währung')->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
                 [
@@ -75,34 +86,51 @@ class RoomTypesCrudController extends AbstractCrudController
                 ]
             );
 
+        // todo discount
+        // Discount array field for additional discounts for this room
         $discounts = ArrayField::new('discounts', 'Rabat Array')
             ->setHelp('Liste der auf den Preis anwendbaren Rabatte');
 
+        // The final price of the room inclusive tax
         $final_rate = MoneyField::new('final_rate', 'Endpreis')
             ->setCurrency('EUR')
             ->setHelp(
                 'Der endgültige Preis, den der Benutzer zahlen muss (Rabatte ausgeschlossen). Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
             );
 
+        // Is the cancellation of the room order for free
         $free_cancellation = BooleanField::new('free_cancellation', 'Gratis Stornierung');
 
+        // Additional hotel fee
         $hotel_fee = MoneyField::new('hotel_fee', 'Hotelgebühr')
             ->setCurrency('EUR')
             ->setHelp(
                 'Zusätzliche Gebühren, die die Benutzer zahlen müssen, um das Hotel zu bezahlen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
+        // The rate model view for showing exclusive stiling for the offer (Exclusive Offer Banner)
         $rate_type = TextField::new('rate_type')
             ->setHelp(
                 'Gibt an, ob die Rate exklusiv für Mobilgeräte oder als Prämienrate gilt. Wenn nicht angegeben, wird die Rate als STANDARD betrachtet.'
+            )->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        'Standart' => 'DEFAULT',
+                        'Honorieren' => 'REWARD',
+                        'Mobil' => 'MOBILE',
+                    ],
+                    'group_by' => 'id',
+                ]
             );
 
+        // Local tax for the region
         $local_tax = NumberField::new('local_tax')
             ->setHelp(
                 'Stadtsteuern. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
-        //
+        // The meale code for the room price and type standard non all inclusive
         $meal_code = TextField::new('meal_code', 'Verpflegungs Code')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
@@ -120,9 +148,11 @@ class RoomTypesCrudController extends AbstractCrudController
                 ]
             );
 
+        // Have the room a individual landing page
         $landing_page_url = UrlField::new('landing_page_url', 'Extra Landingpage Url')
             ->setHelp('Gibt es eine extra Website nur für diese Zimmer');
 
+        // The netto price of the room exclusive vat and boni
         $net_rate = MoneyField::new('net_rate', 'Netto Preis')
             ->setCurrency('EUR')
             ->setHelp(
@@ -130,10 +160,28 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         $payment_type = TextField::new('payment_type', 'Zahlungsmethode');
+
+        // Have we a resort fee for this room
         $resort_fee = MoneyField::new('resort_fee', 'Kurtaxe pro Tag')
             ->setCurrency('EUR');
 
-        $room_amenities = ArrayField::new('room_amenities', 'Zimmerausstattung');
+
+        // The room amenities collection type build from db
+        $room_amenities = CollectionField::new('room_amenities', 'Zimmerausstattung')
+            ->setHelp('Weicht die Zimmer Ausstattung von der Globalen Unterkunft Ausstattung ab')
+            ->setEntryType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'entry_options' => [
+                        'choices'  => [
+                            $this->buildRoomAmenitiesOptions(),
+                        ],
+                        'label'    => false,
+                        'group_by' => 'id',
+                    ],
+                ]
+            );
+
         $room_code = TextField::new('room_code', 'Zimmernummer / Stellplatznummer')
             ->setHelp('Die Zimmernummer oder Stellplatznummer bei Camping');
 
@@ -196,6 +244,9 @@ class RoomTypesCrudController extends AbstractCrudController
         }
     }
 
+    ##############################
+    # Helper Function
+
     protected function getHostelData()
     {
         $hostels = $this->hostelRepository->findAll();
@@ -210,4 +261,23 @@ class RoomTypesCrudController extends AbstractCrudController
         return $option;
     }
 
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildRoomAmenitiesOptions()
+    {
+
+        $options = [];
+
+        // get from db
+        $roomAmenities = $this->roomAmenitiesRepository->getRoomAmenitiesWithDescription();
+
+        // build option array
+        foreach ($roomAmenities as $roomAmenity) {
+            $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
+        }
+
+        return $options;
+    }
 }

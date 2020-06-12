@@ -99,24 +99,15 @@ class AdminDashboardController extends AbstractDashboardController
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
+        /* Link to Homepage */
         yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
-        yield MenuItem::section('Navigator', 'fa fa-anchor');
-
-        yield MenuItem::linkToCrud('Inhalts-Seiten', 'fa fa-columns', StaticSite::class);
-        yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
-            ->setController(AdminUserCrudController::class);
-
-        /* yield MenuItem::linkToUrl('Benutzer', 'fa fa-user', $this->user_route)
-             ->setQueryParameter('referer',$this->user_route);*/
-
-        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
-        yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
-        yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
-
 
         /* Hostel Manager section */
         [
-            yield MenuItem::section('Hostel Manager', 'fa fa-house-user'),
+            yield MenuItem::section('Manager', 'fa fa-house-user'),
+
+            yield MenuItem::linkToCrud('Kunden', 'fa fa-user', User::class)
+                ->setController(AdminUserCrudController::class),
 
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
@@ -124,10 +115,17 @@ class AdminDashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)->setController(
                 RoomTypesCrudController::class
             ),
+
             yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
                 AdminHostelCrudController::class
             ),
         ];
+
+        /* Ads */
+        yield MenuItem::section('Werbung', 'fa fa-anchor');
+        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
+        yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
+        yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
 
 
         /* Media Manager section */
@@ -140,11 +138,12 @@ class AdminDashboardController extends AbstractDashboardController
         ];
 
         /* System Config section */
-        yield MenuItem::section('Einstellung', 'fa fa-fan');
+        yield MenuItem::section('System', 'fa fa-fan');
+        yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class);
         yield MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class);
         yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
-        yield MenuItem::subMenu('Übersetzung', 'fa fa-language')->setSubItems(
+        yield MenuItem::subMenu('Mehrsprachigkeit', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
