@@ -98,7 +98,7 @@ class UserDashboardController extends AbstractDashboardController
             $this->user_privileges = $this->user_account->getUserPrivileges();
 
             // test case
-           /* print_r($this->user_privileges);*/
+            /* print_r($this->user_privileges);*/
         }
 
 
@@ -149,28 +149,35 @@ class UserDashboardController extends AbstractDashboardController
                 ->setCssClass('bg-success text-white pl-2');
         }
 
+        // link to the user account
         yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
             ->setAction('detail')
             ->setEntityId($this->user_id);
 
-        /* Hostel menu */
-        yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
 
-        // todo add show only from logged in user
-        yield MenuItem::linkToCrud('Meine Unterkunft', 'fa fa-hotel', Hostel::class)
-            ->setQueryParameter(
-                'user_id',
-                $this->user_id
-            );
-        yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
-            ->setAction('new');
+        /* HOSTEL MENU > only show with the right user privileges */
+        $check = ['free_account', 'base_account', 'premium_account',];
+        if ($this->isUserHavePrivileges($check)) {
 
-        // have the user hostel so he cant add rooms
-        if ($this->userHaveHostel) {
-            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+            yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
+
+            // todo add show only from logged in user
+            yield MenuItem::linkToCrud('Meine Unterkunft', 'fa fa-hotel', Hostel::class)
+                ->setQueryParameter(
+                    'user_id',
+                    $this->user_id
+                );
+
+            yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
+                ->setAction('new');
+
+            // have the user hostel so he cant add rooms
+            if ($this->userHaveHostel) {
+                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+            }
+
+            yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
         }
-
-        yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
 
 
         /* Media section */
@@ -181,10 +188,15 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
         yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 
-        /* Marketing section */  // todo add role_handling if(user_privileges)
+        /* Marketing section */
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
-        yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);// todo upgrade info
-        yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
+
+            yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
+
+
+        if ($this->isUserHavePrivileges(['leisure_offer'])) {
+            yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
+        }
 
 
         /* Information section */
@@ -224,6 +236,31 @@ class UserDashboardController extends AbstractDashboardController
                     MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
                 ]
             );
+    }
+
+    ######################################
+    #
+    #
+    # Helper function
+    #
+    #
+    #######################################
+
+    /**
+     * Check the user privileges
+     *
+     * @param array $privileges
+     * @return bool
+     */
+    protected function isUserHavePrivileges(array $privileges): bool
+    {
+        foreach ($privileges as $privilege) {
+            if (in_array($privilege, $this->user_privileges)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
