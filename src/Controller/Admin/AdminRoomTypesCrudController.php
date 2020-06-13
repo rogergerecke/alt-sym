@@ -22,14 +22,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
  * Class RoomTypesCrudController
  * @package App\Controller\Admin
  */
-class RoomTypesCrudController extends AbstractCrudController
+class AdminRoomTypesCrudController extends AbstractCrudController
 {
     /**
      * @var HostelRepository
@@ -331,7 +330,7 @@ class RoomTypesCrudController extends AbstractCrudController
      */
     protected function getHostelData()
     {
-        $hostels = $this->hostelRepository->findBy(['user_id'=>$this->user_id]);
+        $hostels = $this->hostelRepository->findAll();
 
         $option = null;
 
@@ -339,11 +338,6 @@ class RoomTypesCrudController extends AbstractCrudController
             $name = 'ID: '.$hostel->getId().', '.stripslashes($hostel->getHostelName());
             $option[$name] = $hostel->getId();
         }
-
-        if ($option === null){
-            $this->addFlash('danger','Sie haben Noch kein Hostel angelegt');
-        }
-
 
         return $option;
     }

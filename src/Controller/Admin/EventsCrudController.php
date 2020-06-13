@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Events;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -16,10 +17,24 @@ use FM\ElfinderBundle\Connector\ElFinderConnector;
 use FM\ElfinderBundle\Controller\ElFinderController;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
+/**
+ * Class EventsCrudController
+ * @package App\Controller\Admin
+ */
 class EventsCrudController extends AbstractCrudController
 {
-    public static $entityFqcn = Events::class;
+    /**
+     * @return string
+     */
+    public static function getEntityFqcn(): string
+    {
+        return Events::class;
+    }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
@@ -33,6 +48,10 @@ class EventsCrudController extends AbstractCrudController
             );
     }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
@@ -104,6 +123,22 @@ class EventsCrudController extends AbstractCrudController
     }
 
     /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    /**
      *
      * Create a new event with
      * the id from the logged in user
@@ -118,13 +153,9 @@ class EventsCrudController extends AbstractCrudController
 
         $events = new Events();
         $events->setUserId((int)$user->getId());
+        $events->setIsUserMadeChanges(true);
 
         return $events;
     }
 
-
-    public static function getEntityFqcn(): string
-    {
-        return self::$entityFqcn;
-    }
 }

@@ -194,6 +194,11 @@ class Hostel
      */
     private $hostel_type;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
 
     public function getId(): ?int
     {
@@ -568,6 +573,18 @@ class Hostel
     public function setHostelType(?string $hostel_type): self
     {
         $this->hostel_type = $hostel_type;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

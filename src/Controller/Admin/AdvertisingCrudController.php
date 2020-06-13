@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Advertising;
 use App\Entity\Hostel;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -16,10 +17,25 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Symfony\Component\DomCrawler\Field\FileFormField;
 
+/**
+ * Class AdvertisingCrudController
+ * @package App\Controller\Admin
+ */
 class AdvertisingCrudController extends AbstractCrudController
 {
-    public static $entityFqcn = Advertising::class;
 
+    /**
+     * @return string
+     */
+    public static function getEntityFqcn(): string
+    {
+        return Advertising::class;
+    }
+
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -30,6 +46,10 @@ class AdvertisingCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
@@ -58,6 +78,21 @@ class AdvertisingCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
 
     /**
      * Create a new advertising with
@@ -73,15 +108,9 @@ class AdvertisingCrudController extends AbstractCrudController
 
         $advertising = new Advertising();
         $advertising->setUserId((int)$user->getId());
+        $advertising->setIsUserMadeChanges(true);
 
         return $advertising;
     }
-
-
-    public static function getEntityFqcn(): string
-    {
-        return self::$entityFqcn;
-    }
-
 
 }

@@ -9,7 +9,10 @@ use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\MediaGallery;
+use App\Entity\RoomTypes;
 use App\Entity\User;
+use App\Repository\HostelRepository;
+use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -22,6 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class UserDashboardController
+ * @package App\Controller\Admin
+ */
 class UserDashboardController extends AbstractDashboardController
 {
 
@@ -35,20 +42,72 @@ class UserDashboardController extends AbstractDashboardController
      * @var UserInterface|null
      */
     private $user_id;
+    /**
+     * @var HostelRepository
+     */
+    private $hostelRepository;
+
+
+    /**
+     * Boolean value of the
+     * logged in user have hostels
+     *
+     * @var bool
+     */
+    private $userHaveHostel = false;
+
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * Contain the full user data
+     * of the logged in user
+     *
+     * @var User|null
+     */
+    private $user_account;
+
+    /**
+     * Contain a array with the user privileges
+     *
+     * @var array|null
+     */
+    private $user_privileges;
 
 
     /**
      * UserDashboardController constructor.
      * @param Security $security
+     * @param UserRepository $userRepository
+     * @param HostelRepository $hostelRepository
      */
-    public function __construct(Security $security)
+    public function __construct(Security $security, UserRepository $userRepository, HostelRepository $hostelRepository)
     {
 
         $this->security = $security;
+        $this->userRepository = $userRepository;
+        $this->hostelRepository = $hostelRepository;
 
+
+        // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
+            $this->user_account = $this->userRepository->find($this->user_id);
+            $this->user_privileges = $this->user_account->getUserPrivileges();
+
+            // test case
+           /* print_r($this->user_privileges);*/
         }
+
+
+        // check if user have hostel
+        if (null !== $this->hostelRepository->findOneBy(['user_id' => $this->user_id])) {
+            $this->userHaveHostel = true;
+        }
+
+
     }
 
     /**
@@ -84,7 +143,11 @@ class UserDashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
 
-        yield MenuItem::linktoDashboard('Upgrade to Premium', 'fa fa-star');
+        // its not premium user show upgrade message
+        if (!in_array('premium_account', $this->user_privileges)) {
+            yield MenuItem::linktoDashboard('Upgrade to Premium', 'fa fa-star')
+                ->setCssClass('bg-success text-white pl-2');
+        }
 
         yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
             ->setAction('detail')
@@ -101,7 +164,12 @@ class UserDashboardController extends AbstractDashboardController
             );
         yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
             ->setAction('new');
-        yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', Hostel::class);
+
+        // have the user hostel so he cant add rooms
+        if ($this->userHaveHostel) {
+            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+        }
+
         yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
 
 
@@ -152,8 +220,7 @@ class UserDashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
                         ->setAction('detail')
                         ->setEntityId($this->user_id),
-                    /*MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),*/
-                    MenuItem::section('------'),
+                    MenuItem::section('--------------------'),
                     MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
                 ]
             );

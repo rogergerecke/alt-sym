@@ -30,6 +30,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Class HostelCrudController
+ * @package App\Controller\Admin
+ */
 class HostelCrudController extends AbstractCrudController
 {
     /**
@@ -64,6 +68,9 @@ class HostelCrudController extends AbstractCrudController
      * @var EntityManagerInterface
      */
     private $em;
+    /**
+     * @var
+     */
     private $user_id;
 
 
@@ -98,11 +105,16 @@ class HostelCrudController extends AbstractCrudController
         $this->security = $security;
 
         $this->em = $em;
+
+        // get the user id from the logged in user
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Hostel::class;
@@ -131,6 +143,10 @@ class HostelCrudController extends AbstractCrudController
 
     }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -144,6 +160,10 @@ class HostelCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
@@ -347,6 +367,21 @@ class HostelCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+    }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
 
 
     ##########################################
@@ -355,6 +390,9 @@ class HostelCrudController extends AbstractCrudController
     #
     ##########################################
 
+    /**
+     * @return mixed
+     */
     protected function getHostels(){
 
         $user = $this->em

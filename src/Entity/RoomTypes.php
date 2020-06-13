@@ -116,6 +116,11 @@ class RoomTypes
      */
     private $vat;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -357,6 +362,18 @@ class RoomTypes
     public function setVat(string $vat): self
     {
         $this->vat = $vat;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }
