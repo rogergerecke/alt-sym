@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use http\Env\Request;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,9 +113,9 @@ class UserCrudController extends AbstractCrudController
     public function edit(AdminContext $context)
     {
         // the logged in user query a entity with no permission for him
-       if ($this->user_id != $context->getRequest()->get('entityId'))
-        {
-            $this->addFlash('warning','You have no access');
+        if ($this->user_id != $context->getRequest()->get('entityId')) {
+            $this->addFlash('warning', 'You have no access');
+
             return new RedirectResponse($this->generateUrl('user'));
 
         }
@@ -187,8 +188,16 @@ class UserCrudController extends AbstractCrudController
      */
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        // set status toggle after change
         if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
             $entityInstance->setIsUserMadeChanges(true);
+        }
+
+        // set new password with encoder interface
+        if (method_exists($entityInstance, 'setPassword')) {
+            $clearPassword = $this->get('request_stack')->getCurrentRequest()->request->all('User')['password'];
+            $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
+            $entityInstance->setPassword($encodedPassword);
         }
 
         parent::updateEntity($entityManager, $entityInstance);
