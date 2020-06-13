@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block description %}{{ content.metaDescription }}{% endblock %}
+
+{% block title %}{{ content.metaTitle }}{% endblock %}
+
+{% block body %}
+    <!-- Leisure Container -->
+   <div class="container">
+       <div class="row text-center">
+           <div class="col-md-12">
+               <h1 class="display-4 text-success">{{ content.heading }}</h1>
+               <div class="lead">{{ content.subHeading }}</div>
+           </div>
+       </div>
+       <div class="row">
+           <!-- Leisure Listing -->
+           {% for leisure in leisures %}
+               <div class="col-md-3">
+                   <!-- Link to Detail Page -->
+                   <a href="{{ path('leisure_detail',{'id':leisure.id}) }}">
+                       {% if leisure.image is not empty %}
+                           <!-- Image -->
+                           <img src="{{ leisure.image }}" alt="{{ leisure.title }}"
+                                class="card-img-top">
+                       {% else %}
+                           <!-- Place Holder -->
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                                class="card-img-top">
+                               <rect fill="#ddd" width="225" height="225"/>
+                               <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                                     font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                               </text>
+                           </svg>
+                       {% endif %}
+                   </a>
+                   <h4><a href="{{ path('leisure_detail',{'id':leisure.id}) }}">{{ leisure.title }}</a></h4>
+                   <div class="location-box"><i class="fas fa-map-marker-alt"></i> {{ leisure.address }}</div>
+               </div>
+           {% endfor %}
+       </div>
+       <div class="row border-top mt-3 pt-3">
+           <div class="col-md-12">
+               {{ content.content|raw }}
+           </div>
+       </div>
+   </div>
+{% endblock %}

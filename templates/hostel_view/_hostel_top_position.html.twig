@@ -76,9 +76,11 @@
                         </div>
                     </div>
                 </div>
-                <p>
-                    <a href="\mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage">E-Mail</a>
-                </p>
+                <!-- Button Group -->
+                <div class="btn-group-sm mt-4 text-right">
+                    <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage" class="btn btn-sm btn-outline-primary"><i class="fa fa-mail-bulk"></i> E-Mail schreiben</a>
+                    <a href="{{ path('hostel_details',{'id':hostel.id}) }}" class="btn btn-sm btn-primary">Zu den Details</a>
+                </div>
             </div>
         </div>
     </div>

@@ -77,6 +77,16 @@ class Events
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -230,6 +240,30 @@ class Events
     public function setStatus(bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

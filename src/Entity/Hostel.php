@@ -18,7 +18,7 @@ class Hostel
     /**
      * Many hostels have one user. This is the owning side.
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="hostels")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
@@ -193,6 +193,11 @@ class Hostel
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $hostel_type;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
 
 
     public function getId(): ?int
@@ -568,6 +573,18 @@ class Hostel
     public function setHostelType(?string $hostel_type): self
     {
         $this->hostel_type = $hostel_type;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

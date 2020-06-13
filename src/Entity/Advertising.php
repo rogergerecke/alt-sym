@@ -57,6 +57,11 @@ class Advertising
      */
     private $end_date_advertising;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +159,18 @@ class Advertising
     public function setEndDateAdvertising(\DateTimeInterface $end_date_advertising): self
     {
         $this->end_date_advertising = $end_date_advertising;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

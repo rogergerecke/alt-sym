@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Events;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -16,20 +17,41 @@ use FM\ElfinderBundle\Connector\ElFinderConnector;
 use FM\ElfinderBundle\Controller\ElFinderController;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
+/**
+ * Class EventsCrudController
+ * @package App\Controller\Admin
+ */
 class EventsCrudController extends AbstractCrudController
 {
-    public static $entityFqcn = Events::class;
+    /**
+     * @return string
+     */
+    public static function getEntityFqcn(): string
+    {
+        return Events::class;
+    }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
             ->setPageTitle(Crud::PAGE_EDIT, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_INDEX, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_NEW, 'Veranstaltung')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Veranstaltung')
             ->setHelp(
                 Crud::PAGE_EDIT,
                 'Tragen Sie zu Ihrer Veranstaltung auch die Geo-Position ein von Google Maps aus der URL z.b. :@49.1345911,10.7017359 dies ist die Position für den Altmühlsee.'
             );
     }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
@@ -52,7 +74,7 @@ class EventsCrudController extends AbstractCrudController
         $event_start_date = DateTimeField::new('event_start_date','Wann beginnt die Veranstaltung');
         $event_end_date = DateTimeField::new('event_end_date','Wann endet die Veranstaltung');
         $end_of_advertising = DateTimeField::new('end_of_advertising','Ende der Werbeanzeige');
-        $create_at = DateField::new('create_at');
+        $create_at = DateField::new('create_at','Erstellt am');
         $status = BooleanField::new('status');
 
         switch ($pageName) {
@@ -101,6 +123,22 @@ class EventsCrudController extends AbstractCrudController
     }
 
     /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    /**
      *
      * Create a new event with
      * the id from the logged in user
@@ -115,13 +153,9 @@ class EventsCrudController extends AbstractCrudController
 
         $events = new Events();
         $events->setUserId((int)$user->getId());
+        $events->setIsUserMadeChanges(true);
 
         return $events;
     }
 
-
-    public static function getEntityFqcn(): string
-    {
-        return self::$entityFqcn;
-    }
 }

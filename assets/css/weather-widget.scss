@@ -1,0 +1,42 @@
+#weather-widget {
+  font-family: $font-family-sans-serif-computed;
+  background-color: #fcfcfc;
+  color: #404040;
+}
+
+#weather-widget .card-header {
+  background-color: #fcfcfc;
+  border-bottom: none;
+}
+
+#weather-widget .info-ow {
+  font-size: 0.5rem;
+}
+
+#weather-current {
+  font-size: 0.8rem;
+}
+
+#weather-current .ow-temp {
+  font-size: 1rem;
+}
+
+#weather-forecast {
+  font-size: 0.6rem;
+}
+
+#weather-forecast img {
+  margin-bottom: 1rem;
+}
+
+#weather-forecast .ow-date {
+  font-size: 0.8rem;
+}
+
+#weather-forecast .ow-temp {
+  font-size: 0.9rem;
+}
+
+.ow-date {
+  font-weight: bold;
+}

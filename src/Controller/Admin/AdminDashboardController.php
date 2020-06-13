@@ -12,17 +12,25 @@ use App\Entity\MediaGallery;
 use App\Entity\Regions;
 use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
+use App\Entity\RoomTypes;
 use App\Entity\StaticSite;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+
 
 class AdminDashboardController extends AbstractDashboardController
 {
@@ -35,13 +43,26 @@ class AdminDashboardController extends AbstractDashboardController
      * @var UserInterface|null
      */
     private $user_id;
+    /**
+     * @var CrudUrlGenerator
+     */
+    private $crudUrlGenerator;
+
+    private $routeBuilder;
+    /**
+     * @var string
+     */
+    private $user_route;
 
     public function __construct(Security $security)
     {
 
         $this->security = $security;
 
-        $this->user_id = '1';
+        if (null !== $this->security->getUser()) {
+            $this->user_id = $this->security->getUser()->getId();
+        }
+
     }
 
     /**
@@ -49,8 +70,16 @@ class AdminDashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
+        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
 
-        return parent::index();
+        $this->user_route = $routeBuilder->setController(AdminUserCrudController::class)->generateUrl();
+
+        return $this->render(
+            'bundles/EasyAdmin/start_admin.html.twig',
+            [
+                'has_content_subtitle' => false,
+            ]
+        );
     }
 
     public function configureDashboard(): Dashboard
@@ -66,33 +95,37 @@ class AdminDashboardController extends AbstractDashboardController
             ->setEntityPermission('ROLE_ADMIN');
     }
 
+
     /* Global Admin Menu */
     public function configureMenuItems(): iterable
     {
+        /* Link to Homepage */
         yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
-        yield MenuItem::section('Navigator', 'fa fa-anchor');
-        yield MenuItem::linkToCrud('Inhalts-Seiten', 'fa fa-columns', StaticSite::class);
-        yield MenuItem::linkToCrud('Benutzer', 'fa fa-user', User::class)
-            ->setController(AdminUserCrudController::class);
-        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
-        yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
-        yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
-
 
         /* Hostel Manager section */
         [
-            yield MenuItem::section('Hostel Manager', 'fa fa-house-user'),
+            yield MenuItem::section('Manager', 'fa fa-house-user'),
+
+            yield MenuItem::linkToCrud('Kunden', 'fa fa-user', User::class)
+                ->setController(AdminUserCrudController::class),
 
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
 
-            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', Hostel::class)->setController(
-                AdminHostelCrudController::class
+            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)->setController(
+                RoomTypesCrudController::class
             ),
+
             yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
                 AdminHostelCrudController::class
             ),
         ];
+
+        /* Ads */
+        yield MenuItem::section('Werbung', 'fa fa-anchor');
+        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
+        yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
+        yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
 
 
         /* Media Manager section */
@@ -105,11 +138,12 @@ class AdminDashboardController extends AbstractDashboardController
         ];
 
         /* System Config section */
-        yield MenuItem::section('Grundeinstellung', 'fa fa-fan');
-        yield MenuItem::linkToCrud('PLZ Regionen', 'fa fa-globe', Regions::class);
-        yield MenuItem::linkToCrud('Hoteltypen', 'fa fa-caravan', AmenitiesTypes::class);
+        yield MenuItem::section('System', 'fa fa-fan');
+        yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
+        yield MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class);
+        yield MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class);
         yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
-        yield MenuItem::subMenu('Sprachen', 'fa fa-language')->setSubItems(
+        yield MenuItem::subMenu('Mehrsprachigkeit', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]

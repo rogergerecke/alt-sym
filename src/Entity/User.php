@@ -72,6 +72,11 @@ class User implements UserInterface
      */
     private $user_privileges = [];
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
     public function __construct()
     {
         $this->hostels = new ArrayCollection();
@@ -238,6 +243,18 @@ class User implements UserInterface
     public function setUserPrivileges(array $user_privileges): self
     {
         $this->user_privileges = $user_privileges;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

@@ -117,43 +117,16 @@ class StaticSiteController extends AbstractController
      */
     public function region()
     {
-        $site = $this->repository->findOneBy(['route' => 'Region', 'status' => true]);
+        $content = $this->repository->findOneBy(['route' => 'Region', 'status' => true]);
 
-        if (!$site) {
+        if (!$content) {
             throw $this->createNotFoundException();
         }
 
         return $this->render(
             'static_site/region.html.twig',
             [
-                'heading'          => $site->getHeading(),
-                'meta_title'       => $site->getMetaTitle(),
-                'meta_description' => $site->getMetaDescription(),
-                'content'          => $site->getContent(),
-            ]
-        );
-    }
-
-    /**
-     * The leisure entry only with payment
-     *
-     * @Route("/freizeitangebote", name="static_site_leisure")
-     */
-    public function leisure()
-    {
-        $site = $this->repository->findOneBy(['route' => 'Leisure', 'status' => true]);
-
-        if (!$site) {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->render(
-            'static_site/index.html.twig',
-            [
-                'heading'          => $site->getHeading(),
-                'meta_title'       => $site->getMetaTitle(),
-                'meta_description' => $site->getMetaDescription(),
-                'content'          => $site->getContent(),
+                'content'          => $content,
             ]
         );
     }

@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ meta_title }}{% endblock %}
-{% block description %}{{ meta_description }}{% endblock %}
+{% block title %}{{ content.metaTitle }}{% endblock %}
+{% block description %}{{ content.metaDescription }}{% endblock %}
 
 {% block body %}
     <div class="container">
-
+        <h1 class="text-center display-4 mb-5">{{ content.heading }}</h1>
+        <hr>
         <!-- Google Maps Container -->
 
         <div class="row mb-5">
@@ -34,44 +35,52 @@
 
         </div>
 
-        <h1 class="text-center text-primary">Der Altmühlsee</h1>
+
         <hr>
+
         <div class="row">
-            <div class="col-md-6">
-                <!-- Image Slider -->
-                <div class="MagicSlideshow"
-                     data-options="autoplay: false; kenburns: true; fullscreen: true; preload: true; selectors: bottom">
-                    <img src="{{ asset('uploads/bildergalerie/1k-20180616-WA0018.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/1k-20180616-WA0018.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/3k-20180616-WA0014.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/3k-20180616-WA0014.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/4k-20180616-WA0012.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/4k-20180616-WA0012.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/5k_20180714_191217.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/5k_20180714_191217.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/6k_20180714_192053.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/6k_20180714_192053.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/7k_20180714_192049.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/7k_20180714_192049.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/8k_20180714_192714.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/8k_20180714_192714.jpg') }}"
-                         alt="basic html slideshow">
-                    <img src="{{ asset('uploads/bildergalerie/9k_2019_.jpg') }}"
-                         data-fullscreen-image="{{ asset('uploads/bildergalerie/9k_2019_.jpg') }}"
-                         alt="basic html slideshow">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h2 class="text-success">{{ heading }}</h2>
-                {{ content|raw }}
+            <div class="col-md-12">
+                <h2 class="text-success">{{ content.subHeading }}</h2>
+                {{ content.content|raw }}
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Image Slider -->
+                <div class="grid" id="masonry-grid">
+                    <div class="grid-item grid-item--high-2">
+                        <img src="{{ asset('uploads/bildergalerie/9k_2019_.jpg') }}"
+                             alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item grid-sizer">
+                        <img src="{{ asset('uploads/bildergalerie/1k-20180616-WA0018.jpg') }}"
+                             alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item">
+                    <img src="{{ asset('uploads/bildergalerie/3k-20180616-WA0014.jpg') }}"
+                         alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item grid-item--high">
+                        <img src="{{ asset('uploads/bildergalerie/6k_20180714_192053.jpg') }}"
+                             alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item">
+                    <img src="{{ asset('uploads/bildergalerie/4k-20180616-WA0012.jpg') }}"
+                         alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item grid-item--high-2">
+                    <img src="{{ asset('uploads/bildergalerie/5k_20180714_191217.jpg') }}"
+                         alt="basic html slideshow">
+                    </div>
+                    <div class="grid-item">
+                    <img src="{{ asset('uploads/bildergalerie/7k_20180714_192049.jpg') }}"
+                         alt="basic html slideshow">
+                    </div>
+                </div>
 
+            </div>
+        </div>
     </div>
+
+
 {% endblock %}

@@ -8,6 +8,7 @@ use App\Form\SearchHostelType;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesDescriptionRepository;
 use App\Repository\RoomAmenitiesRepository;
+use App\Repository\RoomTypesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,24 +106,26 @@ class HostelViewController extends AbstractController
      * @Route("/gastgeber/details/{id}", name="hostel_details", requirements={"id"="\d+"})
      * @param int $id
      * @param HostelRepository $hostelRepository
+     * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
      * @return Response
      */
     public function details(
         int $id,
         HostelRepository $hostelRepository,
+        RoomTypesRepository $roomTypesRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository
     ) {
 
         $hostel = $hostelRepository->find($id);
         $services = false;
 
-        // if nothing hostel data exist
+        // nothing hostel data exist
         if (null === $hostel) {
             $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
         } else {
 
-            // Create the Amenities Description
+            // Create the Amenities Description with service names and icons.svg
             if ($amenities = $hostel->getAmenities()) {
                 // lang code DE
                 $roomAmenities = $roomAmenitiesRepository->getRoomAmenitiesWithDescription();
@@ -135,9 +138,11 @@ class HostelViewController extends AbstractController
                 }
             }
 
-            // Statistics detail page_view counter
-            // write to the hostel statistik /performance killer customer want it
-            // build em for statistic counter
+            #####################################
+            #   // Statistics detail page_view counter
+            #   // write to the hostel statistik /performance killer customer want it
+            #   // build em for statistic counter
+
             $em = $this->getDoctrine()->getManager();
             $statistics = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
 
@@ -159,12 +164,17 @@ class HostelViewController extends AbstractController
             }
         }
 
+        // get rooms data if in database
+        $rooms = null;
+        $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);
+
 
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'hostel'          => $hostel,
-                'services'         => $services,
+                'hostel'   => $hostel,
+                'services' => $services,
+                'rooms'    => $rooms,
 
             ]
         );

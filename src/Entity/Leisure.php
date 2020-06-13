@@ -62,6 +62,11 @@ class Leisure
      */
     private $user_id;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +176,18 @@ class Leisure
     public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
 
         return $this;
     }

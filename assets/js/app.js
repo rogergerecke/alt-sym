@@ -4,34 +4,20 @@ const jQuery = require('jquery');
 // the bootstrap module doesn't export/return anything
 require('bootstrap'); // todo remove slider add magictoolbox
 require('ion-rangeslider');
-/*require('@fortawesome/fontawesome-free');*/
 require('@google/markerclustererplus');
 
-
-/* Include only icons we need from fontawesome */
-// https://fontawesome.com/how-to-use/with-the-api/setup/importing-icons
-/*
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {
-    faAngleDown,
-    faAddressBook,
-    faEnvelope,
-    faMapMarkerAlt,
-    faHome,
-    faUserFriends,
-    faHeart,
-    faHeartBroken,
-    faInfoCircle
-} from '@fortawesome/free-solid-svg-icons'
-
-// load only the selected icons from fontawesome
-library.add(faAngleDown, faAddressBook, faEnvelope, faMapMarkerAlt, faHome, faUserFriends, faHeart, faHeartBroken, faInfoCircle);
-*/
+/* Masonry */
+require('imagesloaded')
+var jQueryBridget = require('jquery-bridget');
+var Masonry = require('masonry-layout');
+jQueryBridget( 'masonry', Masonry, jQuery );
 
 jQuery(function ($) {
     $(window).on('load', function () {
+
         // POS_LOAD the script is inserted in the window.onload(). Can use $
-        /*$('[data-toggle="popover"]').popover();*/
+
+        $('[data-toggle="popover"]').popover();
 
         /* prevent dropdown before close in the hostel_search on start page */
         $('#soapy .dropdown-menu').on('click', function (e) {
@@ -61,7 +47,7 @@ jQuery(function ($) {
             $.ajax({
                 url: $(this).attr('href'),
                 success: function (response) {
-                    link.attr('href',response)
+                    link.attr('href', response)
                 }
             });
 
@@ -85,6 +71,16 @@ jQuery(function ($) {
                 return false;
             }
         });
+
+        /* Masonry only with jQuery Bridge */
+        $('.grid').masonry({
+            itemSelector: ".grid-item",
+            columnWidth: ".grid-sizer",
+            gutter: 15,
+            percentPosition: true
+        });
+
+
 
     });
     // POS_READY the script is inserted in the jQuery's ready function

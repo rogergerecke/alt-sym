@@ -1,10 +1,50 @@
 {% extends 'base.html.twig' %}
+{% block title %}{{ content.title|striptags }}{% endblock %}
+{% block description %}{{ content.shortDescription|striptags }}{% endblock %}
 
 {% block body %}
 
+    <div class="container">
+        <div class="row mb-3">
+            <!-- Heading -->
+            <h1 class="display-4 text-success mb-3">{{ content.title|striptags }}</h1>
+            <!-- Content -->
+            {{ content.description|raw }}
+        </div>
+
+        <p><a href="{{ path('event_details_ical',{'id':content.id}) }}"><i class="fa fa-calendar"></i> In Ihren Kalender übernehmen</a></p>
+        <!-- Location -->
+        <h3 class="h4 mb-2 border-bottom"><i class="fas fa-map"></i> Standort: {{ content.address }} </h3>
+
+        {% if content.longitude is not empty and content.latitude is not empty %}
+            <!-- Google Maps if Geo data-->
+            <div class="row mb-5">
+                <!-- Google Map Container -->
+                <div id="map" style="width: 100%; height: 500px">
+
+                </div>
+
+                <!-- Google maps script -->
+                <script>
+                    // Initialize and add the map
+                    function initMap() {
+                        // The location of Uluru
+                        var uluru = {lat: {{ content.latitude }}, lng: {{ content.longitude }}};
+                        // The map, centered at Uluru
+                        var map = new google.maps.Map(
+                            document.getElementById('map'), {zoom: 13, center: uluru});
+                        // The marker, positioned at Uluru
+                        var marker = new google.maps.Marker({position: uluru, map: map});
+                    }
+                </script>
+
+                <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key={{ go_maps_api_key }}&callback=initMap">
+                </script>
+                <!-- Google maps script #END -->
+
+            </div>
+        {% endif %}
+    </div>
+
 {% endblock %}
-
-{% block title %}
-
-{% endblock %}
-

@@ -22,7 +22,7 @@ class RoomTypes
     private $hostel_id;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $booking_fee;
 
@@ -42,7 +42,7 @@ class RoomTypes
     private $discounts = [];
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $final_rate;
 
@@ -52,7 +52,7 @@ class RoomTypes
     private $free_cancellation;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $hotel_fee;
 
@@ -62,7 +62,7 @@ class RoomTypes
     private $rate_type;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $local_tax;
 
@@ -77,7 +77,7 @@ class RoomTypes
     private $landing_page_url;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $net_rate;
 
@@ -87,7 +87,7 @@ class RoomTypes
     private $payment_type;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $resort_fee;
 
@@ -102,7 +102,7 @@ class RoomTypes
     private $room_code;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $service_charge;
 
@@ -112,9 +112,14 @@ class RoomTypes
     private $url;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=13, scale=4, nullable=true)
      */
     private $vat;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isUserMadeChanges;
 
     public function getId(): ?int
     {
@@ -133,12 +138,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getBookingFee(): ?float
+    public function getBookingFee(): ?string
     {
         return $this->booking_fee;
     }
 
-    public function setBookingFee(float $booking_fee): self
+    public function setBookingFee(string $booking_fee): self
     {
         $this->booking_fee = $booking_fee;
 
@@ -181,12 +186,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getFinalRate(): ?float
+    public function getFinalRate(): ?string
     {
         return $this->final_rate;
     }
 
-    public function setFinalRate(float $final_rate): self
+    public function setFinalRate(string $final_rate): self
     {
         $this->final_rate = $final_rate;
 
@@ -205,12 +210,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getHotelFee(): ?float
+    public function getHotelFee(): ?string
     {
         return $this->hotel_fee;
     }
 
-    public function setHotelFee(float $hotel_fee): self
+    public function setHotelFee(string $hotel_fee): self
     {
         $this->hotel_fee = $hotel_fee;
 
@@ -229,12 +234,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getLocalTax(): ?float
+    public function getLocalTax(): ?string
     {
         return $this->local_tax;
     }
 
-    public function setLocalTax(float $local_tax): self
+    public function setLocalTax(string $local_tax): self
     {
         $this->local_tax = $local_tax;
 
@@ -265,12 +270,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getNetRate(): ?float
+    public function getNetRate(): ?string
     {
         return $this->net_rate;
     }
 
-    public function setNetRate(float $net_rate): self
+    public function setNetRate(string $net_rate): self
     {
         $this->net_rate = $net_rate;
 
@@ -289,12 +294,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getResortFee(): ?float
+    public function getResortFee(): ?string
     {
         return $this->resort_fee;
     }
 
-    public function setResortFee(float $resort_fee): self
+    public function setResortFee(string $resort_fee): self
     {
         $this->resort_fee = $resort_fee;
 
@@ -325,12 +330,12 @@ class RoomTypes
         return $this;
     }
 
-    public function getServiceCharge(): ?float
+    public function getServiceCharge(): ?string
     {
         return $this->service_charge;
     }
 
-    public function setServiceCharge(float $service_charge): self
+    public function setServiceCharge(string $service_charge): self
     {
         $this->service_charge = $service_charge;
 
@@ -349,15 +354,29 @@ class RoomTypes
         return $this;
     }
 
-    public function getVat(): ?float
+    public function getVat(): ?string
     {
         return $this->vat;
     }
 
-    public function setVat(float $vat): self
+    public function setVat(string $vat): self
     {
         $this->vat = $vat;
 
         return $this;
     }
+
+    public function getIsUserMadeChanges(): ?bool
+    {
+        return $this->isUserMadeChanges;
+    }
+
+    public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
+    {
+        $this->isUserMadeChanges = $isUserMadeChanges;
+
+        return $this;
+    }
+
+
 }

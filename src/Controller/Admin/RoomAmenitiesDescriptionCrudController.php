@@ -6,6 +6,7 @@ use App\Entity\RoomAmenitiesDescription;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -21,7 +22,7 @@ class RoomAmenitiesDescriptionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $id = IdField::new('id');
-        $ra_id = TextField::new('ra_id');
+        $ra_id = IntegerField::new('ra_id');
         $name = TextField::new('name');
         $description = TextField::new('description','Beschreibung');
         $lang = TextField::new('lang','Lang Code');

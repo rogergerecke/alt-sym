@@ -22,6 +22,7 @@ class EventsRepository extends ServiceEntityRepository
     public function getAllActiveEvent()
     {
         $now = new \DateTime();
+
         return $this->createQueryBuilder('e')
             ->select(
                 'e.id',
@@ -32,11 +33,12 @@ class EventsRepository extends ServiceEntityRepository
                 'e.latitude',
                 'e.longitude',
                 'e.event_start_date',
-                'e.event_end_date'
+                'e.event_end_date',
+                'e.image'
             )
             ->where('e.status = 1')
-            ->andWhere('e.event_start_date <= :start')
-            ->setParameter('start', $now->format('Y-m-d'))
+            ->andWhere('e.end_of_advertising >= :today')
+            ->setParameter('today', $now->format('Y-m-d H:i:s'))
             ->getQuery()
             ->getResult();
     }

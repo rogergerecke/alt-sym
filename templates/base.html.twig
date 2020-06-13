@@ -3,36 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="noindex, nofollow">
-
-    <meta name="description"
-          content="{% block description %}Welcome!{% endblock %}">
-
-    <title>{% block title %}Welcome!{% endblock %}</title>
-
     {# todo IMPORTENT remove in production no index #}
-    <meta name="robots" content="noindex"/>
-
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="{% block description %}Altmühlsee!{% endblock %}">
+    <title>{% block title %}Altmühlsee{% endblock %}</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto+Condensed:300&display=swap" rel="stylesheet">
-    <!-- Fontawesome Icons -->
-
-    {#<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/ico">#}
-
-    <link rel="stylesheet" type="text/css" href="../../magicslideshow/magicslideshow.css"/>
-    <script src="../../magicslideshow/magicslideshow.js" type="text/javascript"></script>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/ico">
 
     <!-- Dynamic Style -->
     {% block stylesheets %}
         {{ encore_entry_link_tags('global') }}
-        {{ encore_entry_link_tags('irs') }}
+        {{ encore_entry_link_tags('irs') }}{# ironslider #}
     {% endblock %}
-
 </head>
 <body id="body">
 <div class="container-fluid">
-
-
+    <!-- Top Header Banner -->
     <div class="bg-dark p-1" id="header-banner">
         <div class="row">
             <div class="col-md-6">
@@ -48,15 +35,17 @@
             </div>
         </div>
     </div>
+    <!-- Top Header Banner #END -->
 
-    <!-- Header with Navigation -->
+    <!-- Navigation -->
     <header class="header">
         {% include('navigation.html.twig') %}
     </header>
-    <!-- Header with Navigation #END -->
+    <!-- Navigation #END -->
 
     <!-- Main Content -->
     <main id="main" class="{% if app.request.get('_route') == 'app_register' %}bg-light-blue{% endif %}">
+
         <!-- Error Messages -->
         {% for label, messages in app.flashes %}
             {% for message in messages %}
@@ -76,45 +65,28 @@
         {% endfor %}
         <!-- Error Messages #END -->
 
-        <!-- Show Content Extension BODY -->
+        {# Content-Load #}
         {% block body %}
 
         {% endblock %}
-        <!-- Show Content Extension #BODY -->
+        {# Content-Load END #}
+
     </main>
+</div><!-- .container-fluid end -->
 
-
-
-
-</div>
-
-{% if app.request.get('_route') == 'index' %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            {{ content|raw }}
-
-        </div>
-        <div class="col-md-6">
-            {{ include('boxes/_openweather_widget.twig') }}
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<!-- Footer -->
+<!-- Footer Container -->
 <footer id="footer">
     {% include('footer.html.twig') %}
 </footer>
-<!-- Footer #END -->
+<!-- Footer Container #END -->
 
 
-<!-- JAVASCRIPT -->
-<!-- .js at the end -->
+<!-- Javascript Bottom -->
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
 
+<!-- Google Analytics -->
 {{ include('boxes/_google_analytics.html.twig') }}
 
 </body>
