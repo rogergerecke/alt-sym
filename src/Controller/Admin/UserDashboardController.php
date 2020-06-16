@@ -116,7 +116,12 @@ class UserDashboardController extends AbstractDashboardController
     public function index(): Response
     {
 
-        return parent::index();
+        return $this->render(
+        'bundles/EasyAdmin/user_dashbord.html.twig',
+        [
+            'has_content_subtitle' => false,
+        ]
+    );
     }
 
     public function configureDashboard(): Dashboard
@@ -149,11 +154,7 @@ class UserDashboardController extends AbstractDashboardController
                 ->setCssClass('bg-success text-white pl-2');
         }
 
-        // link to the user account
-        yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
-            ->setAction('detail')
-            ->setEntityId($this->user_id);
-
+        yield MenuItem::linktoDashboard('Startseite', 'fa fa-home');
 
         /* HOSTEL MENU > only show with the right user privileges */
         $check = ['free_account', 'base_account', 'premium_account',];

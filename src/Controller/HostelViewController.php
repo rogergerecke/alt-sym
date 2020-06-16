@@ -30,6 +30,7 @@ class HostelViewController extends AbstractController
      * @param Request $request
      * @param SessionInterface $session
      * @return RedirectResponse|Response
+     * @throws \Exception
      */
     public function listing(HostelRepository $hostelRepository, Request $request, SessionInterface $session)
     {
@@ -76,7 +77,9 @@ class HostelViewController extends AbstractController
             // write to the hostel statistik /performance killer customer want it
             // build em for statistic counter
             $em = $this->getDoctrine()->getManager();
-            $hostel_statistics = $em->getRepository(Statistics::class)->findAll();
+            $month = new \DateTime();
+            $month = $month->format('Y-m');
+            $hostel_statistics = $em->getRepository(Statistics::class)->findBy(['date' => new \DateTime($month.'-01')]);
 
             // if hostel id in statistics
             foreach ($hostel_statistics as $hostelStatistic) {
@@ -109,6 +112,7 @@ class HostelViewController extends AbstractController
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
      * @return Response
+     * @throws \Exception
      */
     public function details(
         int $id,
@@ -144,7 +148,11 @@ class HostelViewController extends AbstractController
             #   // build em for statistic counter
 
             $em = $this->getDoctrine()->getManager();
-            $statistics = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
+            $month = new \DateTime();
+            $month = $month->format('Y-m');
+            $statistics = $em->getRepository(Statistics::class)->findOneBy(
+                ['hostel_id' => $id, 'date' => new \DateTime($month.'-01')]
+            );
 
             // if hostel id in statistics
             // if hostel id in statistics or save new
@@ -152,6 +160,7 @@ class HostelViewController extends AbstractController
                 // new statistics entry
                 $statistic = new Statistics();
                 $statistic->setHostelId((int)$id);
+                $statistic->setDate(new \DateTime($month.'-01'));
                 $statistic->setPageView(1);
                 $em->persist($statistic);
                 $em->flush();
