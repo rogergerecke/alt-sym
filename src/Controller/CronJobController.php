@@ -44,7 +44,7 @@ class CronJobController extends AbstractController
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      */
-    public function index(OpenWeatherService $weatherService)
+    public function update(OpenWeatherService $weatherService)
     {
         $status = ($weatherService->_runUpdate(
             ) == true) ? 'Weather Update done' : 'Weather data was new noting to do.';
@@ -60,18 +60,21 @@ class CronJobController extends AbstractController
 
     /**
      * Return a array with the description of the cron jops
+     *
+     * @Route("/cron/job/show", name="cron_job_show")
+     *
      * @return Response
      */
     public function show()
     {
         $jobs[] = [
-            'link'        => $this->generateUrl('cron_job_create_first_statistic_entry'),
             'description' => 'Erzeugt den ersten eintrag für eine Neue Unterkunft in der Statistik-Tabelle',
+            'phat'=>'cron_job_create_first_statistic_entry',
         ];
 
         $jobs[] = [
-            'link'        => $this->generateUrl('cron_job_update_the_weather'),
             'description' => 'Hält das Wetter auf dem neusten Stand',
+            'phat'=>'cron_job_update_the_weather',
         ];
 
         return $this->render(
