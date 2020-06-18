@@ -164,10 +164,7 @@ class UserDashboardController extends AbstractDashboardController
 
             // todo add show only from logged in user
             yield MenuItem::linkToCrud('Meine Unterkunft', 'fa fa-hotel', Hostel::class)
-                ->setQueryParameter(
-                    'user_id',
-                    $this->user_id
-                );
+                ->setQueryParameter('user',$this->user_id);
 
             yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
                 ->setAction('new');
