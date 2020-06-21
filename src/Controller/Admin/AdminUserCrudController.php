@@ -71,7 +71,7 @@ class AdminUserCrudController extends AbstractCrudController
                 ]
             );
 
-        $hostel_name = TextField::new('hostel_name');
+        $hostel_name = TextField::new('hostels');
 
         switch ($pageName) {
             case Crud::PAGE_INDEX:

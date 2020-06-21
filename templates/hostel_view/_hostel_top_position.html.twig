@@ -34,6 +34,14 @@
 
             <!-- Hostel Detail Part -->
             <div class="card-body col-md-8 align-top">
+                <!-- DEHOGA Stars -->
+                {% if hostel.stars is not empty %}
+                    <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                         data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                            <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                {% endif %}
+                <!-- DEHOGA Stars #END -->
+
                 <!-- Heading -->
                 <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
                        class="text-decoration-none">{{ hostel.hostelName }}</a></h3>

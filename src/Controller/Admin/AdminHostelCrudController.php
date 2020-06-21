@@ -83,9 +83,11 @@ class AdminHostelCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('edit', 'Admin: Hostel-Manager')
-            ->setHelp('edit', 'Hier ein Hostel für ein Benutzer anlegen.')
-            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+            ->setPageTitle('edit', 'Admin: Unterkünfte')
+            ->setPageTitle('index', 'Admin: Unterkünfte')
+            ->setHelp('index', 'Hier ist die Übersicht der eingetragenen Unterkünfte.')
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+            ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig');
     }
 
 
@@ -102,8 +104,8 @@ class AdminHostelCrudController extends AbstractCrudController
         $image = TextField::new('image', 'Erstes Bild')
             ->setFormType(ElFinderType::class)
             ->setFormTypeOptions(
-                ['instance' => 'admin', 'enable' => true]
-            )/*->setTemplatePath('@FMElfinderBundle/Form/elfinder_widget.html.twig')*/
+                ['instance' => 'banner', 'enable' => true]
+            )->setHelp('Größe 255x255px das Bild kann man zuschneiden und als Kopie Speichern')// banner instance is configured in fm_elfinder.yaml
         ;
 
         $preview_image = ImageField::new('image');
@@ -192,15 +194,29 @@ class AdminHostelCrudController extends AbstractCrudController
         // Hostel on or offline switch
         $status = BooleanField::new('status');
 
+        $hostel_type = TextField::new('hostel_type', 'Unterkunft-Typ')
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        $this->buildAmenitiesTypesOptions(),
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
+        $stars = IntegerField::new('stars','Hotel Sterne')->setHelp('Nur angeben wenn Sie wirklich über Sterne nach DEHOGA verfügen.');
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$user_id, $hostel_name, $preview_image, $address, $postcode, $city, $status, $amenities,];
+            return [$user_id, $hostel_name,$preview_image, $address, $postcode, $city, $status];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [
                 $id,
                 $user_id,
                 $hostel_name,
+                $hostel_type,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
@@ -229,6 +245,8 @@ class AdminHostelCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [
                 $user_id,
+                $stars,
+                $hostel_type,
                 $hostel_name,
                 $image,
                 $address,
@@ -251,14 +269,14 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
-                $startpage,
-                $toplisting,
-                $top_placement_finished,
                 $status,
             ];
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [
+
                 $hostel_name,
+                $stars,
+                $hostel_type,
                 $image,
                 $address,
                 $address_sub,
@@ -280,9 +298,6 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
-                $startpage,
-                $toplisting,
-                $top_placement_finished,
                 $status,
             ];
         }

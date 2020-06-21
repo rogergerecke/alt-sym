@@ -77,6 +77,14 @@ class User implements UserInterface
      */
     private $isUserMadeChanges;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isHeWantsUpgrade;
+
+    #
+    # Connection to the hostel entity
+    #
     public function __construct()
     {
         $this->hostels = new ArrayCollection();
@@ -117,6 +125,7 @@ class User implements UserInterface
 
         return $this;
     }
+
 
 
     public function getId(): ?int
@@ -255,6 +264,18 @@ class User implements UserInterface
     public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
     {
         $this->isUserMadeChanges = $isUserMadeChanges;
+
+        return $this;
+    }
+
+    public function getIsHeWantsUpgrade(): ?bool
+    {
+        return $this->isHeWantsUpgrade;
+    }
+
+    public function setIsHeWantsUpgrade(?bool $isHeWantsUpgrade): self
+    {
+        $this->isHeWantsUpgrade = $isHeWantsUpgrade;
 
         return $this;
     }

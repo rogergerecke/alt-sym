@@ -3,168 +3,171 @@
 
 
 
-{% block content_body %}
+{% block page_content %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <style>
-        .h3, h5{
-            font-weight: 100; color: #07a7e3
+        .h3, h5 {
+            font-weight: 100;
+            color: #07a7e3
         }
-        .card{
+
+        .card {
             box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
             border: none;
         }
-        .card-header{
+
+        .card-header {
             background-color: #fff;
         }
     </style>
     <!-- Dashboard Aria -->
     <h1 class="h3 mb-4 border-bottom pb-2">Dashboard</h1>
-       <div class="row">
-          <div class="col-md-6">
-              <!-- Monthly Statistic -->
-              <div class="card">
-                  <div class="card-header">
-                      <h5>Besucher Statistik {{ "now"|date('Y') }}</h5>
-                  </div>
-                  <div class="card-body">
-                      <canvas id="myChart" ></canvas>
-                      <script>
-                          var ctx = document.getElementById('myChart').getContext('2d');
-                          var myChart = new Chart(ctx, {
-                              type: 'bar',
-                              data: {
-                                  labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun','Jul', 'Aug', 'Sep', 'Okt', 'Now', 'Dez'],
-                                  datasets: [{
-                                      label: '# of Votes',
-                                      data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
-                                      backgroundColor: [
-                                          'rgba(255, 99, 132, 0.2)',
-                                          'rgba(54, 162, 235, 0.2)',
-                                          'rgba(255, 206, 86, 0.2)',
-                                          'rgba(75, 192, 192, 0.2)',
-                                          'rgba(153, 102, 255, 0.2)',
-                                          'rgba(255, 159, 64, 0.2)',
-                                          'rgba(255, 99, 132, 0.2)',
-                                          'rgba(54, 162, 235, 0.2)',
-                                          'rgba(255, 206, 86, 0.2)',
-                                          'rgba(75, 192, 192, 0.2)',
-                                          'rgba(153, 102, 255, 0.2)',
-                                          'rgba(255, 159, 64, 0.2)'
-                                      ],
-                                      borderColor: [
-                                          'rgba(255, 99, 132, 1)',
-                                          'rgba(54, 162, 235, 1)',
-                                          'rgba(255, 206, 86, 1)',
-                                          'rgba(75, 192, 192, 1)',
-                                          'rgba(153, 102, 255, 1)',
-                                          'rgba(255, 159, 64, 1)',
-                                          'rgba(255, 99, 132, 1)',
-                                          'rgba(54, 162, 235, 1)',
-                                          'rgba(255, 206, 86, 1)',
-                                          'rgba(75, 192, 192, 1)',
-                                          'rgba(153, 102, 255, 1)',
-                                          'rgba(255, 159, 64, 1)'
-                                      ],
-                                      borderWidth: 1
-                                  }]
-                              },
-                              options: {
-                                  scales: {
-                                      yAxes: [{
-                                          ticks: {
-                                              beginAtZero: true
-                                          }
-                                      }]
-                                  }
-                              }
-                          });
-                      </script>
-                  </div>
-              </div>
-          </div>
-           <div class="col-md-3">
-               <!-- Your Hostel -->
-               <div class="card">
-                   <div class="card-header">
-                       <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">3</span></h5>
-                   </div>
-                   <div class="card-body">
-                       <table class="table">
-                           <thead>
-                           <tr>
-                               <th scope="col">#</th>
-                               <th scope="col">First</th>
-                               <th scope="col">Last</th>
-                               <th scope="col">Action</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                           <tr>
-                               <th scope="row">1</th>
-                               <td>Mark</td>
-                               <td>Otto</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">2</th>
-                               <td>Jacob</td>
-                               <td>Thornton</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">3</th>
-                               <td>Larry</td>
-                               <td>the Bird</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
-                   </div>
-               </div>
-           </div>
-           <div class="col-md-3">
-               <!-- Your Rooms -->
-               <div class="card">
-                   <div class="card-header">
-                       <h5>Ihre Zimmer <span class="badge badge-pill badge-primary">3</span></h5>
-                   </div>
-                   <div class="card-body">
-                       <table class="table">
-                           <thead>
-                           <tr>
-                               <th scope="col">#</th>
-                               <th scope="col">First</th>
-                               <th scope="col">Last</th>
-                               <th scope="col">Action</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                           <tr>
-                               <th scope="row">1</th>
-                               <td>Mark</td>
-                               <td>Otto</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">2</th>
-                               <td>Jacob</td>
-                               <td>Thornton</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">3</th>
-                               <td>Larry</td>
-                               <td>the Bird</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
-                   </div>
-               </div>
-           </div>
-       </div>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Monthly Statistic -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Besucher Statistik {{ "now"|date('Y') }}</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="myChart"></canvas>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Now', 'Dez'],
+                                datasets: [{
+                                    label: '# of Votes',
+                                    data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)',
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Your Hostel -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">3</span></h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Your Rooms -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ihre Zimmer <span class="badge badge-pill badge-primary">3</span></h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <!-- Belegungs Plan -->
         <div class="col-md-12 mt-3">
@@ -204,6 +207,51 @@
                         </tbody>
                     </table>
                     <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Information -->
+    <h1 class="h3 mb-4 border-bottom pb-2">Informationen</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Werbung mit falschen Sternen wird bekämpft</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Wer mit Hotelsternen ohne eine entsprechende Klassifizierung wirbt, muss im Fall der Entdeckung
+                        mit
+                        einer kostenpflichtigen Abmahnung der Zentrale zur Bekämpfung unlauteren Wettbewerbs rechnen.
+                        Das
+                        gilt auch dann, wenn ein Betrieb nicht dafür sorgt, dass Portale ihn ohne Sterne präsentieren.
+                        <a href="https://www.dehogabw.de/informieren/dehoga-nachrichten/2017/werbung-mit-falschen-sternen-wird-bekaempft.html"
+                           target="_blank" class="btn btn-link">Mehr Infos</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Die Wirkung von Bildern</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Wer mit guten Bildern wirbt wird mehr erfolg haben. Diese These wurde schon tausenden male
+                        untersucht und bestätigt. Also wenn sie eine Unterkunft anlegen oder Bilder von Zimmern
+                        Hochladen sollten diese immer die Beste Qualität haben. Dies hat schließlich einfluss auf Ihren
+                        erfolg. <a
+                                href="https://conversionboosting.com/article/die-richtigen-fotos-fuer-mehr-conversions_2305/"
+                                target="_blank" class="btn btn-link">Mehr Infos</a>
+                    </p>
+
+                    <p>Sie brauchen Hilfe zu erstellen von und hochladen von Bildern. <a href="mailto:"
+                                                                                         target="_blank" class="btn btn-link">Kontakt für Hilfe</a></p>
+
                 </div>
             </div>
         </div>

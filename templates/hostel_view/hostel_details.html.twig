@@ -9,11 +9,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                <!-- DEHOGA Stars -->
+                {% if hostel.stars is not empty %}
+                <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                     data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                        <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                {% endif %}
+                <!-- DEHOGA Stars #END -->
+
                 <!-- Hostel Heading -->
-                {#<span>Stars ****</span>#}
                 <h1>{{ hostel.hostelName }}</h1>
                 <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}
-                    , {{ hostel.country }} {{ hostel.address }} <a href="#map">auf Karte zeigen.</a></small>
+                    , {{ hostel.country }} {{ hostel.address }} <a href="#map">die Lage auf Karte anzeigen.</a></small>
             </div>
         </div>
         <div class="row mb-3">
@@ -42,7 +50,8 @@
                                     href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Buchungsanfrage {{ hostel.hostelName|striptags }}"
                                     class="btn btn-primary btn-sm"><i class="far fa-envelope"></i> Buchungsanfrage</a>
                         </li>
-                        <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank" class="btn btn-primary btn-sm"><i
+                        <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank"
+                                                       class="btn btn-primary btn-sm"><i
                                         class="fas fa-globe"></i> Homepage</a>
                         </li>
                         <li class="list-group-item"><a href="#availability" class="btn btn-primary btn-sm"><i
