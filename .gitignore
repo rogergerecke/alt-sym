@@ -42,3 +42,8 @@ yarn-error.log
 /assets/magicslideshow/LIC.md
 /assets/magicslideshow/magicslideshow.css
 /assets/magicslideshow/magicslideshow.js
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

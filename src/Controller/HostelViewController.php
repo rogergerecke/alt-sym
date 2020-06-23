@@ -36,19 +36,17 @@ class HostelViewController extends AbstractController
     {
 
         $hostels = null;
+        $top_hostels = null;
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
 
         // we have a search query
         if ($request->isMethod('POST') and $request->request->all($form->getName())) {
 
-            // todo validate form
-
+            // get the query array
             $q = $request->request->all($form->getName());
-            // TODO form function
-            /* $hostels = $hostelRepository->findHostelsWithFilter($q);*/
 
-            if ($hostels !== null) {
+            if ($hostels = $hostelRepository->findHostelsWithFilter($q)) {
                 // do output
                 /*print_r($hostels);*/
             } else {
@@ -63,6 +61,7 @@ class HostelViewController extends AbstractController
         // no request default show all
         if (!$request->request->all('search_hostel')) {
             $hostels = $hostelRepository->findBy(['status' => true]);
+            $top_hostels = $hostelRepository->findTopListingHostels();
         }
 
         #
@@ -70,7 +69,6 @@ class HostelViewController extends AbstractController
         #
         // if the first page view update statistics only one time per session
         if (!$session->has('notice_page_view')) {
-
             $session->set('notice_page_view', true);
 
             // Statistics global_page_view counter
@@ -89,7 +87,6 @@ class HostelViewController extends AbstractController
                 $em->persist($hostelStatistic);
                 $em->flush();
             }
-
         }
 
 
@@ -99,7 +96,7 @@ class HostelViewController extends AbstractController
                 'controller_name' => 'HostelViewController',
                 'form'            => $form->createView(),
                 'hostels'         => $hostels,
-                'top_hostels'     => $hostelRepository->findTopListingHostels(),
+                'top_hostels'     => $top_hostels,
             ]
         );
     }
@@ -128,14 +125,12 @@ class HostelViewController extends AbstractController
         if (null === $hostel) {
             $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
         } else {
-
             // Create the Amenities Description with service names and icons.svg
             if ($amenities = $hostel->getAmenities()) {
                 // lang code DE
                 $roomAmenities = $roomAmenitiesRepository->getRoomAmenitiesWithDescription();
 
                 foreach ($roomAmenities as $amenity) {
-
                     if (in_array($amenity['name'], $amenities)) {
                         $services[] = $amenity;
                     }
