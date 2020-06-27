@@ -17,7 +17,9 @@ jQuery(function ($) {
 
         // POS_LOAD the script is inserted in the window.onload(). Can use $
 
+        // activate bootstrap tools
         $('[data-toggle="popover"]').popover();
+        $('[data-toggle="tooltip"]').tooltip()
 
         /* prevent dropdown before close in the hostel_search on start page */
         $('#soapy .dropdown-menu').on('click', function (e) {

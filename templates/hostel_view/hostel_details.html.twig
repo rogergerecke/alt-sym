@@ -78,13 +78,19 @@
             </div>
         </div>
         <hr>
-
         <!-- Hostel Amenities -->
         <h3>Ausstattung</h3>
         <div class="row">
             {# service.name english name for icons #}
             {% for service in services %}
-                <div class="col-auto">{{ service.0.name }}</div>
+                <div class="col-auto mb-1 text-muted text-center">
+                    {% if service.icon is not empty %}
+                        <img src="{{ asset('build/images/icons/'~service.icon~'') }}" alt="" data-toggle="tooltip"
+                             title="{{ service.0.description }}" class="img-thumbnail"><br>{{ service.0.name }}
+                    {% else %}
+                        {{ service.0.name }}
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
         <hr>
@@ -92,7 +98,7 @@
         <!-- Hostel Availability -->
         {% if calendar is not empty %}
             <h4 id="availability">Belegungsplan</h4>
-                {{ include('hostel_view/_availability_calendar.html.twig') }}
+            {{ include('hostel_view/_availability_calendar.html.twig') }}
         {% endif %}
 
         <!-- Hostel Rooms -->

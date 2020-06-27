@@ -39,6 +39,7 @@ class HostelViewController extends AbstractController
 
         $hostels = null;
         $top_hostels = null;
+        $header_region = null;
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
 
@@ -48,8 +49,7 @@ class HostelViewController extends AbstractController
             $q = $request->request->all($form->getName());
 
             if ($hostels = $hostelRepository->findHostelsWithFilter($q)) {
-                // do output
-                /*print_r($hostels);*/
+                $header_region = $hostelRepository->getRegionsName();
             } else {
                 $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
             }
@@ -98,12 +98,14 @@ class HostelViewController extends AbstractController
                 'form'            => $form->createView(),
                 'hostels'         => $hostels,
                 'top_hostels'     => $top_hostels,
+                'header_region'   => $header_region,
             ]
         );
     }
 
 
     /**
+     * Build the vars for the detail site
      * @Route("/gastgeber/details/{id}", name="hostel_details", requirements={"id"="\d+"})
      * @param int $id
      * @param HostelRepository $hostelRepository
@@ -120,7 +122,6 @@ class HostelViewController extends AbstractController
         RoomAmenitiesRepository $roomAmenitiesRepository,
         CalendarService $calendar
     ) {
-
 
 
         $hostel = $hostelRepository->find($id);

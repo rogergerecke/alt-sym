@@ -10,6 +10,7 @@
             </div>
             <div class="col-md-9" id="heart-overflow">
 
+                {% if header_region is not empty %}<h1 class="h2">Im Umkreis {{ header_region }} <span class="badge badge-pill badge-success">{{ hostels|length }}</span></h1>{% endif %}
                 <!-- Hostel view Premium Position -->
                 {% if top_hostels is not empty %}
                 <div class="row bg-primary mb-3 pt-3 pb-3">

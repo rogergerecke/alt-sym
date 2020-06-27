@@ -14,6 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class HostelRepository extends ServiceEntityRepository
 {
+    private $regions_name;
+
+
     /**
      * @var RegionsRepository
      */
@@ -43,6 +46,9 @@ class HostelRepository extends ServiceEntityRepository
             $plz = $this->regionsRepository->findOneBy(['regions_id' => $filter['regions']]);
 
             if ($plz) {
+                // set the regions name for heading the search page
+                $this->setRegionsName($plz->getName());
+
                 $qb
                     ->andWhere('h.postcode = :plz')
                     ->setParameter('plz', $plz->getZipcode());
@@ -139,32 +145,22 @@ class HostelRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * @return Hostel[] Returns an array of Hostel objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return mixed
+     */
+    public function getRegionsName()
     {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->regions_name;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Hostel
+    /**
+     * @param mixed $regions_name
+     * @return HostelRepository
+     */
+    public function setRegionsName($regions_name)
     {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->regions_name = $regions_name;
+
+        return $this;
     }
-    */
 }
