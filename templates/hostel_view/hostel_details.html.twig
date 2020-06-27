@@ -12,9 +12,10 @@
 
                 <!-- DEHOGA Stars -->
                 {% if hostel.stars is not empty %}
-                <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
-                     data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
-                        <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                    <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                         data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                            <span class="fa fa-star text-warning"></span> {% endfor %} <span
+                                class="far fa-question-circle text-muted"></span></div>
                 {% endif %}
                 <!-- DEHOGA Stars #END -->
 
@@ -60,6 +61,9 @@
                         <li class="list-group-item"><a href="#map" class="btn btn-primary btn-sm"><i
                                         class="fas fa-map-marked-alt"></i> Lage auf Karte</a>
                         </li>
+                        <li class="list-group-item"><a href="#rooms" class="btn btn-primary btn-sm"><i
+                                        class="fas fa-door-closed"></i> Zimmer</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -86,157 +90,13 @@
         <hr>
 
         <!-- Hostel Availability -->
-        <h4 id="availability">Belegungsplan</h4>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card availability-card">
-                    <h5 class="mb-2 ml-2 mt-3">Juli 2020</h5>
-                    <table class="table table-bordered text-center">
-                        <thead class="bg-light-blue text-white">
-                        <tr>
-                            <th>Mo.</th>
-                            <th>Di.</th>
-                            <th>Mi.</th>
-                            <th>Do.</th>
-                            <th>Fr.</th>
-                            <th>Sa.</th>
-                            <th>So.</th>
-                        </tr>
-                        </thead>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td>16</td>
-                            <td>17</td>
-                            <td>18</td>
-                            <td>19</td>
-                            <td>20</td>
-                            <td>21</td>
-                        </tr>
-                        <tr>
-                            <td>22</td>
-                            <td>23</td>
-                            <td>24</td>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                        </tr>
-                        <tr>
-                            <td>29</td>
-                            <td>30</td>
-                            <td>31</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card availability-card">
-                    <h5 class="mb-2 ml-2 mt-3">August 2020</h5>
-                    <table class="table table-bordered text-center">
-                        <thead class="bg-light-blue text-white">
-                        <tr>
-                            <th>Mo.</th>
-                            <th>Di.</th>
-                            <th>Mi.</th>
-                            <th>Do.</th>
-                            <th>Fr.</th>
-                            <th>Sa.</th>
-                            <th>So.</th>
-                        </tr>
-                        </thead>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td>16</td>
-                            <td>17</td>
-                            <td>18</td>
-                            <td>19</td>
-                            <td>20</td>
-                            <td>21</td>
-                        </tr>
-                        <tr>
-                            <td>22</td>
-                            <td>23</td>
-                            <td>24</td>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                        </tr>
-                        <tr>
-                            <td>29</td>
-                            <td>30</td>
-                            <td>31</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <hr>
+        {% if calendar is not empty %}
+            <h4 id="availability">Belegungsplan</h4>
+                {{ include('hostel_view/_availability_calendar.html.twig') }}
+        {% endif %}
 
         <!-- Hostel Rooms -->
-        <h4>Zimmer</h4>
+        <h4 id="rooms">Zimmer</h4>
         <div class="row">
             <div class="col-md-12">
                 {% for room in rooms %}

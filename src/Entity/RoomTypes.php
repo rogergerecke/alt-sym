@@ -121,6 +121,61 @@ class RoomTypes
      */
     private $isUserMadeChanges;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isHandicappedAccessible;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $accommodation_type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $number_of_units;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $unit_size;
+
+    /**
+     * @ORM\Column(type="string", length=4, nullable=true)
+     */
+    private $unit_type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $unit_occupancy;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $number_of_bedrooms;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $number_of_bathrooms;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $floor_number;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $unit_number;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -374,6 +429,138 @@ class RoomTypes
     public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
     {
         $this->isUserMadeChanges = $isUserMadeChanges;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIsHandicappedAccessible(): ?bool
+    {
+        return $this->isHandicappedAccessible;
+    }
+
+    public function setIsHandicappedAccessible(?bool $isHandicappedAccessible): self
+    {
+        $this->isHandicappedAccessible = $isHandicappedAccessible;
+
+        return $this;
+    }
+
+    public function getAccommodationType(): ?string
+    {
+        return $this->accommodation_type;
+    }
+
+    public function setAccommodationType(string $accommodation_type): self
+    {
+        $this->accommodation_type = $accommodation_type;
+
+        return $this;
+    }
+
+    public function getNumberOfUnits(): ?int
+    {
+        return $this->number_of_units;
+    }
+
+    public function setNumberOfUnits(?int $number_of_units): self
+    {
+        $this->number_of_units = $number_of_units;
+
+        return $this;
+    }
+
+    public function getUnitSize(): ?float
+    {
+        return $this->unit_size;
+    }
+
+    public function setUnitSize(?float $unit_size): self
+    {
+        $this->unit_size = $unit_size;
+
+        return $this;
+    }
+
+    public function getUnitType(): ?string
+    {
+        return $this->unit_type;
+    }
+
+    public function setUnitType(?string $unit_type): self
+    {
+        $this->unit_type = $unit_type;
+
+        return $this;
+    }
+
+    public function getUnitOccupancy(): ?int
+    {
+        return $this->unit_occupancy;
+    }
+
+    public function setUnitOccupancy(?int $unit_occupancy): self
+    {
+        $this->unit_occupancy = $unit_occupancy;
+
+        return $this;
+    }
+
+    public function getNumberOfBedrooms(): ?float
+    {
+        return $this->number_of_bedrooms;
+    }
+
+    public function setNumberOfBedrooms(?float $number_of_bedrooms): self
+    {
+        $this->number_of_bedrooms = $number_of_bedrooms;
+
+        return $this;
+    }
+
+    public function getNumberOfBathrooms(): ?float
+    {
+        return $this->number_of_bathrooms;
+    }
+
+    public function setNumberOfBathrooms(?float $number_of_bathrooms): self
+    {
+        $this->number_of_bathrooms = $number_of_bathrooms;
+
+        return $this;
+    }
+
+    public function getFloorNumber(): ?int
+    {
+        return $this->floor_number;
+    }
+
+    public function setFloorNumber(?int $floor_number): self
+    {
+        $this->floor_number = $floor_number;
+
+        return $this;
+    }
+
+    public function getUnitNumber(): ?string
+    {
+        return $this->unit_number;
+    }
+
+    public function setUnitNumber(?string $unit_number): self
+    {
+        $this->unit_number = $unit_number;
 
         return $this;
     }

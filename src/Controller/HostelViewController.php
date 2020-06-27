@@ -9,6 +9,8 @@ use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesDescriptionRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\RoomTypesRepository;
+use App\Service\CalendarService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +32,7 @@ class HostelViewController extends AbstractController
      * @param Request $request
      * @param SessionInterface $session
      * @return RedirectResponse|Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function listing(HostelRepository $hostelRepository, Request $request, SessionInterface $session)
     {
@@ -42,7 +44,6 @@ class HostelViewController extends AbstractController
 
         // we have a search query
         if ($request->isMethod('POST') and $request->request->all($form->getName())) {
-
             // get the query array
             $q = $request->request->all($form->getName());
 
@@ -108,15 +109,19 @@ class HostelViewController extends AbstractController
      * @param HostelRepository $hostelRepository
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
+     * @param CalendarService $calendar
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function details(
         int $id,
         HostelRepository $hostelRepository,
         RoomTypesRepository $roomTypesRepository,
-        RoomAmenitiesRepository $roomAmenitiesRepository
+        RoomAmenitiesRepository $roomAmenitiesRepository,
+        CalendarService $calendar
     ) {
+
+
 
         $hostel = $hostelRepository->find($id);
         $services = false;
@@ -179,6 +184,7 @@ class HostelViewController extends AbstractController
                 'hostel'   => $hostel,
                 'services' => $services,
                 'rooms'    => $rooms,
+                'calendar' => $calendar->getCalendar(),
 
             ]
         );
