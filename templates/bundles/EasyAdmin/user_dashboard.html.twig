@@ -22,13 +22,16 @@
     </style>
     <!-- Dashboard Aria -->
     <h1 class="h3 mb-4 border-bottom pb-2">Dashboard</h1>
+
+    <!-- Monthly Statistic -->
     <div class="row">
+        <!-- Bar Chart -->
         <div class="col-md-6">
-            <!-- Monthly Statistic -->
             <div class="card">
                 <div class="card-header">
-                    <h5>Besucher Statistik {{ "now"|date('Y') }}</h5>
+                    <h5>Statistik {{ "now"|date('Y') }}</h5>
                 </div>
+
                 <div class="card-body">
                     <canvas id="myChart"></canvas>
                     <script>
@@ -85,6 +88,27 @@
                 </div>
             </div>
         </div>
+        <!-- Bar Chart #END -->
+
+        <!-- Small Stat -->
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-header"><h5>Aufrufe der Gastgeber Übersicht</h5></div>
+                        <div class="card-body h4"><b>Gesamt:</b> <span class="text-success">{{ hostel_listing_views }}</span></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header"><h5>Ihre Unterkunft wurde sich gemerkt</h5></div>
+                        <div class="card-body h4"><b>Gesamt:</b> <span class="text-success">{{ hostel_notice }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Small Stat #END -->
+
         <div class="col-md-3">
             <!-- Your Hostel -->
             <div class="card">
@@ -126,48 +150,53 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <!-- Your Rooms -->
-            <div class="card">
-                <div class="card-header">
-                    <h5>Ihre Zimmer <span class="badge badge-pill badge-primary">3</span></h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
-                </div>
+    </div>
+    </div>
+
+    <div class="col-md-3">
+        <!-- Your Rooms -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Ihre Zimmer <span class="badge badge-pill badge-primary">3</span></h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="card-text">1x Anfrage zum Account Upgrade</p>
             </div>
         </div>
     </div>
+    </div>
+
+    <!-- Second row -->
     <div class="row">
         <!-- Belegungs Plan -->
         <div class="col-md-12 mt-3">
@@ -250,7 +279,9 @@
                     </p>
 
                     <p>Sie brauchen Hilfe zu erstellen von und hochladen von Bildern. <a href="mailto:"
-                                                                                         target="_blank" class="btn btn-link">Kontakt für Hilfe</a></p>
+                                                                                         target="_blank"
+                                                                                         class="btn btn-link">Kontakt
+                            für Hilfe</a></p>
 
                 </div>
             </div>
