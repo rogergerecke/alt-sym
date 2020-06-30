@@ -140,6 +140,8 @@ class HostelRepository extends ServiceEntityRepository
             $i++;
         }
 
+        $qb->andWhere('hn.status = 1');
+
         return $qb
             ->getQuery()
             ->getResult();

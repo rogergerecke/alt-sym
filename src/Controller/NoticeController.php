@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class NoticeController extends AbstractController
 {
     const NOTICE_SESSION_KEY = 'notice';
@@ -31,9 +30,7 @@ class NoticeController extends AbstractController
         $hostels = false;
 
         if ($session->has(self::NOTICE_SESSION_KEY)) {
-
             $hostels = $hostelRepository->findAllHostelWithId($session->get(self::NOTICE_SESSION_KEY));
-
         }
 
         return $this->render(
@@ -93,7 +90,6 @@ class NoticeController extends AbstractController
                 $em->persist($hostel_statistic);
                 $em->flush();
             }
-
         }
 
 
@@ -117,7 +113,6 @@ class NoticeController extends AbstractController
         $notice_ids = [];
 
         if ($session->has(self::NOTICE_SESSION_KEY)) {
-
             // search in array and remove id
             foreach ($session->get(self::NOTICE_SESSION_KEY) as $value) {
                 if ($value != $id) {

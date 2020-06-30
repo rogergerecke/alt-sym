@@ -131,6 +131,12 @@ class HostelViewController extends AbstractController
         if (null === $hostel) {
             $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
         } else {
+            if ($hostel->getStatus() == 0) {
+                $this->addFlash('danger', 'Diese Unterkunft ist im Moment deaktiviert.');
+                $this->addFlash('danger', "Wenn Sie meinen das sei nicht korrekt kontaktieren Sie den Support. <a href='".$this->generateUrl('static_site_contact')."'>Hilfe</a>");
+                return new RedirectResponse($this->generateUrl('hostel_view'));
+            }
+
             // Create the Amenities Description with service names and icons.svg
             if ($amenities = $hostel->getAmenities()) {
                 // lang code DE

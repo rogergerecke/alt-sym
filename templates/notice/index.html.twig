@@ -38,75 +38,51 @@
                                          class="rounded card-img">
                                         <rect fill="#ddd" width="225" height="225"/>
                                         <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
-                                              font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                                              font-weight="bold" x="50%" y="50%" text-anchor="middle">Kein Bild
                                         </text>
                                     </svg>
                                 {% endif %}
                             </a>
                         </div>
                         <div class="card-body">
-                            <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}">{{ hostel.hostelName }}</a>
-                            </h3>
-                            <strong>{#<?php echo $chunk['typ_name'] ?>#}</strong>
-                            <div class="row mb-1">
-                                <div class="col-md-12">
-                                    {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>
-                                     <?php if (!empty($chunk[$service['name']])): ?>#}
-                                    {# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
-                                          title="{{ hostel.id }}"/>#}
-                                    {#  <?php endif; ?>
-                                      <?php endforeach; ?>#}
-                                </div>
-                            </div>
-                            <div class="accordion" id="accordion_{{ hostel.id }}">
-                                <div class="card">
-                                    <div class="card-header" id="heading_{{ hostel.id }}">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                    data-target="#collapse_{{ hostel.id }}" aria-expanded="true"
-                                                    aria-controls="collapseOne">
-                                                <div class="listing-icon-location">
-                                                    <i class="fa fa-map-marker-alt"></i>
-                                                </div> {{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.') }}
-                                                KM vom See
-                                                entfernt <i class="fas fa-angle-down rotate-icon"></i>
-                                            </button>
-                                        </h2>
-                                    </div>
+                            <h2 class="h6">
+                                <a href="{{ path('hostel_details',{'id':hostel.id}) }}">{{ hostel.hostelName|u.truncate(30, '...') }}</a>
+                            </h2>
 
-                                    <div id="collapse_{{ hostel.id }}" class="collapse"
-                                         aria-labelledby="heading_{{ hostel.id }}"
-                                         data-parent="#accordion_{{ hostel.id }}">
-                                        <div class="card-body">
-                                            <p>{{ hostel.address }}</p>
-                                            <p>{{ hostel.address }} {{ hostel.city }}</p>
-                                            <p>Tel.:
-                                                <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a>
-                                            </p>
-                                            <p>Fax.: {{ hostel.fax }}</p>
-                                            <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's
-                                                    anzeigen</a></p>
-                                        </div>
-                                    </div>
-                                </div>
+                            <p>{{ hostel.city }}</p>
+
+                            <!-- Reference Table-->
+                            <table class="table table-striped">
+                                <tr><td>{{ hostel.hostelType }}</td><td></td></tr>
+                                <tr>
+                                    <td>Zum See</td>
+                                    <td>{{ hostel.distanceToSee|number_format('1',',','.') }} KM</td>
+                                </tr>
+                            </table>
+
+                            <!-- Button Group -->
+                            <div class="btn-group-sm mb-2">
+                                <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage"
+                                   class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i> E-Mail</a>
+                                <a href="{{ path('hostel_details',{'id':hostel.id}) }}"
+                                   class="btn btn-sm btn-outline-primary">Detail</a>
                             </div>
-                            <p>
-                                <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage">E-Mail</a>
-                            </p>
                         </div>
-
                     </div>
                 </div>
+
             {% else %}
+                <!-- Place Holder -->
                 <div class="col-md-12 mt-5 mb-5">
                     <div class="h4">
-                        <p class="border-left border-info pl-3">Sie haben noch keine Unterkünfte auf Ihrem Merkzettel!</p>
-                        <p class="border-left border-info pl-3">Um eine Unterkunft auf den Merkzettel zu speichern klicken Sie einfach auf das <i class="fas fa-heart"></i> Symbol.</p>
+                        <p class="border-left border-info pl-3">Sie haben noch keine Unterkünfte auf Ihrem
+                            Merkzettel!</p>
+                        <p class="border-left border-info pl-3">Um eine Unterkunft auf den Merkzettel zu speichern
+                            klicken Sie einfach auf das <i class="fas fa-heart"></i> Symbol.</p>
                     </div>
                 </div>
             {% endfor %}
             <!-- Notice Hostels Loop #END -->
-
         </div>
     </div>
 {% endblock %}

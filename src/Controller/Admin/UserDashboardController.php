@@ -164,6 +164,7 @@ class UserDashboardController extends AbstractDashboardController
                 'hostel_listing_views' => $hostel_listing_views,
                 'hostel_detail_views'  => $hostel_detail_views,
                 'hostel_notice'        => $hostel_notice,
+                'user_hostels'=> $this->user_hostels,
             ]
         );
     }

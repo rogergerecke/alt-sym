@@ -113,40 +113,29 @@
             <!-- Your Hostel -->
             <div class="card">
                 <div class="card-header">
-                    <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">3</span></h5>
+                    <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">{{ user_hostels|length }}</span></h5>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Straße</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
                         <tbody>
+                        {% for hostel in user_hostels %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                            <th scope="row">{{ hostel.id }}</th>
+                            <td>{{ hostel.hostelName }}</td>
+                            <td>{{ hostel.address }}</td>
+                            <td><a href="{{ hostel.id }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
-                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
                 </div>
             </div>
         </div>
