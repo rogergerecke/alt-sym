@@ -68,15 +68,31 @@ h5, .h5 {
 
 /* Move the sopy container by resolution */
 /* Search module */
-#start-page-image {
+/*#start-page-image {
   height: 22rem;
   padding-bottom: 20px !important;
   background-image: url(../../assets/images/_altmühlsee-gunzenhausen_05885911_high.webp) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
+}*/
+
+#start-page-image {
+  width: 100%;
+  overflow: hidden;
+  height: 22rem;
 }
 
+#start-page-image .container-fluid img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  margin-top: -20rem;
+}
+
+#soapy{
+  position: relative;
+}
 #soapy .container {
   margin-top: -12rem;
 }

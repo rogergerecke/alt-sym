@@ -87,7 +87,8 @@ class AdminHostelCrudController extends AbstractCrudController
             ->setPageTitle('index', 'Admin: Unterkünfte')
             ->setHelp('index', 'Hier ist die Übersicht der eingetragenen Unterkünfte.')
             ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
-            ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig');
+            ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
+            ->setDefaultSort(['status'=>'DESC']);
     }
 
 

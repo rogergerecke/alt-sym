@@ -3,22 +3,26 @@
         <div class="col-md-3">
             <h5 class="text-uppercase">Brauchen Sie Hilfe</h5>
             <div class="list-group">
+                {% if systemoption.supportPhoneNumber %}
                 <div class="list-group-space">
                     <a href="#" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <small class="mb-1">Rufen Sie uns an</small>
                         </div>
-                        <h6 class="mb-1">09831 881354</h6>
+                        <h6 class="mb-1">{{ systemoption.supportPhoneNumber }}</h6>
                     </a>
                 </div>
+                {% endif %}
+                {% if systemoption.supportEmailAddress %}
                 <div class="list-group-space">
                     <a href="mailto:info@altmuehlsee.com" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <small class="mb-1">Schreiben Sie uns</small>
                         </div>
-                        <h6 class="mb-1">info@altmuehlsee.com</h6>
+                        <h6 class="mb-1"> {{ systemoption.supportEmailAddress }}</h6>
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-3">

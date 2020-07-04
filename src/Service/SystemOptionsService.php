@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-
 use App\Entity\SystemOptions;
 use App\Repository\SystemOptionsRepository;
 
@@ -30,14 +29,38 @@ final class SystemOptionsService
         }
     }
 
+    public function getByKey($key)
+    {
+        return $this->options[$key];
+    }
+
     public function getSupportEmailAddress()
     {
-        return $this->options['SUPPORT_EMAIL_ADDRESS'];
+        return $this->getByKey('SUPPORT_EMAIL_ADDRESS');
     }
 
     public function getCopiedReviverEmailAddress()
     {
-        return $this->options['CC_EMAIL'];
+        return $this->getByKey('CC_EMAIL');
     }
 
+    public function getWebSiteName()
+    {
+        return $this->getByKey('WEB_SITE_NAME');
+    }
+
+    public function getSupportPhoneNumber()
+    {
+        return $this->getByKey('SUPPORT_PHONE_NUMBER');
+    }
+// todo use it in .base.twig
+    public function getStartPageBackground()
+    {
+        return $this->getByKey('BACKGROUND_STARTPAGE');
+    }
+
+    public function getOutgoingPortalLink()
+    {
+        return $this->getByKey('OUTGOING_PORTAL_LINK');
+    }
 }
