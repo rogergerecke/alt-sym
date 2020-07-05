@@ -106,7 +106,16 @@
         <div class="row">
             <div class="col-md-12">
                 {% for room in rooms %}
-                    {{ room.finalRate|number_format('2',',') }}
+                    {# 10400.0000 / 100 #}
+                    {% set p = room.finalRate / 100 %}
+                    <div class="row border-bottom pb-3 pt-3">
+                        <div class="col-md-4">{{ room.numberOfUnits }}
+                            x {{ room.name }} {{ room.accommodationType }} mit {{ room.unitSize }} {{ room.unitType }} {% for a in room.roomAmenities %}<span class="text-success">{{ a }}, </span>{% endfor %}</div>
+                        <div class="col-md-6 text-right"><b>{{ p|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>
+                        </div>
+                        <div class="col-md-2 text-right"><a href="{{ room.landingPageUrl }}" class="btn btn-primary">Zum
+                                Angebot</a></div>
+                    </div>
                 {% endfor %}
             </div>
         </div>

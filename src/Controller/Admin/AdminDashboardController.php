@@ -122,8 +122,8 @@ class AdminDashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
 
-            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)->setController(
-                RoomTypesCrudController::class
+            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)->setController(
+                AdminRoomTypesCrudController::class
             ),
 
             yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(

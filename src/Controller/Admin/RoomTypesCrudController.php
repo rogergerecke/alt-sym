@@ -6,6 +6,7 @@ use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
+use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -44,24 +45,34 @@ class RoomTypesCrudController extends AbstractCrudController
      */
     private $security;
     private $user_id;
+    /**
+     * @var AdminMessagesHandler
+     */
+    private $adminMessagesHandler;
 
     /**
      * RoomTypesCrudController constructor.
      * @param HostelRepository $hostelRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
      * @param Security $security
+     * @param AdminMessagesHandler $adminMessagesHandler
      */
-    public function __construct(HostelRepository $hostelRepository,RoomAmenitiesRepository $roomAmenitiesRepository, Security $security)
-    {
+    public function __construct(
+        HostelRepository $hostelRepository,
+        RoomAmenitiesRepository $roomAmenitiesRepository,
+        Security $security,
+        AdminMessagesHandler $adminMessagesHandler
+    ) {
         $this->hostelRepository = $hostelRepository;
         $this->roomAmenitiesRepository = $roomAmenitiesRepository;
-
         $this->security = $security;
+        $this->adminMessagesHandler = $adminMessagesHandler;
 
         // get the user id from the logged in user
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
+
 
     }
 
@@ -110,8 +121,8 @@ class RoomTypesCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'choices'  => [
-                        'Euro' => 'EUR',
-                        'Pfund' => 'GBP',
+                        'Euro'   => 'EUR',
+                        'Pfund'  => 'GBP',
                         'Dollar' => 'USD',
                     ],
                     'group_by' => 'id',
@@ -148,9 +159,9 @@ class RoomTypesCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'choices'  => [
-                        'Standart' => 'DEFAULT',
+                        'Standart'   => 'DEFAULT',
                         'Honorieren' => 'REWARD',
-                        'Mobil' => 'MOBILE',
+                        'Mobil'      => 'MOBILE',
                     ],
                     'group_by' => 'id',
                 ]
@@ -243,7 +254,7 @@ class RoomTypesCrudController extends AbstractCrudController
                     $payment_type,
                     $url,
                     $meal_code,
-                    ];
+                ];
                 break;
             case Crud::PAGE_DETAIL:
                 return [];
@@ -297,6 +308,12 @@ class RoomTypesCrudController extends AbstractCrudController
     {
         if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
             $entityInstance->setIsUserMadeChanges(true);
+
+            // add message to admin log
+            $this->adminMessagesHandler->addInfo(
+                "Der Benutzer-ID: $this->user_id hat an einem Zimmer einstellung geändert.",
+                "Ein Benutzer hat ein Zimmer bearbeitet."
+            );
         }
 
         parent::updateEntity($entityManager, $entityInstance);
@@ -312,6 +329,12 @@ class RoomTypesCrudController extends AbstractCrudController
 
         $room_types = new RoomTypes();
         $room_types->setIsUserMadeChanges(true);
+
+        // add massage to admin log
+        $this->adminMessagesHandler->addInfo(
+            "Der Benutzer-ID: $this->user_id hat an einem Zimmer angelegt.",
+            "Ein Benutzer hat ein neues Zimmer angelegt."
+        );
 
         return $room_types;
     }
@@ -331,7 +354,7 @@ class RoomTypesCrudController extends AbstractCrudController
      */
     protected function getHostelData()
     {
-        $hostels = $this->hostelRepository->findBy(['user_id'=>$this->user_id]);
+        $hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id]);
 
         $option = null;
 
@@ -340,8 +363,8 @@ class RoomTypesCrudController extends AbstractCrudController
             $option[$name] = $hostel->getId();
         }
 
-        if ($option === null){
-            $this->addFlash('danger','Sie haben Noch kein Hostel angelegt');
+        if ($option === null) {
+            $this->addFlash('danger', 'Sie haben Noch kein Hostel angelegt');
         }
 
 
