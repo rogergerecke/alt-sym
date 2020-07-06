@@ -242,6 +242,65 @@ class RoomTypesCrudController extends AbstractCrudController
                 ]
             );
 
+        $name = TextField::new('name', 'Angebots Name');
+        $is_handicapped_accessible = BooleanField::new('is_handicapped_accessible', 'Barrierefrei');
+
+        //Specific accommodation's category. E.g. "Einzelzimmer", "Stellplatz", "Junior Suite"
+        $accommodation_type = TextField::new('accommodation_type', 'Kategorie')
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        [
+                            'Einzelzimmer'   => 'Einzelzimmer',
+                            'Doppelzimmer'   => 'Doppelzimmer',
+                            'Mehrbettzimmer' => 'Mehrbettzimmer',
+                            'Penthouse'      => 'Penthouse',
+                            'Stellplatz'     => 'Stellplatz',
+                            'Holzhütte'      => 'Holzhütte',
+                            'Junior Suite'   => 'Junior Suite',
+                            'Suite'          => 'Suite',
+                        ],
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
+        // Number of units the unique partner reference
+        $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Angebotes')
+            ->setHelp('Wie oft verfügen Sie von dieser Art des Raumes');
+
+        // Numeric size of the unit in square feet or meters
+        $unit_size = IntegerField::new('unit_size', 'Raum / Platz größe');
+
+        // Square feet or square meters
+        $unit_type = TextField::new('unit_type', 'Größen Einheit')
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        [
+                            'Quadratmeter' => 'qm',
+                            'Square feet'  => 'ft²',
+                        ],
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
+        // Number of guests allowed per unit
+        $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste')
+            ->setHelp('Die erlaubte Gästeanzahl für diesen Raum, wichtig für die Suchfunktion');
+
+        $number_of_bedrooms = NumberField::new('number_of_bedrooms', 'Anzahl Schlafzimmer');
+        $number_of_bathrooms = NumberField::new('number_of_bathrooms', 'Anzahl Badezimmer');
+
+        // Number of floor where the unit is located
+        $floor_number = IntegerField::new('floor_number', 'Etage');
+
+        // House or apartment number
+        $unit_number = TextField::new('unit_number', 'Hausnummer / Apartment');
+
         switch ($pageName) {
             case Crud::PAGE_INDEX:
                 return [
@@ -262,6 +321,7 @@ class RoomTypesCrudController extends AbstractCrudController
             case Crud::PAGE_EDIT:
             case Crud::PAGE_NEW:
                 return [
+                    $name,
                     $hostel_id,
                     $booking_fee,
                     $currency,
@@ -280,8 +340,18 @@ class RoomTypesCrudController extends AbstractCrudController
                     $url,
                     $landing_page_url,
                     $meal_code,
+                    $accommodation_type,
                     $breakfast_included,
                     $free_cancellation,
+                    $is_handicapped_accessible,
+                    $number_of_units,
+                    $unit_size,
+                    $unit_type,
+                    $unit_occupancy,
+                    $number_of_bedrooms,
+                    $number_of_bathrooms,
+                    $floor_number,
+                    $unit_number,
                 ];
                 break;
         }

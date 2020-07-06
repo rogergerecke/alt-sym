@@ -21,8 +21,10 @@
 
                 <!-- Hostel Heading -->
                 <h1>{{ hostel.hostelName }}</h1>
+                {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
                 <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}
                     , {{ hostel.country }} {{ hostel.address }} <a href="#map">die Lage auf Karte anzeigen.</a></small>
+                {% endif %}
             </div>
         </div>
         <div class="row mb-3">
@@ -41,118 +43,151 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        ab 75 EUR/Nacht
+                        {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+                            {% set r = rooms.0.finalRate / 100 %}
+                        ab <b>{{ r|format_currency(rooms.0.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
+                        {% endif %}
                     </div>
                     <div class="card-body">
-
+                        <!-- Its Base Account Show This -->
+                        {% if 'base_account' not in hostel.user.userPrivileges or 'premium_account' not in hostel.user.userPrivileges %}
+                            <p>{{ hostel.hostelName }}</p>
+                            <p>{{ hostel.address }}</p>
+                            <p>{{ hostel.postcode }} {{ hostel.city }}</p>
+                            <p>Tel.:
+                                <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a>
+                            </p>
+                            <p>Fax.: {{ hostel.fax }}</p>
+                        {% endif %}
                     </div>
                     <ul class="list-group list-group-flush">
+                        <!-- E-Mail Contact -->
                         <li class="list-group-item"><a
                                     href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Buchungsanfrage {{ hostel.hostelName|striptags }}"
                                     class="btn btn-primary btn-sm"><i class="far fa-envelope"></i> Buchungsanfrage</a>
                         </li>
-                        <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank"
-                                                       class="btn btn-primary btn-sm"><i
-                                        class="fas fa-globe"></i> Homepage</a>
-                        </li>
-                        <li class="list-group-item"><a href="#availability" class="btn btn-primary btn-sm"><i
-                                        class="fas fa-calendar-alt"></i> Belegungsplan</a>
-                        </li>
-                        <li class="list-group-item"><a href="#map" class="btn btn-primary btn-sm"><i
-                                        class="fas fa-map-marked-alt"></i> Lage auf Karte</a>
-                        </li>
-                        <li class="list-group-item"><a href="#rooms" class="btn btn-primary btn-sm"><i
-                                        class="fas fa-door-closed"></i> Zimmer</a>
-                        </li>
+                        <!-- Only for High rate Model -->
+                        {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+                            <!-- Webpage Link -->
+                            <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank"
+                                                           class="btn btn-primary btn-sm"><i
+                                            class="fas fa-globe"></i> Homepage</a>
+                            </li>
+                            <!-- Availability -->
+                            <li class="list-group-item"><a href="#availability" class="btn btn-primary btn-sm"><i
+                                            class="fas fa-calendar-alt"></i> Belegungsplan</a>
+                            </li>
+                            <!-- On Google Maps -->
+                            <li class="list-group-item"><a href="#map" class="btn btn-primary btn-sm"><i
+                                            class="fas fa-map-marked-alt"></i> Lage auf Karte</a>
+                            </li>
+                            <!-- Room Offers -->
+                            <li class="list-group-item"><a href="#rooms" class="btn btn-primary btn-sm"><i
+                                            class="fas fa-door-closed"></i> Zimmer</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
 
         <!-- Hostel Description -->
-        <hr>
-        <h2>Beschreibung</h2>
-        <div class="row">
-            <div class="col-md-12">
-                {{ hostel.description|raw }}
-            </div>
-        </div>
-        <hr>
-        <!-- Hostel Amenities -->
-        <h3>Ausstattung</h3>
-        <div class="row">
-            {# service.name english name for icons #}
-            {% for service in services %}
-                <div class="col-auto mb-1 text-muted text-center">
-                    {% if service.icon is not empty %}
-                        <img src="{{ asset('build/images/icons/'~service.icon~'') }}" alt="" data-toggle="tooltip"
-                             title="{{ service.0.description }}" class="img-thumbnail"><br>{{ service.0.name }}
-                    {% else %}
-                        {{ service.0.name }}
-                    {% endif %}
+        {% if hostel.description is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+            <hr>
+            <h2>Beschreibung</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ hostel.description|raw }}
                 </div>
-            {% endfor %}
-        </div>
-        <hr>
+            </div>
+            <hr>
+        {% endif %}
+
+        <!-- Hostel Amenities -->
+        {% if services is not empty %}
+            <h3>Ausstattung</h3>
+            <div class="row">
+                {# service.name english name for icons #}
+                {% for service in services %}
+                    <div class="col-auto mb-1 text-muted text-center">
+                        {% if service.icon is not empty %}
+                            <img src="{{ asset('build/images/icons/'~service.icon~'') }}" alt="" data-toggle="tooltip"
+                                 title="{{ service.0.description }}" class="img-thumbnail"><br>{{ service.0.name }}
+                        {% else %}
+                            {{ service.0.name }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <hr>
+        {% endif %}
 
         <!-- Hostel Availability -->
-        {% if calendar is not empty %}
+        {% if calendar is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
             <h4 id="availability">Belegungsplan</h4>
             {{ include('hostel_view/_availability_calendar.html.twig') }}
         {% endif %}
 
         <!-- Hostel Rooms -->
-        <h4 id="rooms">Zimmer</h4>
-        <div class="row">
-            <div class="col-md-12">
-                {% for room in rooms %}
-                    {# 10400.0000 / 100 #}
-                    {% set p = room.finalRate / 100 %}
-                    <div class="row border-bottom pb-3 pt-3">
-                        <div class="col-md-4">{{ room.numberOfUnits }}
-                            x {{ room.name }} {{ room.accommodationType }} mit {{ room.unitSize }} {{ room.unitType }} {% for a in room.roomAmenities %}<span class="text-success">{{ a }}, </span>{% endfor %}</div>
-                        <div class="col-md-6 text-right"><b>{{ p|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>
+        {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+            <h4 id="rooms">Zimmer</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    {% for room in rooms %}
+                        {# 10400.0000 / 100 #}
+                        {% set p = room.finalRate / 100 %}
+                        <div class="row border-bottom pb-3 pt-3">
+                            <div class="col-md-4">{{ room.numberOfUnits }}
+                                x {{ room.name }} {{ room.accommodationType }}
+                                mit {{ room.unitSize }} {{ room.unitType }} {% for a in room.roomAmenities %}<span
+                                        class="text-success">{{ a }}, </span>{% endfor %}</div>
+                            <div class="col-md-6 text-right">
+                                <b>{{ p|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>
+                            </div>
+                            <div class="col-md-2 text-right"><a href="{{ room.landingPageUrl }}"
+                                                                class="btn btn-primary">Zum
+                                    Angebot</a></div>
                         </div>
-                        <div class="col-md-2 text-right"><a href="{{ room.landingPageUrl }}" class="btn btn-primary">Zum
-                                Angebot</a></div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <hr>
+            <hr>
+        {% endif %}
     </div>
 
 
 
     <!-- Google Maps Container -->
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="map" style="width: 100%; height: 500px">
+    {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        <div class="container mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="map" style="width: 100%; height: 500px">
 
+                    </div>
+
+                    <!-- Google maps script -->
+                    <script>
+                        // Initialize and add the map
+                        function initMap() {
+                            // The location of Uluru
+                            var uluru = {lat: {{ hostel.latitude }}, lng: {{ hostel.longitude }} };
+                            // The map, centered at Uluru
+                            var map = new google.maps.Map(
+                                document.getElementById('map'), {zoom: 14, center: uluru});
+                            // The marker, positioned at Uluru
+                            var marker = new google.maps.Marker({position: uluru, map: map});
+                        }
+                    </script>
+
+                    <script async defer
+                            src="https://maps.googleapis.com/maps/api/js?key={{ go_maps_api_key }}&callback=initMap">
+                    </script>
+                    <!-- Google maps script #END -->
                 </div>
-
-                <!-- Google maps script -->
-                <script>
-                    // Initialize and add the map
-                    function initMap() {
-                        // The location of Uluru
-                        var uluru = {lat: {{ hostel.latitude }}, lng: {{ hostel.longitude }} };
-                        // The map, centered at Uluru
-                        var map = new google.maps.Map(
-                            document.getElementById('map'), {zoom: 14, center: uluru});
-                        // The marker, positioned at Uluru
-                        var marker = new google.maps.Marker({position: uluru, map: map});
-                    }
-                </script>
-
-                <script async defer
-                        src="https://maps.googleapis.com/maps/api/js?key={{ go_maps_api_key }}&callback=initMap">
-                </script>
-                <!-- Google maps script #END -->
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

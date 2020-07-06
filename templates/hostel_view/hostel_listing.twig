@@ -39,7 +39,7 @@
 
                                     <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
                                         <!-- Hostel Image -->
-                                        {% if hostel.image is not empty %}
+                                        {% if hostel.image is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
                                             <!-- Image -->
                                             <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
                                                  class="rounded float-left card-img-left img-fluid">

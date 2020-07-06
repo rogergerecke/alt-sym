@@ -85,7 +85,8 @@ class AdminUserCrudController extends AbstractCrudController
         $password = TextField::new('password')
             ->setFormType(PasswordType::class)
             ->setFormTypeOption('empty_data', '')
-            ->setRequired(false);
+            ->setRequired(false)
+            ->setHelp('Wenn das Password nicht geändert werden soll feld leer lassen.');
 
         $partner_id = IntegerField::new('partner_id', 'Kundennummer')
             ->setHelp('Die Kundennummer sollte man nicht ändern sie wird auf Rechnung verwendet');

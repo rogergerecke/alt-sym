@@ -123,7 +123,7 @@ class HostelViewController extends AbstractController
         CalendarService $calendar
     ) {
 
-
+        $hostel = null;
         $hostel = $hostelRepository->find($id);
         $services = false;
 
