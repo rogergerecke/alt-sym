@@ -1,0 +1,34 @@
+<style>.table td{height: 43px}</style>
+<div class="row">
+{% for month in calendar %}
+        <div class="col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class="card availability-card">
+                <h5 class="mb-2 ml-2 mt-3">{{ month.month }} {{ month.year }}</h5>
+                <table class="table table-bordered text-center">
+                    <thead class="bg-light-blue text-white">
+                    <tr>
+                        <th>Mo.</th>
+                        <th>Di.</th>
+                        <th>Mi.</th>
+                        <th>Do.</th>
+                        <th>Fr.</th>
+                        <th>Sa.</th>
+                        <th>So.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for week in month.weeks %}
+                        <tr>
+                            {% for day in week %}
+                                <td{% if loop.index == 6 or loop.index == 7 %} class="bg-light"{% endif %}>{% if day is not empty %}{{ day }}{% endif %}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endfor %}
+</div>

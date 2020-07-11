@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {# todo IMPORTENT remove in production no index #}
     <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="{% block description %}Altmühlsee!{% endblock %}">
-    <title>{% block title %}Altmühlsee{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ systemoption.webSiteName }}{% endblock %}">
+    <title>{% block title %}{{ systemoption.webSiteName }}{% endblock %}</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto+Condensed:300&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/ico">
@@ -22,17 +22,21 @@
     <!-- Top Header Banner -->
     <div class="bg-dark p-1" id="header-banner">
         <div class="row">
+            {% if systemoption.supportEmailAddress %}
             <div class="col-md-6">
                 <div class="text-left text-white pl-2 d-none d-md-block">
                     <i class="fas fa-envelope"></i>
-                    info@altmuehlsee.com
+                    {{ systemoption.supportEmailAddress }}
                 </div>
             </div>
+            {% endif %}
+            {% if systemoption.outgoingPortalLink %}
             <div class="col-md-6">
                 <div class="text-right text-white pr-2">
-                    Zum Portal für Ihren Urlaub am <a href="https://brombachsee.de/" class="text-white">Brombachsee</a>
+                    {{ systemoption.outgoingPortalLink|raw }}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
     <!-- Top Header Banner #END -->
@@ -53,7 +57,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                                {{ message }}
+                                {{ message|raw }}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

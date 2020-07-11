@@ -1,4 +1,4 @@
-{% for hostel in top_hostels %}
+{#{% for hostel in top_hostels %}
     <div class="border-info card card-list-hotels mb-4">
         <div class="row">
             <div class="img-thumb-box col-md-4">
@@ -34,6 +34,14 @@
 
             <!-- Hostel Detail Part -->
             <div class="card-body col-md-8 align-top">
+                <!-- DEHOGA Stars -->
+                {% if hostel.stars is not empty %}
+                    <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                         data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                            <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                {% endif %}
+                <!-- DEHOGA Stars #END -->
+
                 <!-- Heading -->
                 <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
                        class="text-decoration-none">{{ hostel.hostelName }}</a></h3>
@@ -41,12 +49,12 @@
                 <strong>{{ hostel.hostelType }}</strong>
                 <div class="row mb-1">
                     <div class="col-md-12">
-                        {# <?php foreach ($serviceRepository->getAllServices() as $service): ?>
-                         <?php if (!empty($chunk[$service['name']])): ?>#}
-                        {# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
-                              title="{{ hostel.id }}"/>#}
-                        {#  <?php endif; ?>
-                          <?php endforeach; ?>#}
+                        #}{# <?php foreach ($serviceRepository->getAllServices() as $service): ?>
+                         <?php if (!empty($chunk[$service['name']])): ?>#}{#
+                        #}{# <img src="images/icons/{{ hostel.id }}" data-toggle="tooltip"
+                              title="{{ hostel.id }}"/>#}{#
+                        #}{#  <?php endif; ?>
+                          <?php endforeach; ?>#}{#
                     </div>
                 </div>
                 <div class="accordion" id="accordion_{{ hostel.id }}">
@@ -58,8 +66,8 @@
                                         aria-controls="collapseOne">
                                     <div class="listing-icon-location">
                                         <i class="fa fa-map-marker-alt"></i>
-                                    </div>{{ hostel.city }}
-                                    , 10 KM vom See
+                                    </div>{{ hostel.city }}  {{ hostel.distanceToSee|number_format('1',',','.') }}
+                                    KM vom See
                                     entfernt <i class="fas fa-angle-down rotate-icon"></i>
                                 </button>
                             </h2>
@@ -86,4 +94,74 @@
     </div>
 {% else %}
     <p>Nothing to show</p>
+{% endfor %}#}
+
+{% for hostel in top_hostels %}
+    <div class="col-md-3">
+        <div class="card">
+            <!-- Card Image -->
+            <div class="card-img-top">
+                <!-- Notice Heart Button Ajax submit -->
+                {% if hostel.id in app.session.get('notice') %}
+                    <a href="{{ path('notice_remove',{'id':hostel.id}) }}" class="notice-button"><i
+                                class="fas fa-heart"></i></a>
+                {% else %}
+                    <a href="{{ path('notice_add',{'id':hostel.id}) }}" class="notice-button"><i
+                                class="far fa-heart"></i></a>
+                {% endif %}
+                <!-- Notice Heart Button Ajax submit #END -->
+
+                <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
+                    <!-- Hostel Image -->
+                    {% if hostel.image is not empty %}
+                        <!-- Image -->
+                        <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
+                             class="rounded float-left card-img-left img-fluid">
+                    {% else %}
+                        <!-- Place Holder -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
+                             class="rounded float-left card-img-left">
+                            <rect fill="#ddd" width="225" height="225"/>
+                            <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30" dy="10.5"
+                                  font-weight="bold" x="50%" y="50%" text-anchor="middle">Kein Bild
+                            </text>
+                        </svg>
+                    {% endif %}
+                </a>
+            </div>
+
+            <!-- Hostel Detail Part -->
+            <div class="card-body">
+
+                <!-- DEHOGA Stars -->
+                {% if hostel.stars is not empty %}
+                    <div class="" style="font-size: 0.5rem" data-toggle="popover"
+                         title="{{ hostel.stars }} Sterne Unterkunft"
+                         data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                            <span class="fa fa-star text-warning"></span> {% endfor %} <span
+                                class="far fa-question-circle text-muted"></span></div>
+                    {% else %}
+                    <div style="height: 0.7rem"></div>
+                {% endif %}
+                <!-- DEHOGA Stars #END -->
+
+                <!-- Hostel Type -->
+                <p class="m-0">
+                    <strong>{{ hostel.hostelType }}</strong>
+                </p>
+                <p class="m-0"><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
+                      class="text-decoration-none">{{ hostel.hostelName|u.truncate(20, '...') }}</a></p>
+                <p class="small m-0">{{ hostel.distanceToSee|number_format('1',',','.') }} KM vom See entfernt</p>
+
+                <!-- Button Group -->
+                <div class="btn-group-sm mt-4">
+                    <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage"
+                       class="btn btn-sm btn-outline-primary"><i class="fa fa-mail-bulk"></i> E-Mail</a>
+                    <a href="{{ path('hostel_details',{'id':hostel.id}) }}" class="btn btn-sm btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+   {# nothing hostel in top placement cant add werbebanner webservice albrecht #}
 {% endfor %}

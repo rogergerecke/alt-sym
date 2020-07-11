@@ -42,6 +42,11 @@ class RoomAmenities
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $icon;
+
 
     public function getId(): ?int
     {
@@ -104,6 +109,18 @@ class RoomAmenities
     public function setStatus(bool $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

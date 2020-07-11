@@ -2,146 +2,222 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 
-
-{% block content_body %}
+{% block page_content %}
     <style>
-        .h3, h5{
-            font-weight: 100; color: #07a7e3
+        .h3, h5 {
+            font-weight: 100;
+            color: #07a7e3
         }
-        .card{
+
+        .card {
             box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
             border: none;
         }
-        .card-header{
+
+        .card-header {
             background-color: #fff;
         }
+
+        #admin-massages-card .card-body {
+            padding: 0;
+            color: var(--gray-500);
+        }
+
+        .list-group {
+            border-radius: 0;
+        }
+
+        .list-group h5 {
+            font-size: 1rem;
+            font-family: var(--font-family-base);
+            color: var(--gray-600);
+            font-weight: bold;
+        }
+
+        .list-group-item {
+            border-right: 0;
+            border-left: 0;
+            border-radius: 0;
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+            border-top-width: 1px !important;
+        }
+
+
     </style>
-    <!-- Admin Aria -->
+    <!-- Admin Dashboard -->
     <h1 class="h3 mb-4 border-bottom pb-2">Admin Bereich</h1>
-       <div class="row">
-           <!-- New Registration -->
-          <div class="col-md-4">
-              <div class="card">
-                  <div class="card-header">
-                      <h5>Neue Kunden Registrierung <span class="badge badge-pill badge-primary">3</span></h5>
-                  </div>
-                  <div class="card-body">
-                      <table class="table">
-                          <thead>
-                          <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">First</th>
-                              <th scope="col">Last</th>
-                              <th scope="col">Action</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                          <tr>
-                              <th scope="row">1</th>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                          </tr>
-                          <tr>
-                              <th scope="row">2</th>
-                              <td>Jacob</td>
-                              <td>Thornton</td>
-                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                          </tr>
-                          <tr>
-                              <th scope="row">3</th>
-                              <td>Larry</td>
-                              <td>the Bird</td>
-                              <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                          </tr>
-                          </tbody>
-                      </table>
-                     <p class="card-text"> 1x Neue Registrierung</p>
-                  </div>
-              </div>
-          </div>
-           <!-- Account Upgrade -->
-           <div class="col-md-4">
-               <div class="card">
-                   <div class="card-header">
-                       <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">3</span></h5>
-                   </div>
-                   <div class="card-body">
-                       <table class="table">
-                           <thead>
-                           <tr>
-                               <th scope="col">#</th>
-                               <th scope="col">First</th>
-                               <th scope="col">Last</th>
-                               <th scope="col">Action</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                           <tr>
-                               <th scope="row">1</th>
-                               <td>Mark</td>
-                               <td>Otto</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">2</th>
-                               <td>Jacob</td>
-                               <td>Thornton</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">3</th>
-                               <td>Larry</td>
-                               <td>the Bird</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
-                   </div>
-               </div>
-           </div>
-           <!-- New Hostel Entry -->
-           <div class="col-md-4">
-               <div class="card">
-                   <div class="card-header">
-                       <h5>Neuer Unterkunft Eintrag <span class="badge badge-pill badge-primary">3</span></h5>
-                   </div>
-                   <div class="card-body">
-                       <table class="table">
-                           <thead>
-                           <tr>
-                               <th scope="col">#</th>
-                               <th scope="col">First</th>
-                               <th scope="col">Last</th>
-                               <th scope="col">Action</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                           <tr>
-                               <th scope="row">1</th>
-                               <td>Mark</td>
-                               <td>Otto</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">2</th>
-                               <td>Jacob</td>
-                               <td>Thornton</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           <tr>
-                               <th scope="row">3</th>
-                               <td>Larry</td>
-                               <td>the Bird</td>
-                               <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <p class="card-text">1x Anfrage zum Account Upgrade</p>
-                   </div>
-               </div>
-           </div>
-       </div>
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <!-- Admin Massage Card -->
+            <div class="card" id="admin-massages-card">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <h5>System-Nachrichten <span
+                                class="badge badge-pill badge-primary">{{ admin_messages|length }}</span></h5>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <p class="pl-2">Sie haben mehre System Nachrichten. System Nachrichten werden vom System erzeugt
+                        oder durch Kunden die Ihre Kundendaten verändert haben und die dann überprüft werden müssen.</p>
+                    <!-- Massages List -->
+                    <div class="list-group">
+                        {% for adminMassage in admin_messages %}
+                            <!-- Message Item -->
+                            <div class="list-group-item massage-type-{{ adminMassage.type }}">
+                                <!-- Heading -->
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-2">{{ adminMassage.heading }} <span
+                                                class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
+                                    </h5>
+                                    <span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }}</span>
+                                </div>
+                                <!-- Sub Heading -->
+                                <h6 class="mb-1 text-muted">{{ adminMassage.subHeading }}</h6>
+                                <!-- Text -->
+                                <p class="mb-2">{{ adminMassage.message }}</p>
+                                <!-- Button -->
+                                <a href="{{ adminMassage.id }}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Massages List #END -->
+                </div>
+                <!-- Card Body #END -->
+            </div>
+        </div>
+
+        <!-- Account col-md -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">3</span></h5>
+                </div>
+                <div class="card-body">
+                    <p>Es gibt mehrere Kunden die ein Account Upgrade möchten gehen Sie auf den Link Bearbeiten im
+                        unteren Menü um das Upgrade durchzuführen und den Kunden die neuen Privilegien zuzuweisen.</p>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                </div>
+            </div>
+        </div>
+        <!-- New Hostel Entry -->
+        {# <div class="col-md-4">
+             <div class="card">
+                 <div class="card-header">
+                     <h5>Neuer Unterkunft Eintrag <span class="badge badge-pill badge-primary">3</span></h5>
+                 </div>
+                 <div class="card-body">
+                     <table class="table">
+                         <thead>
+                         <tr>
+                             <th scope="col">#</th>
+                             <th scope="col">First</th>
+                             <th scope="col">Last</th>
+                             <th scope="col">Action</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr>
+                             <th scope="row">1</th>
+                             <td>Mark</td>
+                             <td>Otto</td>
+                             <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                         </tr>
+                         <tr>
+                             <th scope="row">2</th>
+                             <td>Jacob</td>
+                             <td>Thornton</td>
+                             <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                         </tr>
+                         <tr>
+                             <th scope="row">3</th>
+                             <td>Larry</td>
+                             <td>the Bird</td>
+                             <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                         </tr>
+                         </tbody>
+                     </table>
+                     <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                 </div>
+             </div>
+         </div>#}
+    </div>
+
+    <!-- Information -->
+    <h1 class="h3 mb-4 border-bottom pb-2">Informationen</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Werbung mit falschen Sternen wird bekämpft</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Wer mit Hotelsternen ohne eine entsprechende Klassifizierung wirbt, muss im Fall der Entdeckung
+                        mit
+                        einer kostenpflichtigen Abmahnung der Zentrale zur Bekämpfung unlauteren Wettbewerbs rechnen.
+                        Das
+                        gilt auch dann, wenn ein Betrieb nicht dafür sorgt, dass Portale ihn ohne Sterne präsentieren.
+                        <a href="https://www.dehogabw.de/informieren/dehoga-nachrichten/2017/werbung-mit-falschen-sternen-wird-bekaempft.html"
+                           target="_blank" class="btn btn-link">Mehr Infos</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Die Wirkung von Bildern</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Wer mit guten Bildern wirbt wird mehr erfolg haben. Diese These wurde schon tausenden male
+                        untersucht und bestätigt. Also wenn sie eine Unterkunft anlegen oder Bilder von Zimmern
+                        Hochladen sollten diese immer die Beste Qualität haben. Dies hat schließlich einfluss auf Ihren
+                        erfolg. <a
+                                href="https://conversionboosting.com/article/die-richtigen-fotos-fuer-mehr-conversions_2305/"
+                                target="_blank" class="btn btn-link">Mehr Infos</a>
+                    </p>
+
+                    <p>Sie brauchen Hilfe zu erstellen von und hochladen von Bildern. <a href="mailto:"
+                                                                                       target="_blank" class="btn btn-link">Kontakt für Hilfe</a></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

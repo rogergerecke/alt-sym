@@ -25,6 +25,7 @@ Auch bei diesen Cronjobs gibt es leider ein Limit deshalb müssen wir 4 Cronjobs
 
 Fertig am 29.07.2020
 
+Attention update to the new symfony mail componente
 
 # Hier Fehler melden !
 

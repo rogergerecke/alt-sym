@@ -5,6 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Hostel;
 use App\Entity\RoomAmenities;
 use App\Entity\User;
+use App\Repository\AmenitiesTypesRepository;
+use App\Repository\CurrencyRepository;
+use App\Repository\FederalStateRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\ArrayType;
@@ -45,12 +48,31 @@ class AdminHostelCrudController extends AbstractCrudController
      * @var RoomAmenities
      */
     private $roomAmenities;
+    /**
+     * @var CurrencyRepository
+     */
+    private $currencyRepository;
+    /**
+     * @var FederalStateRepository
+     */
+    private $federalStateRepository;
+    /**
+     * @var AmenitiesTypesRepository
+     */
+    private $amenitiesTypesRepository;
 
-    public function __construct(UserRepository $userRepository,RoomAmenitiesRepository $roomAmenities)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        RoomAmenitiesRepository $roomAmenities,
+        CurrencyRepository $currencyRepository,
+        FederalStateRepository $federalStateRepository,
+        AmenitiesTypesRepository $amenitiesTypesRepository
+    ) {
         $this->userRepository = $userRepository;
         $this->roomAmenities = $roomAmenities;
-        $this->buildRoomAmenitiesOptions();
+        $this->currencyRepository = $currencyRepository;
+        $this->federalStateRepository = $federalStateRepository;
+        $this->amenitiesTypesRepository = $amenitiesTypesRepository;
     }
 
     public static function getEntityFqcn(): string
@@ -61,9 +83,12 @@ class AdminHostelCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('edit','Admin: Hostel-Manager')
-            ->setHelp('edit','Hier ein Hostel für ein Benutzer anlegen.')
-            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+            ->setPageTitle('edit', 'Admin: Unterkünfte')
+            ->setPageTitle('index', 'Admin: Unterkünfte')
+            ->setHelp('index', 'Hier ist die Übersicht der eingetragenen Unterkünfte.')
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+            ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
+            ->setDefaultSort(['status'=>'DESC']);
     }
 
 
@@ -77,18 +102,34 @@ class AdminHostelCrudController extends AbstractCrudController
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
 
-        $image = TextField::new('image','Erstes Bild')
+        $image = TextField::new('image', 'Erstes Bild')
             ->setFormType(ElFinderType::class)
-            ->setFormTypeOptions(['instance' => 'admin', 'enable' => true])
-            /*->setTemplatePath('@FMElfinderBundle/Form/elfinder_widget.html.twig')*/;
+            ->setFormTypeOptions(
+                ['instance' => 'banner', 'enable' => true]
+            )->setHelp('Größe 255x255px das Bild kann man zuschneiden und als Kopie Speichern')// banner instance is configured in fm_elfinder.yaml
+        ;
 
-            $preview_image = ImageField::new('image');
+        $preview_image = ImageField::new('image');
 
         $address = TextField::new('address', 'Straße');
         $address_sub = TextField::new('address_sub', 'Adress zusatz');
         $postcode = IntegerField::new('postcode', 'PLZ');
         $city = TextField::new('city', 'Stadt');
-        $state = TextField::new('state', 'Bundesland'); // todo add dropdown
+
+        /* Build the federal state dropdown field SH, NRW */
+        $state = TextField::new('state', 'Bundesland')->setHelp(
+            'In welchem Bundesland liegt Ihre Unterkunft'
+        )
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        $this->buildFederalStateOptions(),
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
         $country = TextField::new('country', 'Land');// todo add dropdown
         $country_id = IntegerField::new('country_id'); // intern filed only
         $longitude = NumberField::new('longitude');
@@ -98,29 +139,52 @@ class AdminHostelCrudController extends AbstractCrudController
         $fax = TextField::new('fax');
         $web = UrlField::new('web');
         $email = EmailField::new('email');
-        $currency = TextField::new('currency');//todo dropdown
+
+        /* Build the currency dropdown field EUR, GBP */
+        $currency = TextField::new('currency', 'Währung')->setHelp(
+            'Die Währung in der Sie abrechnen'
+        )
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        $this->buildCurrencyOptions(),
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
         $room_types = TextField::new('room_types');// todo dropdown array[]
 
         /* amenities choices array */
-        $amenities = CollectionField::new('amenities','Ausstattung')->setHelp('Ausstattung die generell im Hostel verfügbar ist')
+        $amenities = CollectionField::new('amenities', 'Ausstattung')->setHelp(
+            'Ausstattung die generell im Hostel verfügbar ist'
+        )
             ->setEntryType(ChoiceType::class)
             ->setFormTypeOptions(
-                ['entry_options'  => [
-                    'choices'  => [
-                        $this->buildRoomAmenitiesOptions()
+                [
+                    'entry_options' => [
+                        'choices'  => [
+                            $this->buildRoomAmenitiesOptions(),
+                        ],
+                        'label'    => false,
+                        'group_by' => 'id',
                     ],
-                    'label'      => false,
-                    'group_by'   => 'id',
-                ],
-                    ]
+                ]
             );//todo json*/
 
         $description = TextareaField::new('description', 'Beschreibung')
             ->setFormType(CKEditorType::class);
 
-        // api connection parameter for hostel availability import
-        $api_key = TextField::new('api_key');// todo only display autogenarate UUid
-        $hostel_availability_url = UrlField::new('hostel_availability_url');
+
+        // api connection parameter for hostel availability import autogenerated
+        $api_key = TextField::new('api_key')->setHelp(
+            'Ihr API schlüssel für den Import'
+        )->setFormTypeOption('disabled' ,true);
+
+        $hostel_availability_url = UrlField::new('hostel_availability_url')->setHelp(
+            'URL für den Import der Zimmerverfügbarkeit. Abruf 1x Stündlich.'
+        );
 
         // Extra cost field only by admin editable
         $sort = TextField::new('sort'); //todo add only by admin over extra pay
@@ -131,15 +195,29 @@ class AdminHostelCrudController extends AbstractCrudController
         // Hostel on or offline switch
         $status = BooleanField::new('status');
 
+        $hostel_type = TextField::new('hostel_type', 'Unterkunft-Typ')
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        $this->buildAmenitiesTypesOptions(),
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
+
+        $stars = IntegerField::new('stars','Hotel Sterne')->setHelp('Nur angeben wenn Sie wirklich über Sterne nach DEHOGA verfügen.');
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$user_id, $hostel_name, $preview_image, $address, $postcode, $city, $status];
+            return [$user_id, $hostel_name,$preview_image, $address, $postcode, $city, $status];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
             return [
                 $id,
                 $user_id,
                 $hostel_name,
+                $hostel_type,
+                $image,
                 $address,
                 $address_sub,
                 $postcode,
@@ -168,6 +246,8 @@ class AdminHostelCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_NEW === $pageName) {
             return [
                 $user_id,
+                $stars,
+                $hostel_type,
                 $hostel_name,
                 $image,
                 $address,
@@ -190,14 +270,14 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
-                $startpage,
-                $toplisting,
-                $top_placement_finished,
                 $status,
             ];
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [
+
                 $hostel_name,
+                $stars,
+                $hostel_type,
                 $image,
                 $address,
                 $address_sub,
@@ -219,24 +299,21 @@ class AdminHostelCrudController extends AbstractCrudController
                 $description,
                 $api_key,
                 $hostel_availability_url,
-                $startpage,
-                $toplisting,
-                $top_placement_finished,
                 $status,
             ];
         }
     }
 
 
-    public function configureActions(Actions $actions): Actions
-    {
-
-        return parent::configureActions($actions); // TODO: Change the autogenerated stub
-    }
-
     # Helper function protected
 
-    protected function buildRoomAmenitiesOptions(){
+
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildRoomAmenitiesOptions()
+    {
 
         $options = [];
 
@@ -244,11 +321,61 @@ class AdminHostelCrudController extends AbstractCrudController
         $roomAmenities = $this->roomAmenities->getRoomAmenitiesWithDescription();
 
         // build option array
-        foreach ($roomAmenities as $roomAmenity){
+        foreach ($roomAmenities as $roomAmenity) {
             $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
         }
 
         return $options;
     }
 
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildCurrencyOptions()
+    {
+        $options = [];
+
+        $currencys = $this->currencyRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($currencys as $currency) {
+            $options[$currency->getName()] = $currency->getCode();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildAmenitiesTypesOptions()
+    {
+        $options = [];
+
+        $amenities_types = $this->amenitiesTypesRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($amenities_types as $types) {
+            $options[$types->getName()] = $types->getName();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildFederalStateOptions()
+    {
+        $options = [];
+
+        $federalStates = $this->federalStateRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($federalStates as $federalState) {
+            $options[$federalState->getName()] = $federalState->getCode();
+        }
+
+        return $options;
+    }
 }

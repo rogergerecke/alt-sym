@@ -52,7 +52,7 @@ h1, .h1 {
   font-size: 3rem;
 }
 
-h1 a, h2 a, h3 a, h4 a, h5 a, h6 a  {
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   color: $headings-color !important;
 }
 
@@ -68,15 +68,31 @@ h5, .h5 {
 
 /* Move the sopy container by resolution */
 /* Search module */
-#start-page-image {
+/*#start-page-image {
   height: 22rem;
   padding-bottom: 20px !important;
   background-image: url(../../assets/images/_altmühlsee-gunzenhausen_05885911_high.webp) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
+}*/
+
+#start-page-image {
+  width: 100%;
+  overflow: hidden;
+  height: 22rem;
 }
 
+#start-page-image .container-fluid img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  margin-top: -20rem;
+}
+
+#soapy{
+  position: relative;
+}
 #soapy .container {
   margin-top: -12rem;
 }
@@ -171,10 +187,10 @@ h5, .h5 {
   padding-bottom: 0.25rem;
 }
 
-.heading-sp{
+.heading-sp {
   font-size: 2rem;
   margin-bottom: 2rem;
-  font-family: Oswald,sans-serif;
+  font-family: Oswald, sans-serif;
   font-weight: 500;
   line-height: 1.2;
   color: #093773;
@@ -216,11 +232,15 @@ h5, .h5 {
 }
 
 /* Hostel Detail */
-.availability-card h5{
+.availability-card h5 {
   font-family: Roboto, sans-serif;
   font-weight: 100;
   font-size: 1.7rem;
   color: $triade-4-rgba;
+}
+
+.img-thumbnail:hover {
+  background-color: #efefef
 }
 
 /* Import the Styles */
@@ -286,7 +306,7 @@ h5, .h5 {
   @return ($value / 16px) *1rem;
 }
 
-#masonry-grid{
+#masonry-grid {
   padding-top: .9375rem;
   padding-left: .9375rem;
   padding-right: .9375rem;

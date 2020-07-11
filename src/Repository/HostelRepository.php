@@ -14,27 +14,60 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class HostelRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $regions_name;
+
+
+    /**
+     * @var RegionsRepository
+     */
+    private $regionsRepository;
+
+    public function __construct(ManagerRegistry $registry, RegionsRepository $regionsRepository)
     {
         parent::__construct($registry, Hostel::class);
+        $this->regionsRepository = $regionsRepository;
     }
 
+
+    /**
+     * The complex hostel search function
+     * @param array|null $filter
+     * @return int|mixed|string
+     * @throws \Exception
+     */
     public function findHostelsWithFilter(?array $filter)
     {
         // first idee
         /* [regions] => 61 [hostel_types] => 4 [quantity_person] => 1 [submit] => [price_range] => 10;80 [see_distance] => 1;5 )*/
         $qb = $this->createQueryBuilder('h');
 
+        // add the regions filter works by postcode
         if ($filter['regions']) {
-            $qb
-                ->andWhere('h.room_types LIKE :filter OR h.partner_id LIKE :filter')
-                ->setParameter('filter', '%'.$filter['regions'].'%');
+            $plz = $this->regionsRepository->findOneBy(['regions_id' => $filter['regions']]);
+
+            if ($plz) {
+                // set the regions name for heading the search page
+                $this->setRegionsName($plz->getName());
+
+                $qb
+                    ->andWhere('h.postcode = :plz')
+                    ->setParameter('plz', $plz->getZipcode());
+            } else {
+                throw new \Exception('This region doesnt exist check your regions table.');
+            }
         }
 
+        // add the hostel type filter ['hostel_types'] => 64
         if ($filter['hostel_types']) {
             $qb
-                ->andWhere('h.room_types LIKE :filter OR h.partner_id LIKE :filter')
-                ->setParameter('filter', '%'.$filter['hostel_types'].'%');
+                ->leftJoin(
+                    'App\Entity\AmenitiesTypes',
+                    'at',
+                    'WITH',
+                    'h.hostel_type = at.name'
+                )
+                ->andWhere('at.amenities_id = :id')
+                ->setParameter('id', $filter['hostel_types']);
         }
 
         return $qb
@@ -62,7 +95,6 @@ class HostelRepository extends ServiceEntityRepository
             ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();
-
     }
 
     /**
@@ -79,7 +111,6 @@ class HostelRepository extends ServiceEntityRepository
             ->addOrderBy('tlh.sort', 'DESC');
 
         return $qb->getQuery()->getResult();
-
     }
 
 
@@ -109,37 +140,29 @@ class HostelRepository extends ServiceEntityRepository
             $i++;
         }
 
+        $qb->andWhere('hn.status = 1');
+
         return $qb
             ->getQuery()
             ->getResult();
     }
 
-    // /**
-    //  * @return Hostel[] Returns an array of Hostel objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return mixed
+     */
+    public function getRegionsName()
     {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->regions_name;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Hostel
+    /**
+     * @param mixed $regions_name
+     * @return HostelRepository
+     */
+    public function setRegionsName($regions_name)
     {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->regions_name = $regions_name;
+
+        return $this;
     }
-    */
 }

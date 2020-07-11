@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CronJobController!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>Link</th>
+                <th>Beschreibung</th>
+                <th>#</th>
+            </tr>
+            {% for job in jobs %}
+
+            <tr>
+                <td>{{ url(job.phat) }}</td>
+                <td>{{ job.description }}</td>
+                <td><a href="{{ url(job.phat) }}" class="btn btn-sm btn-warning">Ausführen</a></td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+</div>
+{% endblock %}

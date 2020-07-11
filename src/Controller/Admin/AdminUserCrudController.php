@@ -9,26 +9,63 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 
 class AdminUserCrudController extends AbstractCrudController
 {
     public static $entityFqcn = User::class;
 
     /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+
+    /**
      * @var UserPrivilegesTypesRepository
      */
     private $privilegesTypesRepository;
+    /**
+     * @var object|\Symfony\Component\Security\Core\User\UserInterface|null
+     */
+    private $user;
+    /**
+     * @var Security
+     */
+    private $security;
+    /**
+     * @var string|null
+     */
+    private $password;
 
-    public function __construct(UserPrivilegesTypesRepository $privilegesTypesRepository)
-    {
+    /**
+     * AdminUserCrudController constructor.
+     * @param UserPrivilegesTypesRepository $privilegesTypesRepository
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param Security $security
+     */
+    public function __construct(
+        UserPrivilegesTypesRepository $privilegesTypesRepository,
+        UserPasswordEncoderInterface $passwordEncoder,
+        Security $security
+    ) {
         $this->privilegesTypesRepository = $privilegesTypesRepository;
+        $this->passwordEncoder = $passwordEncoder;
+
+
+        if (null !== $security->getUser()) {
+            $this->password = $security->getUser()->getPassword();
+        }
     }
 
     public static function getEntityFqcn(): string
@@ -39,13 +76,17 @@ class AdminUserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setPageTitle(Crud::PAGE_INDEX,'Benutzer');
+        return $crud->setPageTitle(Crud::PAGE_INDEX, 'Benutzer');
     }
 
     public function configureFields(string $pageName): iterable
     {
         $email = TextField::new('email');
-        $password = TextField::new('password');
+        $password = TextField::new('password')
+            ->setFormType(PasswordType::class)
+            ->setFormTypeOption('empty_data', '')
+            ->setRequired(false)
+            ->setHelp('Wenn das Password nicht geändert werden soll feld leer lassen.');
 
         $partner_id = IntegerField::new('partner_id', 'Kundennummer')
             ->setHelp('Die Kundennummer sollte man nicht ändern sie wird auf Rechnung verwendet');
@@ -71,7 +112,7 @@ class AdminUserCrudController extends AbstractCrudController
                 ]
             );
 
-        $hostel_name = TextField::new('hostel_name');
+        $hostel_name = AssociationField::new('hostels');
 
         switch ($pageName) {
             case Crud::PAGE_INDEX:
@@ -82,20 +123,20 @@ class AdminUserCrudController extends AbstractCrudController
                     $name,
                     $user_privileges,
                     $hostel_name,
-                    $status
+                    $status,
                 ];
                 break;
             case Crud::PAGE_NEW:
             case Crud::PAGE_EDIT:
-            return [
-                $name,
-                $user_privileges,
-                $partner_id,
-                $email,
-                $password,
-                $status,
-            ];
-            break;
+                return [
+                    $name,
+                    $partner_id,
+                    $email,
+                    $user_privileges,
+                    $password,
+                    $status,
+                ];
+                break;
             case Crud::PAGE_DETAIL:
                 return [
                     $id,
@@ -108,7 +149,31 @@ class AdminUserCrudController extends AbstractCrudController
                 ];
                 break;
         }
+    }
 
+    /**
+     * Password generation on password entity update over Symfony core
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+
+
+        // set new password with encoder interface
+        if (method_exists($entityInstance, 'setPassword')) {
+            $clearPassword = $this->get('request_stack')->getCurrentRequest()->request->all('User')['password'];
+
+            // if user password not change save the old one
+            if (empty($clearPassword)) {
+                $entityInstance->setPassword($this->getUser()->getPassword());
+            } else {
+                $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
+                $entityInstance->setPassword($encodedPassword);
+            }
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
     }
 
 
@@ -125,6 +190,7 @@ class AdminUserCrudController extends AbstractCrudController
 
         $privileges = $this->privilegesTypesRepository->findBy(['status' => true]);
 
+        $oneYear = date('Y-m-d', strtotime(date("Y-m-d", mktime())." + 365 day"));
         foreach ($privileges as $privilege) {
             $options[$privilege->getName()] = $privilege->getCode();
         }

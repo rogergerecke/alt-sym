@@ -9,6 +9,9 @@ use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesDescriptionRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\RoomTypesRepository;
+use App\Repository\HostelGalleryRepository;
+use App\Service\CalendarService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,26 +33,24 @@ class HostelViewController extends AbstractController
      * @param Request $request
      * @param SessionInterface $session
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function listing(HostelRepository $hostelRepository, Request $request, SessionInterface $session)
     {
 
         $hostels = null;
+        $top_hostels = null;
+        $header_region = null;
         // creat a new hostel search form
         $form = $this->createForm(SearchHostelType::class);
 
         // we have a search query
         if ($request->isMethod('POST') and $request->request->all($form->getName())) {
-
-            // todo validate form
-
+            // get the query array
             $q = $request->request->all($form->getName());
-            // TODO form function
-            /* $hostels = $hostelRepository->findHostelsWithFilter($q);*/
 
-            if ($hostels !== null) {
-                // do output
-                /*print_r($hostels);*/
+            if ($hostels = $hostelRepository->findHostelsWithFilter($q)) {
+                $header_region = $hostelRepository->getRegionsName();
             } else {
                 $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
             }
@@ -62,6 +63,7 @@ class HostelViewController extends AbstractController
         // no request default show all
         if (!$request->request->all('search_hostel')) {
             $hostels = $hostelRepository->findBy(['status' => true]);
+            $top_hostels = $hostelRepository->findTopListingHostels();
         }
 
         #
@@ -69,14 +71,15 @@ class HostelViewController extends AbstractController
         #
         // if the first page view update statistics only one time per session
         if (!$session->has('notice_page_view')) {
-
             $session->set('notice_page_view', true);
 
             // Statistics global_page_view counter
             // write to the hostel statistik /performance killer customer want it
             // build em for statistic counter
             $em = $this->getDoctrine()->getManager();
-            $hostel_statistics = $em->getRepository(Statistics::class)->findAll();
+            $month = new \DateTime();
+            $month = $month->format('Y-m');
+            $hostel_statistics = $em->getRepository(Statistics::class)->findBy(['date' => new \DateTime($month.'-01')]);
 
             // if hostel id in statistics
             foreach ($hostel_statistics as $hostelStatistic) {
@@ -86,7 +89,6 @@ class HostelViewController extends AbstractController
                 $em->persist($hostelStatistic);
                 $em->flush();
             }
-
         }
 
 
@@ -96,27 +98,35 @@ class HostelViewController extends AbstractController
                 'controller_name' => 'HostelViewController',
                 'form'            => $form->createView(),
                 'hostels'         => $hostels,
-                'top_hostels'     => $hostelRepository->findTopListingHostels(),
+                'top_hostels'     => $top_hostels,
+                'header_region'   => $header_region,
             ]
         );
     }
 
 
     /**
+     * Build the vars for the detail site
      * @Route("/gastgeber/details/{id}", name="hostel_details", requirements={"id"="\d+"})
      * @param int $id
      * @param HostelRepository $hostelRepository
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
+     * @param CalendarService $calendar
+     * @param HostelGalleryRepository $hostelGallery
      * @return Response
+     * @throws Exception
      */
     public function details(
         int $id,
         HostelRepository $hostelRepository,
         RoomTypesRepository $roomTypesRepository,
-        RoomAmenitiesRepository $roomAmenitiesRepository
+        RoomAmenitiesRepository $roomAmenitiesRepository,
+        CalendarService $calendar,
+        HostelGalleryRepository $hostelGallery
     ) {
 
+        $hostel = null;
         $hostel = $hostelRepository->find($id);
         $services = false;
 
@@ -124,6 +134,17 @@ class HostelViewController extends AbstractController
         if (null === $hostel) {
             $this->addFlash('info', 'Diese Unterkunft hat noch keine Detailseite');
         } else {
+            if ($hostel->getStatus() == 0) {
+                $this->addFlash('danger', 'Diese Unterkunft ist im Moment deaktiviert.');
+                $this->addFlash(
+                    'danger',
+                    "Wenn Sie meinen das sei nicht korrekt kontaktieren Sie den Support. <a href='".$this->generateUrl(
+                        'static_site_contact'
+                    )."'>Hilfe</a>"
+                );
+
+                return new RedirectResponse($this->generateUrl('hostel_view'));
+            }
 
             // Create the Amenities Description with service names and icons.svg
             if ($amenities = $hostel->getAmenities()) {
@@ -131,7 +152,6 @@ class HostelViewController extends AbstractController
                 $roomAmenities = $roomAmenitiesRepository->getRoomAmenitiesWithDescription();
 
                 foreach ($roomAmenities as $amenity) {
-
                     if (in_array($amenity['name'], $amenities)) {
                         $services[] = $amenity;
                     }
@@ -144,7 +164,11 @@ class HostelViewController extends AbstractController
             #   // build em for statistic counter
 
             $em = $this->getDoctrine()->getManager();
-            $statistics = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
+            $month = new \DateTime();
+            $month = $month->format('Y-m');
+            $statistics = $em->getRepository(Statistics::class)->findOneBy(
+                ['hostel_id' => $id, 'date' => new \DateTime($month.'-01')]
+            );
 
             // if hostel id in statistics
             // if hostel id in statistics or save new
@@ -152,6 +176,7 @@ class HostelViewController extends AbstractController
                 // new statistics entry
                 $statistic = new Statistics();
                 $statistic->setHostelId((int)$id);
+                $statistic->setDate(new \DateTime($month.'-01'));
                 $statistic->setPageView(1);
                 $em->persist($statistic);
                 $em->flush();
@@ -175,6 +200,8 @@ class HostelViewController extends AbstractController
                 'hostel'   => $hostel,
                 'services' => $services,
                 'rooms'    => $rooms,
+                'calendar' => $calendar->getCalendar(),
+                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );

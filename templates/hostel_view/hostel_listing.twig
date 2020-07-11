@@ -10,12 +10,18 @@
             </div>
             <div class="col-md-9" id="heart-overflow">
 
+                {% if header_region is not empty %}<h1 class="h2">Im Umkreis {{ header_region }} <span class="badge badge-pill badge-success">{{ hostels|length }}</span></h1>{% endif %}
                 <!-- Hostel view Premium Position -->
-                {{ include('hostel_view/_hostel_top_position.html.twig') }}
+                {% if top_hostels is not empty %}
+                <div class="row bg-primary mb-3 pt-3 pb-3">
+                    {{ include('hostel_view/_hostel_top_position.html.twig') }}
+                </div>
+                {% endif %}
+
 
                 <!-- Hostel view Default Position -->
                 {% for hostel in hostels %}
-                    {% if hostel.toplisting is empty %}
+                    {% if hostel.toplisting is empty or hostel.toplisting is not empty and app.request.request.get('search_hostel') is not empty %}
                         <div class="card card-list-hotels mb-2">
                             <div class="row">
 
@@ -33,7 +39,7 @@
 
                                     <a href="{{ path('hostel_details',{'id':hostel.id}) }}">
                                         <!-- Hostel Image -->
-                                        {% if hostel.image is not empty %}
+                                        {% if hostel.image is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
                                             <!-- Image -->
                                             <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
                                                  class="rounded float-left card-img-left img-fluid">
@@ -44,7 +50,7 @@
                                                 <rect fill="#ddd" width="225" height="225"/>
                                                 <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30"
                                                       dy="10.5"
-                                                      font-weight="bold" x="50%" y="50%" text-anchor="middle">225×225
+                                                      font-weight="bold" x="50%" y="50%" text-anchor="middle">Kein Bild
                                                 </text>
                                             </svg>
                                         {% endif %}
@@ -53,6 +59,15 @@
 
                                 <!-- Hostel Detail Part -->
                                 <div class="card-body col-md-8 align-top">
+
+                                    <!-- DEHOGA Stars -->
+                                    {% if hostel.stars is not empty %}
+                                        <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                                             data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
+                                                <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                                    {% endif %}
+                                    <!-- DEHOGA Stars #END -->
+
                                     <!-- Heading -->
                                     <h3><a href="{{ path('hostel_details',{'id':hostel.id}) }}"
                                            class="text-decoration-none">{{ hostel.hostelName }}</a>

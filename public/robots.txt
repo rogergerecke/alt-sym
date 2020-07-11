@@ -1,0 +1,8 @@
+user-agent: *
+disallow: /notice
+disallow: /user
+disallow: /admin
+disallow: /login
+disallow: /logout
+disallow: /kontakt
+disallow: /index.php

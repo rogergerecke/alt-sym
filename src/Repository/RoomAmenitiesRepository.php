@@ -33,7 +33,7 @@ class RoomAmenitiesRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQuery(
-            'SELECT r.id,r.name, d 
+            'SELECT r.id,r.name,r.icon, d 
              FROM App\Entity\RoomAmenities r
           LEFT OUTER JOIN App\Entity\RoomAmenitiesDescription d WITH 
               r.id = d.ra_id

@@ -49,12 +49,12 @@ fm_elfinder:
                         plugins:
                             AutoResize:
                                 enable: true
-                                maxWidth: 900
-                                maxHeight: 400
-                                quality: 70 # JPEG image save quality
+                                maxWidth: 1000
+                                maxHeight: 655
+                                quality: 100 # JPEG image save quality
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
                         upload_deny: ['all']
-                        upload_max_size: 2M # also file upload sizes restricted in php.ini
+                        upload_max_size: 3M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
                     info:
@@ -194,7 +194,7 @@ fm_elfinder:
                         upload_deny: ['all']
                         upload_max_size: 20M # also file upload sizes restricted in php.ini
 
-        # banner the definition for the
+        #
         # advertising banner function for the user
         #
         banner:
@@ -232,3 +232,41 @@ fm_elfinder:
                                 maxWidth: 555
                                 maxHeight: 255
                                 quality: 100 # JPEG image save quality
+
+        #
+        # configuration hostel for the hostel detail page
+        hostel:
+            locale: '%kernel.default_locale%' # defaults to current request locale
+            editor: form # other options are tinymce, tinymce4, fm_tinymce, form, simple, custom
+            #editor_template: custom template for your editor # default null
+            #path_prefix: / # for setting custom assets path prefix, useful for non vhost configurations, i.e. http://127.0.0.1/mysite/
+            #fullscreen: true|false # default is true, applies to simple and ckeditor editors
+            #theme: smoothness # jquery theme, default is 'smoothness'
+            #visible_mime_types: ['image/png', 'image/jpg', 'image/jpeg'] # only show these mime types, defaults to show all
+            connector:
+                #debug: true|false # defaults to false
+                binds:
+                    upload.presave:
+                        - Plugin.AutoResize.onUpLoadPreSave
+                    plugins:
+                        AutoResize: # global resize options, applies to root which don't have his own resize configuraion
+                            enable: true
+                            maxWidth: 1000
+                            maxHeight: 655
+                            quality: 90 # JPEG image save quality
+                roots:       # at least one root must be defined, defines root filemanager directories
+                    uploads:
+                        #show_hidden: true|false # defaults to false, hides dotfiles
+                        driver: LocalFileSystem
+                        path: uploads/hostel
+                        upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
+                        upload_deny: ['all']
+                        upload_max_size: 3M # also file upload sizes restricted in php.ini
+                        #attributes: example of setting attributes permission
+                        #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
+                        plugins:
+                            AutoResize: # resize configuraion
+                                enable: true
+                                maxWidth: 1000
+                                maxHeight: 655
+                                quality: 90 # JPEG image save quality

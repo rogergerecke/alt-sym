@@ -1,15 +1,23 @@
 {# templates/emails/registration.html.twig #}
-<h3>Super! Sie sind jetzt Mittglied bei uns</h3>
+<h3>Super! Sie sind jetzt Mitglied bei uns {{ name }}</h3>
 
-Hallo {{ name }}! Sie haben sich bei uns registriert.
+Hallo! Sie haben sich erfolgreich bei uns registriert.
 
 {# example, assuming you have a route named "login" #}
-Zum Login, gehen Sie auf: <a href="{{ url('login') }}">Mitglider-Bereich</a>.
+Zum Login, gehen Sie auf: <a
+        href="{{ url('user') }}">Mitglieder-Bereich</a> dort ist Ihr Mitglieder Bereich in dem Sie nach freischaltung Ihren eintrag machen können.
 
 Danke!
 
-{# Makes an absolute URL to the /images/logo.png file #}
-<img src="{{ absolute_url(asset('images/logo.png')) }}">
+Sollten Sie hilfe benötigen bin ich gerne für Sie da Ihre Susanne
+{{ systemoption.SupportEmailAddress }}
+
+Viele Grüße Susanne
+
+{# Makes an absolute URL to the /favicon.ico file #}
+<img src="{{ absolute_url(asset('/favicon.ico')) }}">
 <br>
-<p>Sie erhalten diese Email weil sich mit dieser {{ registration_member_email }} ein Kundenkonto auf Altmühlsee.com angelegt wurde.  Sollte Sie sich dort nicht Registriert haben Melden Sie sich bitte beim Support damit wir Ihre Daten wieder löschen können.</p>
-<p>Support-Email: {{ support_email_address }}</p>
+<p>Sie erhalten diese Email weil sich mit dieser Email Adresse: {{ registration_member_email }} ein Kundenkonto
+    auf {{ path('index') }} angelegt wurde. Sollte Sie sich dort nicht Registriert haben Melden Sie sich bitte beim
+    Support damit wir Ihre Daten wieder löschen können.</p>
+<p>Support-Email: {{ systemoption.SupportEmailAddress }}</p>

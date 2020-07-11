@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use App\Service\SystemOptionsService;
 use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,8 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         Swift_Mailer $mailer,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        SystemOptionsService $systemOptions
     ): Response {
 
         // get the symfony session wee need it later
@@ -106,20 +108,21 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
             $message = new \Swift_Message('Wilkommen bei Altmühlsee');
 
-            // send a copy to (set in .env)
-            if (isset($_ENV['CC_EMAIL'])) {
-                $message->setCc($_ENV['CC_EMAIL']);
+            // send a copy to
+            if (null !== ($systemOptions->getCopiedReviverEmailAddress())) {
+                $message->setCc($systemOptions->getCopiedReviverEmailAddress());
             }
 
-            // if developer mode
-            if (isset($_ENV['TEST_MAIL_ADDRESS'])) {
-                $message->setTo($_ENV['TEST_MAIL_ADDRESS']);
+            // if developer mode send mails to the developer
+            if (null !== ($systemOptions->getTestEmailAddress())) {
+                $message->setTo($systemOptions->getTestEmailAddress());
             } else {
+                // real receiver email address from the formular
                 $message->setTo($form->get('email')->getData());
             }
 
             $message
-                ->setFrom($_ENV['MAIL_SYSTEM_ABSENCE_ADDRESS'])
+                ->setFrom($systemOptions->getMailSystemAbsenceAddress())
                 ->setBody(
                     $this->renderView(
                     // Email-Template templates/emails/registration.html.twig
@@ -127,7 +130,7 @@ class RegistrationController extends AbstractController
                         [
                             'name'                      => $form->get('name')->getData(),
                             'registration_member_email' => $form->get('email')->getData(),
-                            'support_email_address'     => $_ENV['SUPPORT_EMAIL_ADDRESS'],
+                            'support_email_address'     => $systemOptions->getSupportEmailAddress(),
                         ]
                     ),
                     'text/html'
@@ -142,7 +145,7 @@ class RegistrationController extends AbstractController
 
         // open route /register is login true redirect to member aria
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('user');
         }
 
         // we has a selection of account type?

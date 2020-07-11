@@ -14,7 +14,9 @@ use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
 use App\Entity\RoomTypes;
 use App\Entity\StaticSite;
+use App\Entity\SystemOptions;
 use App\Entity\User;
+use App\Repository\AdminMessageRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -53,15 +55,22 @@ class AdminDashboardController extends AbstractDashboardController
      * @var string
      */
     private $user_route;
+    /**
+     * @var AdminMessageRepository
+     */
+    private $adminMessageRepository;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security,AdminMessageRepository $adminMessageRepository)
     {
 
         $this->security = $security;
+        $this->adminMessageRepository = $adminMessageRepository;
 
+        // build the user id for the my account link
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
+
 
     }
 
@@ -70,14 +79,15 @@ class AdminDashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
 
-        $this->user_route = $routeBuilder->setController(AdminUserCrudController::class)->generateUrl();
+        // get the admin messages
+        $admin_messages = $this->adminMessageRepository->findAll();
 
         return $this->render(
             'bundles/EasyAdmin/start_admin.html.twig',
             [
                 'has_content_subtitle' => false,
+                'admin_messages'=> $admin_messages
             ]
         );
     }
@@ -106,14 +116,14 @@ class AdminDashboardController extends AbstractDashboardController
         [
             yield MenuItem::section('Manager', 'fa fa-house-user'),
 
-            yield MenuItem::linkToCrud('Kunden', 'fa fa-user', User::class)
+            yield MenuItem::linkToCrud('Benutzerkonten', 'fa fa-user', User::class)
                 ->setController(AdminUserCrudController::class),
 
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
 
-            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)->setController(
-                RoomTypesCrudController::class
+            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)->setController(
+                AdminRoomTypesCrudController::class
             ),
 
             yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
@@ -138,7 +148,8 @@ class AdminDashboardController extends AbstractDashboardController
         ];
 
         /* System Config section */
-        yield MenuItem::section('System', 'fa fa-fan');
+        yield MenuItem::section('System', 'fa fa-desktop');
+        yield MenuItem::linkToCrud('Einstellung', 'fa fa-fan', SystemOptions::class);
         yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
         yield MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class);
         yield MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class);
@@ -150,6 +161,13 @@ class AdminDashboardController extends AbstractDashboardController
         );
     }
 
+
+    /**
+     * Create the User Flyout menu over the top right corner
+     *
+     * @param UserInterface $user
+     * @return UserMenu
+     */
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         // menu build print_r($user);

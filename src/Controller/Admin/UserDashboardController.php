@@ -3,16 +3,18 @@
 
 namespace App\Controller\Admin;
 
-
 use App\Entity\Advertising;
 use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\MediaGallery;
 use App\Entity\RoomTypes;
+use App\Entity\HostelGallery;
 use App\Entity\User;
 use App\Repository\HostelRepository;
+use App\Repository\StatisticsRepository;
 use App\Repository\UserRepository;
+use App\Service\AdminMessagesHandler;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -75,6 +77,22 @@ class UserDashboardController extends AbstractDashboardController
      * @var array|null
      */
     private $user_privileges;
+    /**
+     * @var int|null
+     */
+    private $user_hostel_ids;
+    /**
+     * @var array
+     */
+    private $user_hostels;
+    /**
+     * @var StatisticsRepository
+     */
+    private $statisticsRepository;
+    /**
+     * @var array
+     */
+    private $statistics;
 
 
     /**
@@ -82,32 +100,33 @@ class UserDashboardController extends AbstractDashboardController
      * @param Security $security
      * @param UserRepository $userRepository
      * @param HostelRepository $hostelRepository
+     * @param StatisticsRepository $statisticsRepository
      */
-    public function __construct(Security $security, UserRepository $userRepository, HostelRepository $hostelRepository)
-    {
-
+    public function __construct(
+        Security $security,
+        UserRepository $userRepository,
+        HostelRepository $hostelRepository,
+        StatisticsRepository $statisticsRepository
+    ) {
+        // inti vars
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->hostelRepository = $hostelRepository;
-
+        $this->statisticsRepository = $statisticsRepository;
 
         // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
             $this->user_account = $this->userRepository->find($this->user_id);
             $this->user_privileges = $this->user_account->getUserPrivileges();
-
-            // test case
-            /* print_r($this->user_privileges);*/
         }
 
 
-        // check if user have hostel
-        if (null !== $this->hostelRepository->findOneBy(['user_id' => $this->user_id])) {
+        // check if user have hostel than get all ids for menu building
+        if ($hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id])) {
             $this->userHaveHostel = true;
+            $this->user_hostels = $hostels;
         }
-
-
     }
 
     /**
@@ -116,7 +135,67 @@ class UserDashboardController extends AbstractDashboardController
     public function index(): Response
     {
 
-        return parent::index();
+        // get all statistics for the owned hostels for the dashboard
+        $statistics = null;
+        $hostel_listing_views = null;
+        $hostel_detail_views = null;
+        $hostel_notice = null;
+        if ($this->userHaveHostel) {
+            $statistics = $this->statisticsRepository->findAll();
+
+            // create $global_page_view
+            foreach ($statistics as $value) {
+                $hostel_listing_views = $value->getGlobalPageView() + $hostel_listing_views;
+            }
+
+            // create detail page view and notice
+            foreach ($this->user_hostels as $hostel) {
+                foreach ($statistics as $statistic) {
+                    if ($hostel->getId() == $statistic->getHostelId()) {
+                        $hostel_detail_views[] = $statistic->getPageView();
+                        $hostel_notice = $statistic->getNoticeHostel() + $hostel_notice;
+                    }
+                }
+            }
+        }
+
+        return $this->render(
+            'bundles/EasyAdmin/user_dashboard.html.twig',
+            [
+                'has_content_subtitle' => false,
+                'statistics'           => $statistics,
+                'hostel_listing_views' => $hostel_listing_views,
+                'hostel_detail_views'  => $hostel_detail_views,
+                'hostel_notice'        => $hostel_notice,
+                'user_hostels'         => $this->user_hostels,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/user/upgrade/{package}", name="user_upgrade")
+     * @param AdminMessagesHandler $adminMessagesHandler
+     * @param string $package
+     * @return Response
+     */
+    public function upgrade(AdminMessagesHandler $adminMessagesHandler, $package = 'free_account')
+    {
+        switch ($package) {
+            case 'base_account':
+                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: base_account');
+                break;
+            case 'premium_account':
+                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: premium_account');
+                break;
+        }
+
+        return $this->render(
+            'bundles/EasyAdmin/user_upgrade.html.twig',
+            [
+                'package'      => $package,
+                'user_hostels' => $this->user_hostels,
+            ]
+        );
     }
 
     public function configureDashboard(): Dashboard
@@ -145,38 +224,38 @@ class UserDashboardController extends AbstractDashboardController
 
         // its not premium user show upgrade message
         if (!in_array('premium_account', $this->user_privileges)) {
-            yield MenuItem::linktoDashboard('Upgrade to Premium', 'fa fa-star')
+            yield MenuItem::linktoRoute('Upgrade to Premium', 'fa fa-star', 'user_upgrade')
                 ->setCssClass('bg-success text-white pl-2');
         }
 
-        // link to the user account
-        yield MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
-            ->setAction('detail')
-            ->setEntityId($this->user_id);
-
+        yield MenuItem::linktoDashboard('Startseite', 'fa fa-home');
 
         /* HOSTEL MENU > only show with the right user privileges */
         $check = ['free_account', 'base_account', 'premium_account',];
         if ($this->isUserHavePrivileges($check)) {
-
             yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
 
-            // todo add show only from logged in user
-            yield MenuItem::linkToCrud('Meine Unterkunft', 'fa fa-hotel', Hostel::class)
-                ->setQueryParameter(
-                    'user_id',
-                    $this->user_id
-                );
-
-            yield MenuItem::linkToCrud('Unterkunft hinzufügen', 'fa fa-hotel', Hostel::class)
-                ->setAction('new');
-
-            // have the user hostel so he cant add rooms
+            // Create the Hostel:Menu
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+                yield MenuItem::section('Meine Unterkünfte', 'fa fa-hotel');
+                // add the hostels to menu
+                foreach ($this->user_hostels as $userHostel) {
+                    $hostel_name = substr($userHostel->getHostelName(), 0, 11);
+                    yield MenuItem::linkToCrud('Unterkunft '.$hostel_name, 'fa fa-room', Hostel::class)
+                        ->setAction('edit')
+                        ->setEntityId($userHostel->getId());
+                }
             }
 
-            yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
+            if (!$this->userHaveHostel) {
+                yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)->setAction('new');
+            }
+
+            // have the user hostel so he cant add rooms and images for the hostel
+            if ($this->userHaveHostel) {
+                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+                yield MenuItem::linkToCrud('Bilder hinzufügen', 'fa fa-image', HostelGallery::class);
+            }
         }
 
 
@@ -185,19 +264,15 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
             ->setLinkTarget('_blank')
             ->setQueryParameter('instance', 'user');
-        yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
-        yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 
         /* Marketing section */
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
+        yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
 
-            yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
-
-
+        /* The Leisure Menu Offer Point */
         if ($this->isUserHavePrivileges(['leisure_offer'])) {
             yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
         }
-
 
         /* Information section */
         yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
@@ -209,6 +284,13 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
     }
 
+
+    /**
+     * Create the ordinary user menu top
+     * right corner
+     * @param UserInterface $user
+     * @return UserMenu
+     */
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         // menu build print_r($user);
@@ -247,7 +329,8 @@ class UserDashboardController extends AbstractDashboardController
     #######################################
 
     /**
-     * Check the user privileges
+     * Check the user have the privileges
+     * for menu options
      *
      * @param array $privileges
      * @return bool
@@ -262,6 +345,4 @@ class UserDashboardController extends AbstractDashboardController
 
         return false;
     }
-
-
 }

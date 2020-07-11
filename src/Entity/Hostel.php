@@ -199,6 +199,11 @@ class Hostel
      */
     private $isUserMadeChanges;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $stars;
+
 
     public function getId(): ?int
     {
@@ -585,6 +590,18 @@ class Hostel
     public function setIsUserMadeChanges(?bool $isUserMadeChanges): self
     {
         $this->isUserMadeChanges = $isUserMadeChanges;
+
+        return $this;
+    }
+
+    public function getStars(): ?int
+    {
+        return $this->stars;
+    }
+
+    public function setStars(?int $stars): self
+    {
+        $this->stars = $stars;
 
         return $this;
     }
