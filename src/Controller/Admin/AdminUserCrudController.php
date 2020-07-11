@@ -190,6 +190,7 @@ class AdminUserCrudController extends AbstractCrudController
 
         $privileges = $this->privilegesTypesRepository->findBy(['status' => true]);
 
+        $oneYear = date('Y-m-d', strtotime(date("Y-m-d", mktime())." + 365 day"));
         foreach ($privileges as $privilege) {
             $options[$privilege->getName()] = $privilege->getCode();
         }

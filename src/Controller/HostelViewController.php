@@ -9,6 +9,7 @@ use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesDescriptionRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\RoomTypesRepository;
+use App\Repository\HostelGalleryRepository;
 use App\Service\CalendarService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -112,6 +113,7 @@ class HostelViewController extends AbstractController
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
      * @param CalendarService $calendar
+     * @param HostelGalleryRepository $hostelGallery
      * @return Response
      * @throws Exception
      */
@@ -120,7 +122,8 @@ class HostelViewController extends AbstractController
         HostelRepository $hostelRepository,
         RoomTypesRepository $roomTypesRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository,
-        CalendarService $calendar
+        CalendarService $calendar,
+        HostelGalleryRepository $hostelGallery
     ) {
 
         $hostel = null;
@@ -133,7 +136,13 @@ class HostelViewController extends AbstractController
         } else {
             if ($hostel->getStatus() == 0) {
                 $this->addFlash('danger', 'Diese Unterkunft ist im Moment deaktiviert.');
-                $this->addFlash('danger', "Wenn Sie meinen das sei nicht korrekt kontaktieren Sie den Support. <a href='".$this->generateUrl('static_site_contact')."'>Hilfe</a>");
+                $this->addFlash(
+                    'danger',
+                    "Wenn Sie meinen das sei nicht korrekt kontaktieren Sie den Support. <a href='".$this->generateUrl(
+                        'static_site_contact'
+                    )."'>Hilfe</a>"
+                );
+
                 return new RedirectResponse($this->generateUrl('hostel_view'));
             }
 
@@ -192,6 +201,7 @@ class HostelViewController extends AbstractController
                 'services' => $services,
                 'rooms'    => $rooms,
                 'calendar' => $calendar->getCalendar(),
+                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );

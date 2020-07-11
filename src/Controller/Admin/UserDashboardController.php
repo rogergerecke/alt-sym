@@ -9,10 +9,12 @@ use App\Entity\Hostel;
 use App\Entity\Media;
 use App\Entity\MediaGallery;
 use App\Entity\RoomTypes;
+use App\Entity\HostelGallery;
 use App\Entity\User;
 use App\Repository\HostelRepository;
 use App\Repository\StatisticsRepository;
 use App\Repository\UserRepository;
+use App\Service\AdminMessagesHandler;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -98,6 +100,7 @@ class UserDashboardController extends AbstractDashboardController
      * @param Security $security
      * @param UserRepository $userRepository
      * @param HostelRepository $hostelRepository
+     * @param StatisticsRepository $statisticsRepository
      */
     public function __construct(
         Security $security,
@@ -164,7 +167,33 @@ class UserDashboardController extends AbstractDashboardController
                 'hostel_listing_views' => $hostel_listing_views,
                 'hostel_detail_views'  => $hostel_detail_views,
                 'hostel_notice'        => $hostel_notice,
-                'user_hostels'=> $this->user_hostels,
+                'user_hostels'         => $this->user_hostels,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/user/upgrade/{package}", name="user_upgrade")
+     * @param AdminMessagesHandler $adminMessagesHandler
+     * @param string $package
+     * @return Response
+     */
+    public function upgrade(AdminMessagesHandler $adminMessagesHandler, $package = 'free_account')
+    {
+        switch ($package) {
+            case 'base_account':
+                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: base_account');
+                break;
+            case 'premium_account':
+                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: premium_account');
+                break;
+        }
+
+        return $this->render(
+            'bundles/EasyAdmin/user_upgrade.html.twig',
+            [
+                'package'      => $package,
+                'user_hostels' => $this->user_hostels,
             ]
         );
     }
@@ -195,7 +224,7 @@ class UserDashboardController extends AbstractDashboardController
 
         // its not premium user show upgrade message
         if (!in_array('premium_account', $this->user_privileges)) {
-            yield MenuItem::linktoDashboard('Upgrade to Premium', 'fa fa-star')
+            yield MenuItem::linktoRoute('Upgrade to Premium', 'fa fa-star', 'user_upgrade')
                 ->setCssClass('bg-success text-white pl-2');
         }
 
@@ -222,12 +251,11 @@ class UserDashboardController extends AbstractDashboardController
                 yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)->setAction('new');
             }
 
-            // have the user hostel so he cant add rooms
+            // have the user hostel so he cant add rooms and images for the hostel
             if ($this->userHaveHostel) {
                 yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+                yield MenuItem::linkToCrud('Bilder hinzufügen', 'fa fa-image', HostelGallery::class);
             }
-
-            yield MenuItem::linkToCrud('Bilder Galerie', 'fa fa-image', MediaGallery::class)->setEntityId(1);
         }
 
 
@@ -236,19 +264,15 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
             ->setLinkTarget('_blank')
             ->setQueryParameter('instance', 'user');
-        yield MenuItem::linkToCrud('Gallery', 'fa fa-image', MediaGallery::class);
-        yield MenuItem::linkToCrud('Media', 'fa fa-image', Media::class);
 
         /* Marketing section */
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
-
         yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
 
-
+        /* The Leisure Menu Offer Point */
         if ($this->isUserHavePrivileges(['leisure_offer'])) {
             yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
         }
-
 
         /* Information section */
         yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
@@ -260,6 +284,13 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
     }
 
+
+    /**
+     * Create the ordinary user menu top
+     * right corner
+     * @param UserInterface $user
+     * @return UserMenu
+     */
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         // menu build print_r($user);
@@ -298,7 +329,8 @@ class UserDashboardController extends AbstractDashboardController
     #######################################
 
     /**
-     * Check the user privileges
+     * Check the user have the privileges
+     * for menu options
      *
      * @param array $privileges
      * @return bool

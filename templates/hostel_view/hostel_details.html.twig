@@ -31,12 +31,10 @@
             <div class="col-md-9">
                 <!-- Image Slider -->
                 <div class="MagicSlideshow" data-options="selectors: bottom; selectors-style: thumbnails;">
-                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg"
-                         alt="basic html slideshow">
-                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg"
-                         alt="basic html slideshow">
-                    <img src="https://magictoolbox.sirv.com/images/magicslideshow/places-03-1075.jpg"
-                         alt="basic html slideshow">
+                    {% for image in gallery %}
+                    <img src="{{ image.image }}"
+                         alt="{{ image.name|striptags|raw }}">
+                    {% endfor %}
                 </div>
 
             </div>
