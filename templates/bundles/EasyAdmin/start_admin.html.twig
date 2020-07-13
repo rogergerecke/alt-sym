@@ -3,6 +3,34 @@
 
 
 {% block page_content %}
+    <!-- Massage Delete Button Handling with Ajax -->
+    <script>
+        jQuery(function ($) {
+            $(window).on('load', function () {
+                /* ajax request the notice hostel id */
+                $('a.delete').click(function (event) {
+                    event.preventDefault();
+
+                    // toggle the heart icon
+                    $(this).find('i').toggleClass('fa far');
+
+                    // must save the link before ajax
+                    let link = $(this);
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        success: function (response) {
+                            link.attr('href', response)// response latter use for new link target
+                        }
+                    });
+
+                    return false; // for good measure
+                });
+            });
+            // POS_READY the script is inserted in the jQuery's ready function
+        });
+
+    </script>
+    <!-- Short Inline Admin Dashboard Styling -->
     <style>
         .h3, h5 {
             font-weight: 100;
@@ -42,10 +70,9 @@
             padding-bottom: 2rem;
             border-top-width: 1px !important;
         }
-
-
     </style>
-    <!-- Admin Dashboard -->
+
+    <!-- Admin Dashboard Main Container -->
     <h1 class="h3 mb-4 border-bottom pb-2">Admin Bereich</h1>
     <div class="row mb-4">
 
@@ -71,7 +98,11 @@
                                     <h5 class="mb-2">{{ adminMassage.heading }} <span
                                                 class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
                                     </h5>
-                                    <span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }}</span>
+                                    <span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }} </span>
+                                    <span class="ml-1"><a
+                                                href="{{ path('admin_remove_message', {'id': adminMassage.id}) }}"
+                                                class="delete btn btn-sm btn-danger"> <i
+                                                    class="fa fa-trash-alt"></i></a></span>
                                 </div>
                                 <!-- Sub Heading -->
                                 <h6 class="mb-1 text-muted">{{ adminMassage.subHeading }}</h6>
@@ -86,44 +117,51 @@
             </div>
         </div>
 
-        <!-- Account col-md -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">{{ user_upgrade|length }}</span></h5>
-                </div>
-                <div class="card-body">
-                    <p>Es gibt Kunden die ein Account Upgrade möchten gehen Sie auf den Button <u>Upgrade durchführen</u> oder Senden Sie den Kunden eine Email.  Für ein Upgrade fügen Sie ein weiteres Privileg hinzu lassen sie die Basis-Privilegien bestehen.</p>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email-Adresse</th>
-                            <th scope="col">Email Kontakt</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for upgrade in user_upgrade %}
-                        <tr>
-                            <th scope="row">{{ upgrade.id }}</th>
-                            <td>{{ upgrade.name }}</td>
-                            <td>{{ upgrade.email }}</td>
-                            <td><a href="mailto:{{ upgrade.email }}" class="btn btn-sm btn-info"><i class="fa fa-envelope-open"></i> Senden</a></td>
-                            {% set url = ea_url()
-                                .setController('App\\Controller\\Admin\\AdminUserCrudController')
-                                .setAction('edit')
-                                .setEntityId(upgrade.id) %}
-                            <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Upgrade durchführen</a></td>
-                        </tr>
-                       {% endfor %}
-                        </tbody>
-                    </table>
-                    <p class="card-text">{{ user_upgrade|length }}x Anfrage zum Account Upgrade</p>
+        <!-- Account Upgrade col-md -->
+        {% if user_upgrade is not empty %}
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Kundenkonto Upgrade <span
+                                    class="badge badge-pill badge-primary">{{ user_upgrade|length }}</span></h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Es gibt Kunden die ein Account Upgrade möchten gehen Sie auf den Button <u>Upgrade
+                                durchführen</u> oder Senden Sie den Kunden eine Email. Für ein Upgrade fügen Sie ein
+                            weiteres Privileg hinzu lassen sie die Basis-Privilegien bestehen.</p>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email-Adresse</th>
+                                <th scope="col">Email Kontakt</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for upgrade in user_upgrade %}
+                                <tr>
+                                    <th scope="row">{{ upgrade.id }}</th>
+                                    <td>{{ upgrade.name }}</td>
+                                    <td>{{ upgrade.email }}</td>
+                                    <td><a href="mailto:{{ upgrade.email }}" class="btn btn-sm btn-info"><i
+                                                    class="fa fa-envelope-open"></i> Senden</a></td>
+                                    {% set url = ea_url()
+                                        .setController('App\\Controller\\Admin\\AdminUserCrudController')
+                                        .setAction('edit')
+                                        .setEntityId(upgrade.id) %}
+                                    <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>
+                                            Upgrade durchführen</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="card-text">{{ user_upgrade|length }}x Anfrage zum Account Upgrade</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
         <!-- New Hostel Entry -->
         {# <div class="col-md-4">
              <div class="card">
@@ -167,7 +205,7 @@
          </div>#}
     </div>
 
-    <!-- Information -->
+    <!-- Information Section -->
     <h1 class="h3 mb-4 border-bottom pb-2">Informationen</h1>
     <div class="row">
         <div class="col-md-6">
@@ -206,7 +244,9 @@
                     </p>
 
                     <p>Sie brauchen Hilfe zu erstellen von und hochladen von Bildern. <a href="mailto:"
-                                                                                       target="_blank" class="btn btn-link">Kontakt für Hilfe</a></p>
+                                                                                         target="_blank"
+                                                                                         class="btn btn-link">Kontakt
+                            für Hilfe</a></p>
 
                 </div>
             </div>

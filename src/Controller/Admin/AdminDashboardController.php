@@ -18,6 +18,7 @@ use App\Entity\SystemOptions;
 use App\Entity\User;
 use App\Repository\AdminMessageRepository;
 use App\Repository\UserRepository;
+use App\Service\AdminMessagesHandler;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -67,17 +68,22 @@ class AdminDashboardController extends AbstractDashboardController
      * @var User[]
      */
     private $user_upgrade;
+    /**
+     * @var AdminMessagesHandler
+     */
+    private $adminMessagesHandler;
 
     public function __construct(
         Security $security,
         AdminMessageRepository $adminMessageRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        AdminMessagesHandler $adminMessagesHandler
     ) {
 
         $this->security = $security;
         $this->adminMessageRepository = $adminMessageRepository;
         $this->userRepository = $userRepository;
-
+        $this->adminMessagesHandler = $adminMessagesHandler;
 
         // build the user id for the my account link
         if (null !== $this->security->getUser()) {
@@ -108,6 +114,22 @@ class AdminDashboardController extends AbstractDashboardController
                 'user_upgrade'         => $user_upgrade,
             ]
         );
+    }
+
+
+    /**
+     * @Route("/admin/remove_message/{id}", name="admin_remove_message")
+     * @param $id
+     * @return Response
+     */
+    public function remove_message($id): Response
+    {
+        $massage = $this->adminMessageRepository->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($massage);
+        $em->flush();
+
+        return new Response('OK');
     }
 
     public function configureDashboard(): Dashboard
