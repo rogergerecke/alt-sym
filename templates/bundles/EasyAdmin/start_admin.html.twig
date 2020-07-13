@@ -76,9 +76,7 @@
                                 <!-- Sub Heading -->
                                 <h6 class="mb-1 text-muted">{{ adminMassage.subHeading }}</h6>
                                 <!-- Text -->
-                                <p class="mb-2">{{ adminMassage.message }}</p>
-                                <!-- Button -->
-                                <a href="{{ adminMassage.id }}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+                                <p class="mb-2">{{ adminMassage.message|raw }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -92,42 +90,37 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">3</span></h5>
+                    <h5>Kundenkonto Upgrade <span class="badge badge-pill badge-primary">{{ user_upgrade|length }}</span></h5>
                 </div>
                 <div class="card-body">
-                    <p>Es gibt mehrere Kunden die ein Account Upgrade möchten gehen Sie auf den Link Bearbeiten im
-                        unteren Menü um das Upgrade durchzuführen und den Kunden die neuen Privilegien zuzuweisen.</p>
+                    <p>Es gibt Kunden die ein Account Upgrade möchten gehen Sie auf den Button <u>Upgrade durchführen</u> oder Senden Sie den Kunden eine Email.  Für ein Upgrade fügen Sie ein weiteres Privileg hinzu lassen sie die Basis-Privilegien bestehen.</p>
                     <table class="table">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email-Adresse</th>
+                            <th scope="col">Email Kontakt</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
                         <tbody>
+                        {% for upgrade in user_upgrade %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
+                            <th scope="row">{{ upgrade.id }}</th>
+                            <td>{{ upgrade.name }}</td>
+                            <td>{{ upgrade.email }}</td>
+                            <td><a href="mailto:{{ upgrade.email }}" class="btn btn-sm btn-info"><i class="fa fa-envelope-open"></i> Senden</a></td>
+                            {% set url = ea_url()
+                                .setController('App\\Controller\\Admin\\AdminUserCrudController')
+                                .setAction('edit')
+                                .setEntityId(upgrade.id) %}
+                            <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Upgrade durchführen</a></td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
-                        </tr>
+                       {% endfor %}
                         </tbody>
                     </table>
-                    <p class="card-text">1x Anfrage zum Account Upgrade</p>
+                    <p class="card-text">{{ user_upgrade|length }}x Anfrage zum Account Upgrade</p>
                 </div>
             </div>
         </div>

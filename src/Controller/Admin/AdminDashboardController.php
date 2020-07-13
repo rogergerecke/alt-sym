@@ -17,6 +17,7 @@ use App\Entity\StaticSite;
 use App\Entity\SystemOptions;
 use App\Entity\User;
 use App\Repository\AdminMessageRepository;
+use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -32,7 +33,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
-
 
 class AdminDashboardController extends AbstractDashboardController
 {
@@ -59,18 +59,30 @@ class AdminDashboardController extends AbstractDashboardController
      * @var AdminMessageRepository
      */
     private $adminMessageRepository;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var User[]
+     */
+    private $user_upgrade;
 
-    public function __construct(Security $security,AdminMessageRepository $adminMessageRepository)
-    {
+    public function __construct(
+        Security $security,
+        AdminMessageRepository $adminMessageRepository,
+        UserRepository $userRepository
+    ) {
 
         $this->security = $security;
         $this->adminMessageRepository = $adminMessageRepository;
+        $this->userRepository = $userRepository;
+
 
         // build the user id for the my account link
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
-
 
     }
 
@@ -83,11 +95,17 @@ class AdminDashboardController extends AbstractDashboardController
         // get the admin messages
         $admin_messages = $this->adminMessageRepository->findAll();
 
+        // get upgrade wishes
+        if ($user_upgrade = $this->userRepository->findBy(['isHeWantsUpgrade' => 1])) {
+            $this->user_upgrade = $user_upgrade;
+        }
+
         return $this->render(
             'bundles/EasyAdmin/start_admin.html.twig',
             [
                 'has_content_subtitle' => false,
-                'admin_messages'=> $admin_messages
+                'admin_messages'       => $admin_messages,
+                'user_upgrade'         => $user_upgrade,
             ]
         );
     }
@@ -110,7 +128,8 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         /* Link to Homepage */
-        yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt');
+        yield MenuItem::linktoRoute('Zur Seite', 'fa fa-home', 'index');
 
         /* Hostel Manager section */
         [
@@ -196,6 +215,5 @@ class AdminDashboardController extends AbstractDashboardController
                     MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
                 ]
             );
-
     }
 }
