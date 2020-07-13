@@ -32,12 +32,15 @@
     </script>
     <!-- Short Inline Admin Dashboard Styling -->
     <style>
+
         .h3, h5 {
             font-weight: 100;
-            color: #07a7e3
+            color: var(--text-blue-600)
         }
 
+
         .card {
+            background-color: #fff;
             box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
             border: none;
         }
@@ -46,9 +49,14 @@
             background-color: #fff;
         }
 
+        .card-header h5 {
+            display: inline-block;
+        }
+
         #admin-massages-card .card-body {
             padding: 0;
-            color: var(--gray-500);
+            color: var(--gray-600);
+            font-size: 0.8rem;
         }
 
         .list-group {
@@ -67,7 +75,6 @@
             border-left: 0;
             border-radius: 0;
             padding-top: 1rem;
-            padding-bottom: 2rem;
             border-top-width: 1px !important;
         }
     </style>
@@ -76,13 +83,13 @@
     <h1 class="h3 mb-4 border-bottom pb-2">Admin Bereich</h1>
     <div class="row mb-4">
 
-        <div class="col-md-4">
+        <div class="col-md-5">
             <!-- Admin Massage Card -->
             <div class="card" id="admin-massages-card">
                 <!-- Card Header -->
                 <div class="card-header">
-                    <h5>System-Nachrichten <span
-                                class="badge badge-pill badge-primary">{{ admin_messages|length }}</span></h5>
+                    <h5>Nachrichten</h5>
+                    <span class="badge badge-pill badge-primary float-right">{{ admin_messages|length }}</span>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -95,11 +102,10 @@
                             <div class="list-group-item massage-type-{{ adminMassage.type }}">
                                 <!-- Heading -->
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-2">{{ adminMassage.heading }} <span
-                                                class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
+                                    <h5 class="mb-2">{{ adminMassage.heading }} <span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
                                     </h5>
-                                    <span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }} </span>
-                                    <span class="ml-1"><a
+
+                                    <span class="ml-1"><span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }} </span> <a
                                                 href="{{ path('admin_remove_message', {'id': adminMassage.id}) }}"
                                                 class="delete btn btn-sm btn-danger"> <i
                                                     class="fa fa-trash-alt"></i></a></span>
@@ -119,11 +125,11 @@
 
         <!-- Account Upgrade col-md -->
         {% if user_upgrade is not empty %}
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Kundenkonto Upgrade <span
-                                    class="badge badge-pill badge-primary">{{ user_upgrade|length }}</span></h5>
+                        <h5>Kundenkonto Upgrade</h5> <span
+                                class="badge badge-pill badge-primary float-right">{{ user_upgrade|length }}</span>
                     </div>
                     <div class="card-body">
                         <p>Es gibt Kunden die ein Account Upgrade möchten gehen Sie auf den Button <u>Upgrade

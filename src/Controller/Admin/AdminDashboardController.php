@@ -6,9 +6,8 @@ use App\Entity\Advertising;
 use App\Entity\AmenitiesTypes;
 use App\Entity\Events;
 use App\Entity\Hostel;
+use App\Entity\HostelGallery;
 use App\Entity\Leisure;
-use App\Entity\Media;
-use App\Entity\MediaGallery;
 use App\Entity\Regions;
 use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
@@ -23,12 +22,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -182,10 +178,9 @@ class AdminDashboardController extends AbstractDashboardController
         /* Media Manager section */
         [
             yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
-            yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder')
+            yield MenuItem::linktoRoute('Datei Upload', 'fa fa-upload', 'elfinder')
                 ->setQueryParameter('instance', 'admin'),
-            yield MenuItem::linkToCrud('Dateien', 'fa fa-image', Media::class),
-            yield MenuItem::linkToCrud('Gallery', 'fa fa-images', MediaGallery::class),
+            yield MenuItem::linkToCrud('Gallery bearbeiten', 'fa fa-image', HostelGallery::class),
         ];
 
         /* System Config section */
