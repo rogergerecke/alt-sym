@@ -3,11 +3,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Advertising;
 use App\Entity\Events;
 use App\Entity\Hostel;
-use App\Entity\Media;
-use App\Entity\MediaGallery;
 use App\Entity\RoomTypes;
 use App\Entity\HostelGallery;
 use App\Entity\User;
@@ -18,7 +15,6 @@ use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
 use App\Service\SystemOptionsService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -26,14 +22,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
-use Symfony\Component\HttpFoundation\Request;
+use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class UserDashboardController
+ * Class UserDashboardController this class contain the
+ * ground configuration for the user aria include right
+ * handling and main menu build
+ *
  * @package App\Controller\Admin
  */
 class UserDashboardController extends AbstractDashboardController
@@ -111,7 +110,7 @@ class UserDashboardController extends AbstractDashboardController
      */
     private $systemOptions;
     /**
-     * @var \Swift_Mailer
+     * @var Swift_Mailer
      */
     private $mailer;
 
@@ -124,7 +123,7 @@ class UserDashboardController extends AbstractDashboardController
      * @param StatisticsRepository $statisticsRepository
      * @param CrudUrlGenerator $crudUrlGenerator
      * @param SystemOptionsService $systemOptions
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      */
     public function __construct(
         Security $security,
@@ -133,7 +132,7 @@ class UserDashboardController extends AbstractDashboardController
         StatisticsRepository $statisticsRepository,
         CrudUrlGenerator $crudUrlGenerator,
         SystemOptionsService $systemOptions,
-        \Swift_Mailer $mailer
+        Swift_Mailer $mailer
     ) {
         // inti vars
         $this->security = $security;
@@ -208,14 +207,14 @@ class UserDashboardController extends AbstractDashboardController
      * upgrade link and inform the admin with the right type.
      * @Route("/user/upgrade/{product}", name="user_upgrade")
      * @param AdminMessagesHandler $adminMessagesHandler
-     * @param UserPrivilegesTypesRepository $repository
+     * @param UserPrivilegesTypesRepository $privilegesTypesRepository
      * @param SystemOptionsService $options
      * @param string $product
      * @return Response
      */
     public function upgrade(
         AdminMessagesHandler $adminMessagesHandler,
-        UserPrivilegesTypesRepository $repository,
+        UserPrivilegesTypesRepository $privilegesTypesRepository,
         SystemOptionsService $options,
         $product = ''
     ) {
@@ -230,22 +229,34 @@ class UserDashboardController extends AbstractDashboardController
             $em->flush();
 
             // inform admin about upgrade wish
-            $user_privileges_types = $repository->findOneBy(['code' => $product]);
+            $user_privileges_types = $privilegesTypesRepository->findOneBy(['code' => $product]);
+            $user_account_edit_url = $this->createEditUrl($this->user_id);
+            $user_name = $this->user_account->getName();
+
             $this->addFlash(
                 'success',
                 'Ihre Upgrade anfrage wurde gesendet versendet.  Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
             );
-            $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: '.$user_privileges_types->getName());
+
+            $adminMessagesHandler->addInfo(
+                "Der Benutzer möchte ein Upgrade auf: ".$user_privileges_types->getName(),
+                "Kundenkonto Upgrade Wunsch",
+                "Kundenkonto von <a href='".$user_account_edit_url."'>$user_name</a>"
+            );
 
             // send admin a mail with information about
 
             $email_template_vars = [
-                'web_site_name' => $this->systemOptions->getWebSiteName(),
-                'user_account_edit'=>$this->createEditUrl($this->user_id),
-                'user_name'=>$this->user_account->getName()
+                'web_site_name'          => $this->systemOptions->getWebSiteName(),
+                'user_account_edit_url'  => $user_account_edit_url,
+                'user_number'            => $this->user_account->getPartnerId(),
+                'user_name'              => $this->user_account->getName(),
+                'user_email'             => $this->user_account->getUsername(),
+                'user_registration_date' => $this->user_account->getCreateAt()->format('d.m.Y'),
+                'upgrade_to_product'     => $user_privileges_types->getName(),
+
             ];
             $this->sendUpgradeWishMail($email_template_vars);
-
         }
 
         return $this->render(
@@ -420,7 +431,7 @@ class UserDashboardController extends AbstractDashboardController
     {
         // upgrade massage for the system admin
         // do anything else you need here, like send an email
-        $message = new \Swift_Message('Upgrade wunsch bei Altmühlsee');
+        $message = new \Swift_Message('Kundenkonto Upgrade Wunsch bei Altmühlsee');
 
         // send a copy to
         if (null !== ($this->systemOptions->getCopiedReviverEmailAddress())) {

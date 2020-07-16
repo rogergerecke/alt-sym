@@ -85,7 +85,6 @@ class AdminDashboardController extends AbstractDashboardController
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
-
     }
 
     /**
@@ -114,11 +113,14 @@ class AdminDashboardController extends AbstractDashboardController
 
 
     /**
+     * Remove a message from the admin message
+     * dashboard center
+     *
      * @Route("/admin/remove_message/{id}", name="admin_remove_message")
      * @param $id
      * @return Response
      */
-    public function remove_message($id): Response
+    public function removeMessage($id): Response
     {
         $massage = $this->adminMessageRepository->find($id);
         $em = $this->getDoctrine()->getManager();

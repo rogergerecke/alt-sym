@@ -1,7 +1,26 @@
-{# notification mail template user wants a upgrade from his account #}
+{#
+notification mail template user wants a upgrade from his account
+avalible vars
+web_site_name
+user_account_edit_url
+user_number
+user_name
+user_email
+user_registration_date
+upgrade_to_product
+#}
 Hallo Susanne,
 
-ein Benutzer möchte ein Account Upgrade auf der Seite <a href="{{ path('admin') }}" target="_blank">{{ web_site_name }}</a>,
-Logge dich im Admin ein und Bearbeite den Account vom Kunden <a href="{{ user_account_edit }}" target="_blank">{{ user_name }}</a>.
 <br><br>
-Hier gehts zum Account von <a href="{{ user_account_edit }}" target="_blank">{{ user_name }}</a>
+der Benutzer {{ user_name }} möchte ein Upgrade auf <u>{{ upgrade_to_product }}</u>
+<br><br>
+Logge dich im Admin bei <a href="{{ path('admin') }}" target="_blank">{{ web_site_name }}</a> ein um die Einstellungen anzupassen.
+<br><br>
+Unter diesen Link gehts direkt zum Kunden-Konto von <a href="{{ user_account_edit_url }}" target="_blank">{{ user_name }}</a> .
+<br><br>
+<h4>Weitere Information</h4>
+Kunden-Nummer: {{ user_number }}<br>
+Name: {{ user_name }}<br>
+E-Mail: {{ user_email }}<br>
+Mitglied-Seit: {{ user_registration_date }}<br>
+Will Upgrade auf: {{ upgrade_to_product }}<br>
