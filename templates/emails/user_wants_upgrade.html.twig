@@ -1,6 +1,7 @@
 {# notification mail template user wants a upgrade from his account #}
 Hallo Susanne,
-ein Benutzer möchte ein Account Upgrade auf {{ path('index') }},
-Logge dich im Admin ein und Bearbeite den Account.
-<br>
-Hier gehts zum <a href="{{ path('admin') }}">Login</a>
+
+ein Benutzer möchte ein Account Upgrade auf der Seite <a href="{{ path('admin') }}" target="_blank">{{ web_site_name }}</a>,
+Logge dich im Admin ein und Bearbeite den Account vom Kunden <a href="{{ user_account_edit }}" target="_blank">{{ user_name }}</a>.
+<br><br>
+Hier gehts zum Account von <a href="{{ user_account_edit }}" target="_blank">{{ user_name }}</a>

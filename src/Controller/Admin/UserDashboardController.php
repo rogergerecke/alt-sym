@@ -13,14 +13,19 @@ use App\Entity\HostelGallery;
 use App\Entity\User;
 use App\Repository\HostelRepository;
 use App\Repository\StatisticsRepository;
+use App\Repository\UserPrivilegesTypesRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
+use App\Service\SystemOptionsService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,6 +98,22 @@ class UserDashboardController extends AbstractDashboardController
      * @var array
      */
     private $statistics;
+    /**
+     * @var CrudUrlBuilder
+     */
+    private $crudUrlBuilder;
+    /**
+     * @var CrudUrlGenerator
+     */
+    private $crudUrlGenerator;
+    /**
+     * @var SystemOptionsService
+     */
+    private $systemOptions;
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
 
 
     /**
@@ -101,18 +122,28 @@ class UserDashboardController extends AbstractDashboardController
      * @param UserRepository $userRepository
      * @param HostelRepository $hostelRepository
      * @param StatisticsRepository $statisticsRepository
+     * @param CrudUrlGenerator $crudUrlGenerator
+     * @param SystemOptionsService $systemOptions
+     * @param \Swift_Mailer $mailer
      */
     public function __construct(
         Security $security,
         UserRepository $userRepository,
         HostelRepository $hostelRepository,
-        StatisticsRepository $statisticsRepository
+        StatisticsRepository $statisticsRepository,
+        CrudUrlGenerator $crudUrlGenerator,
+        SystemOptionsService $systemOptions,
+        \Swift_Mailer $mailer
     ) {
         // inti vars
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->hostelRepository = $hostelRepository;
         $this->statisticsRepository = $statisticsRepository;
+        $this->crudUrlGenerator = $crudUrlGenerator;
+        $this->systemOptions = $systemOptions;
+        $this->mailer = $mailer;
+
 
         // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
@@ -173,31 +204,65 @@ class UserDashboardController extends AbstractDashboardController
     }
 
     /**
-     * @Route("/user/upgrade/{package}", name="user_upgrade")
+     * The account upgrade message function build the
+     * upgrade link and inform the admin with the right type.
+     * @Route("/user/upgrade/{product}", name="user_upgrade")
      * @param AdminMessagesHandler $adminMessagesHandler
-     * @param string $package
+     * @param UserPrivilegesTypesRepository $repository
+     * @param SystemOptionsService $options
+     * @param string $product
      * @return Response
      */
-    public function upgrade(AdminMessagesHandler $adminMessagesHandler, $package = 'free_account')
-    {
-        switch ($package) {
-            case 'base_account':
-                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: base_account');
-                break;
-            case 'premium_account':
-                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: premium_account');
-                break;
+    public function upgrade(
+        AdminMessagesHandler $adminMessagesHandler,
+        UserPrivilegesTypesRepository $repository,
+        SystemOptionsService $options,
+        $product = ''
+    ) {
+
+        // if upgrade request submit handle it and inform the admin about it
+        if ($product) {
+            // set the status from the user to wants upgrade
+            $user = $this->user_account;
+            $user->setIsHeWantsUpgrade(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // inform admin about upgrade wish
+            $user_privileges_types = $repository->findOneBy(['code' => $product]);
+            $this->addFlash(
+                'success',
+                'Ihre Upgrade anfrage wurde gesendet versendet.  Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
+            );
+            $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: '.$user_privileges_types->getName());
+
+            // send admin a mail with information about
+
+            $email_template_vars = [
+                'web_site_name' => $this->systemOptions->getWebSiteName(),
+                'user_account_edit'=>$this->createEditUrl($this->user_id),
+                'user_name'=>$this->user_account->getName()
+            ];
+            $this->sendUpgradeWishMail($email_template_vars);
+
         }
 
         return $this->render(
             'bundles/EasyAdmin/user_upgrade.html.twig',
             [
-                'package'      => $package,
-                'user_hostels' => $this->user_hostels,
+                'product'               => $product,
+                'user_hostels'          => $this->user_hostels,
+                'support_email_address' => $options->getSupportEmailAddress(),
+                'support_phone_number'  => $options->getSupportPhoneNumber(),
             ]
         );
     }
 
+
+    /**
+     * @return Dashboard
+     */
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -344,5 +409,57 @@ class UserDashboardController extends AbstractDashboardController
         }
 
         return false;
+    }
+
+    /**
+     * Send the Registration mail to the new user
+     * with the dynamic twig templates vars
+     * @param array $email_template_vars
+     */
+    protected function sendUpgradeWishMail(array $email_template_vars): void
+    {
+        // upgrade massage for the system admin
+        // do anything else you need here, like send an email
+        $message = new \Swift_Message('Upgrade wunsch bei Altmühlsee');
+
+        // send a copy to
+        if (null !== ($this->systemOptions->getCopiedReviverEmailAddress())) {
+            $message->setCc($this->systemOptions->getCopiedReviverEmailAddress());
+        }
+
+        // if developer mode send mails to the developer
+        if (null !== ($this->systemOptions->getTestEmailAddress())) {
+            $message->setTo($this->systemOptions->getTestEmailAddress());
+        } else {
+            // real receiver email address from configuration
+            $message->setTo($this->systemOptions->getSupportEmailAddress());
+        }
+
+        $message
+            ->setFrom($this->systemOptions->getMailSystemAbsenceAddress())
+            ->setBody(
+                $this->renderView(
+                // Email-Template templates/emails/user_wants_upgrade.html.twig
+                    'emails/user_wants_upgrade.html.twig',
+                    $email_template_vars
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * Build the User-Profil Edit Url for the admin
+     * @param $id
+     * @return CrudUrlBuilder
+     */
+    protected function createEditUrl($id): string
+    {
+        return $this->crudUrlGenerator->build()
+            ->setDashboard(AdminDashboardController::class)
+            ->setController(AdminUserCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($id);
     }
 }
