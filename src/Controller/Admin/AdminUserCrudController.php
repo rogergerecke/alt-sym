@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminUserCrudController extends AbstractCrudController
 {
@@ -39,7 +40,7 @@ class AdminUserCrudController extends AbstractCrudController
      */
     private $privilegesTypesRepository;
     /**
-     * @var object|\Symfony\Component\Security\Core\User\UserInterface|null
+     * @var object|UserInterface|null
      */
     private $user;
     /**
@@ -196,6 +197,11 @@ class AdminUserCrudController extends AbstractCrudController
             ;
     }
 
+    ################################################################
+    #
+    # Override Entity
+    #
+    ################################################################
 
     /**
      * Password generation on password entity update over Symfony core

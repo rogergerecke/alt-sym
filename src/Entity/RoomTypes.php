@@ -565,5 +565,4 @@ class RoomTypes
         return $this;
     }
 
-
 }

@@ -19,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
@@ -218,7 +219,7 @@ class UserDashboardController extends AbstractDashboardController
         SystemOptionsService $options,
         $product = ''
     ) {
-
+print_r($this->createEditUrl($this->user_id));
         // if upgrade request submit handle it and inform the admin about it
         if ($product) {
             // set the status from the user to wants upgrade
@@ -328,18 +329,21 @@ class UserDashboardController extends AbstractDashboardController
             }
 
             // have the user hostel so he cant add rooms and images for the hostel
+            // todo filter by user
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
+                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)
+                    ->setQueryParameter('filterField', 'hostel_id')
+                    ->setQueryParameter('filter',4);
                 yield MenuItem::linkToCrud('Bilder hinzufügen', 'fa fa-image', HostelGallery::class);
             }
         }
 
 
         /* Media section */
-        yield MenuItem::section('Media-Einstellung', 'fa fa-image');
+      /*  yield MenuItem::section('Media-Einstellung', 'fa fa-image');
         yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
             ->setLinkTarget('_blank')
-            ->setQueryParameter('instance', 'user');
+            ->setQueryParameter('instance', 'user');*/
 
         /* Marketing section */
         yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');

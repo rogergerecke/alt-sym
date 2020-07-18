@@ -131,7 +131,11 @@
                             <th scope="row">{{ hostel.id }}</th>
                             <td>{{ hostel.hostelName }}</td>
                             <td>{{ hostel.address }}</td>
-                            <td><a href="{{ hostel.id }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
+                            {% set url = ea_url()
+                                .setController('App\\Controller\\Admin\\HostelCrudController')
+                                .setAction('edit')
+                                .setEntityId(hostel.id) %}
+                            <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
                         </tr>
                         {% endfor %}
                         </tbody>

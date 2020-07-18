@@ -5,11 +5,19 @@ namespace App\Controller\Admin;
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
+use App\Repository\RoomTypesRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -21,6 +29,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -357,6 +366,14 @@ class RoomTypesCrudController extends AbstractCrudController
         }
     }
 
+   /* public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $entityManager->getRepository(RoomTypesRepository::class)->findBy(['hostel_id'=>4]);
+        parent::persistEntity($entityManager, $entityInstance);
+    }*/
+
+
+
 
 
     ##########################################################
@@ -460,4 +477,6 @@ class RoomTypesCrudController extends AbstractCrudController
 
         return $options;
     }
+
+
 }
