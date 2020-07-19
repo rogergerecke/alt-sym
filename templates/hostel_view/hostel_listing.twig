@@ -104,6 +104,11 @@
                                                  aria-labelledby="heading_{{ hostel.id }}"
                                                  data-parent="#accordion_{{ hostel.id }}">
                                                 <div class="card-body">
+                                                    <p>
+                                                        {% for room in hostel.roomTypes %}
+                                                            {{ room.hostelId }}
+                                                        {% endfor %}
+                                                    </p>
                                                     <p>{{ hostel.address }}</p>
                                                     <p>{{ hostel.address }} {{ hostel.city }}</p>
                                                     <p>Tel.:

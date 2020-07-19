@@ -32,11 +32,16 @@ class HostelViewController extends AbstractController
      * @param HostelRepository $hostelRepository
      * @param Request $request
      * @param SessionInterface $session
+     * @param RoomTypesRepository $roomTypesRepository
      * @return RedirectResponse|Response
      * @throws Exception
      */
-    public function listing(HostelRepository $hostelRepository, Request $request, SessionInterface $session)
-    {
+    public function listing(
+        HostelRepository $hostelRepository,
+        Request $request,
+        SessionInterface $session,
+        RoomTypesRepository $roomTypesRepository
+    ) {
 
         $hostels = null;
         $top_hostels = null;
@@ -197,11 +202,11 @@ class HostelViewController extends AbstractController
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'hostel'   => $hostel,
+                'hostel' => $hostel,
                 'services' => $services,
-                'rooms'    => $rooms,
+                'rooms' => $rooms,
                 'calendar' => $calendar->getCalendar(),
-                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
+                'gallery' => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );

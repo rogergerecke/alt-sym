@@ -10,6 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 class RoomTypes
 {
     /**
+     * Many hostels have one user. This is the owning side.
+     * @ORM\ManyToOne(targetEntity=Hostel::class, inversedBy="room_types")
+     * @ORM\JoinColumn(name="hostel_id", referencedColumnName="id")
+     */
+    private $hostel;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")

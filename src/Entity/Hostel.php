@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
-
 
 /**
  * Hostel contain the full address data for hostel location a user cant have many hostels.
@@ -14,13 +14,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Hostel
 {
 
-
     /**
      * Many hostels have one user. This is the owning side.
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="hostels")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * One Hostel has many room_types. This is the inverse side.
+     * @ORM\OneToMany(targetEntity=RoomTypes::class, mappedBy="hostel")
+     */
+    private $room_types;
 
 
     /**
@@ -123,10 +128,6 @@ class Hostel
      */
     private $status;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $room_types;
 
     /**
      * The amenities contain a json array
@@ -204,7 +205,27 @@ class Hostel
      */
     private $stars;
 
+    #
+    # Connection to the room_types entity
+    #
+    public function __construct()
+    {
+        $this->room_types = new ArrayCollection();
+    }
 
+    public function getRoomTypes(): Collection
+    {
+        return $this->room_types;
+    }
+
+
+    public function setRoomTypes(?RoomTypes $room_types): self
+    {
+        $this->room_types = $room_types;
+
+        return $this;
+    }
+###########
     public function getId(): ?int
     {
         return $this->id;
@@ -426,7 +447,7 @@ class Hostel
         return $this;
     }
 
-    public function getRoomTypes(): ?string
+   /* public function getRoomTypes(): ?string
     {
         return $this->room_types;
     }
@@ -436,7 +457,7 @@ class Hostel
         $this->room_types = $room_types;
 
         return $this;
-    }
+    }*/
 
     public function getAmenities(): ?array
     {

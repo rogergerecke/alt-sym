@@ -310,15 +310,14 @@ print_r($this->createEditUrl($this->user_id));
         /* HOSTEL MENU > only show with the right user privileges */
         $check = ['free_account', 'base_account', 'premium_account',];
         if ($this->isUserHavePrivileges($check)) {
-            yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
-
             // Create the Hostel:Menu
             if ($this->userHaveHostel) {
-                yield MenuItem::section('Meine Unterkünfte', 'fa fa-hotel');
+                yield MenuItem::section('Meine Unterkunft');
                 // add the hostels to menu
                 foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = substr($userHostel->getHostelName(), 0, 11);
-                    yield MenuItem::linkToCrud('Unterkunft '.$hostel_name, 'fa fa-room', Hostel::class)
+                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
+
+                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
                         ->setAction('edit')
                         ->setEntityId($userHostel->getId());
                 }
@@ -331,10 +330,10 @@ print_r($this->createEditUrl($this->user_id));
             // have the user hostel so he cant add rooms and images for the hostel
             // todo filter by user
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)
+                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
                     ->setQueryParameter('filterField', 'hostel_id')
                     ->setQueryParameter('filter',4);
-                yield MenuItem::linkToCrud('Bilder hinzufügen', 'fa fa-image', HostelGallery::class);
+                yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
             }
         }
 
@@ -346,7 +345,7 @@ print_r($this->createEditUrl($this->user_id));
             ->setQueryParameter('instance', 'user');*/
 
         /* Marketing section */
-        yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
+        yield MenuItem::section('Marketing-Einstellung');
         yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
 
         /* The Leisure Menu Offer Point */
@@ -355,7 +354,7 @@ print_r($this->createEditUrl($this->user_id));
         }
 
         /* Information section */
-        yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
+        yield MenuItem::section('Hilfe & Information');
         yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
         yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
         yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
