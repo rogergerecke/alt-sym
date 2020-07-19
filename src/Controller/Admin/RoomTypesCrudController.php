@@ -311,7 +311,7 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         // Number of units the unique partner reference
-        $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Angebotes')
+        $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Zimmers')
             ->setHelp('Wie oft verfügen Sie von dieser Art des Raumes');
 
         // Numeric size of the unit in square feet or meters
@@ -333,7 +333,7 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         // Number of guests allowed per unit
-        $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste')
+        $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste in diesem Zimmer')
             ->setHelp('Die erlaubte Gästeanzahl für diesen Raum, wichtig für die Suchfunktion');
 
         $number_of_bedrooms = NumberField::new('number_of_bedrooms', 'Anzahl Schlafzimmer');

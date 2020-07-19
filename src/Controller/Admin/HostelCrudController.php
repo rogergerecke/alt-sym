@@ -312,7 +312,6 @@ class HostelCrudController extends AbstractCrudController
                 $web,
                 $email,
                 $currency,
-
                 $amenities,
                 $description,
                 $hostel_availability_url,
@@ -343,7 +342,6 @@ class HostelCrudController extends AbstractCrudController
                 $web,
                 $email,
                 $currency,
-
                 $amenities,
                 $description,
                 $api_key,
@@ -371,7 +369,6 @@ class HostelCrudController extends AbstractCrudController
                 $web,
                 $email,
                 $currency,
-
                 $amenities,
                 $description,
                 $api_key,

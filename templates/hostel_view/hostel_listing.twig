@@ -10,12 +10,13 @@
             </div>
             <div class="col-md-9" id="heart-overflow">
 
-                {% if header_region is not empty %}<h1 class="h2">Im Umkreis {{ header_region }} <span class="badge badge-pill badge-success">{{ hostels|length }}</span></h1>{% endif %}
+                {% if header_region is not empty %}<h1 class="h2">Im Umkreis {{ header_region }} <span
+                            class="badge badge-pill badge-success">{{ hostels|length }}</span></h1>{% endif %}
                 <!-- Hostel view Premium Position -->
                 {% if top_hostels is not empty %}
-                <div class="row bg-primary mb-3 pt-3 pb-3">
-                    {{ include('hostel_view/_hostel_top_position.html.twig') }}
-                </div>
+                    <div class="row bg-primary mb-3 pt-3 pb-3">
+                        {{ include('hostel_view/_hostel_top_position.html.twig') }}
+                    </div>
                 {% endif %}
 
 
@@ -44,15 +45,9 @@
                                             <img src="{{ hostel.image }}" alt="{{ hostel.hostelName }}"
                                                  class="rounded float-left card-img-left img-fluid">
                                         {% else %}
-                                            <!-- Place Holder -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225"
-                                                 class="rounded float-left card-img-left">
-                                                <rect fill="#ddd" width="225" height="225"/>
-                                                <text fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="30"
-                                                      dy="10.5"
-                                                      font-weight="bold" x="50%" y="50%" text-anchor="middle">Kein Bild
-                                                </text>
-                                            </svg>
+                                            <!-- Place Holder Image -->
+                                            <img src="{{ asset('uploads/placeholder255x255.png') }}" alt="{{ hostel.hostelName }}"
+                                                 class="rounded float-left card-img-left img-fluid">
                                         {% endif %}
                                     </a>
                                 </div>
@@ -62,9 +57,11 @@
 
                                     <!-- DEHOGA Stars -->
                                     {% if hostel.stars is not empty %}
-                                        <div class="mb-1 d-inline" data-toggle="popover" title="{{ hostel.stars }} Sterne Unterkunft"
+                                        <div class="mb-1 d-inline" data-toggle="popover"
+                                             title="{{ hostel.stars }} Sterne Unterkunft"
                                              data-content="Eine wirklich schöne Unterkunft mit {{ hostel.stars }} Sternen.">{% for i in 1..hostel.stars %}
-                                                <span class="fa fa-star text-warning"></span> {% endfor %} <span class="far fa-question-circle text-muted"></span></div>
+                                                <span class="fa fa-star text-warning"></span> {% endfor %} <span
+                                                    class="far fa-question-circle text-muted"></span></div>
                                     {% endif %}
                                     <!-- DEHOGA Stars #END -->
 
@@ -104,11 +101,13 @@
                                                  aria-labelledby="heading_{{ hostel.id }}"
                                                  data-parent="#accordion_{{ hostel.id }}">
                                                 <div class="card-body">
-                                                    <p>
-                                                        {% for room in hostel.roomTypes %}
-                                                            {{ room.hostelId }}
-                                                        {% endfor %}
-                                                    </p>
+                                                    {% for room in hostel.roomTypes %}
+                                                        <p>
+                                                            {% set r = room.finalRate / 100 %}
+                                                            {{ room.accommodationType }} ab
+                                                            <b>{{ r|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
+                                                        </p>
+                                                    {% endfor %}
                                                     <p>{{ hostel.address }}</p>
                                                     <p>{{ hostel.address }} {{ hostel.city }}</p>
                                                     <p>Tel.:
@@ -124,8 +123,11 @@
 
                                     <!-- Button Group -->
                                     <div class="btn-group-sm mt-4 text-right">
-                                        <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage" class="btn btn-sm btn-outline-primary"><i class="fa fa-mail-bulk"></i> E-Mail schreiben</a>
-                                        <a href="{{ path('hostel_details',{'id':hostel.id}) }}" class="btn btn-sm btn-primary">Zu den Details</a>
+                                        <a href="mailto:{{ hostel.email }}?subject=Altmühlsee Portal Anfrage"
+                                           class="btn btn-sm btn-outline-primary"><i class="fa fa-mail-bulk"></i> E-Mail
+                                            schreiben</a>
+                                        <a href="{{ path('hostel_details',{'id':hostel.id}) }}"
+                                           class="btn btn-sm btn-primary">Zu den Details</a>
                                     </div>
                                 </div>
                             </div>

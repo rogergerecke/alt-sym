@@ -70,6 +70,18 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('id', $filter['hostel_types']);
         }
 
+        if ($filter['quantity_person']) {
+            $qb
+                ->leftJoin(
+                    'App\Entity\RoomTypes',
+                    'rt',
+                    'WITH',
+                    'h.id = rt.hostel_id'
+                )
+                ->andWhere('(rt.unit_occupancy * rt.number_of_units) >= :quantity')
+                ->setParameter('quantity', $filter['quantity_person']);
+        }
+
         return $qb
             ->orderBy('h.status', 'DESC')
             ->getQuery()
