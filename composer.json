@@ -40,7 +40,8 @@
     "symfony/yaml": "*",
     "symfonycasts/reset-password-bundle": "^1.1",
     "twig/intl-extra": "^3.0",
-    "twig/string-extra": "^3.0"
+    "twig/string-extra": "^3.0",
+    "scienta/doctrine-json-functions": "~4.1"
   },
   "require-dev": {
     "phpmd/phpmd": "@stable",

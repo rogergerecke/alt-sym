@@ -113,8 +113,50 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('dhig', $distance_highest);
         }
 
+        //add query filter for isHandicappedAccessible
+        if (isset($filter['handicap'])) {
+            $qb
+                ->leftJoin(
+                    'App\Entity\RoomTypes',
+                    'hc',
+                    'WITH',
+                    'h.id = hc.hostel_id'
+                )
+                ->andWhere('hc.isHandicappedAccessible = 1');
+        }
+
+        // add bread service query filter
+        if (isset($filter['bread_service'])) {
+            $qb
+                ->andWhere("JSON_SEARCH(h.amenities, 'one', '$.service') = :service")->setParameter('service', 'bread_service');
+        }
+
+        // add meal code filter query
+        if (isset($filter['half_board'])) {
+            $qb
+                ->leftJoin(
+                    'App\Entity\RoomTypes',
+                    'hb',
+                    'WITH',
+                    'h.id = hb.hostel_id'
+                )
+                ->andWhere('hb.meal_code = HB');
+        }
+
+        // add breakfast filter query
+        if (isset($filter['breakfast'])) {
+            $qb
+                ->leftJoin(
+                    'App\Entity\RoomTypes',
+                    'bi',
+                    'WITH',
+                    'h.id = bi.hostel_id'
+                )
+                ->andWhere('bi.breakfast_included = 1');
+        }
+
         return $qb
-            ->orderBy('h.status', 'DESC')
+            ->orderBy('h.sort', 'DESC')
             ->getQuery()
             ->getResult();
     }
