@@ -70,6 +70,7 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('id', $filter['hostel_types']);
         }
 
+        // add the query for person filter
         if ($filter['quantity_person']) {
             $qb
                 ->leftJoin(
@@ -80,6 +81,24 @@ class HostelRepository extends ServiceEntityRepository
                 )
                 ->andWhere('(rt.unit_occupancy * rt.number_of_units) >= :quantity')
                 ->setParameter('quantity', $filter['quantity_person']);
+        }
+
+        // add the query for the price range filter
+        if ($filter['price_range']) {
+            $price_range = explode(';', $filter['price_range'], 2);
+            $price_lowest = $price_range[0] * 100;
+            $price_highest = $price_range[1] * 100;
+
+            $qb
+                ->leftJoin(
+                    'App\Entity\RoomTypes',
+                    'fr',
+                    'WITH',
+                    'h.id = fr.hostel_id'
+                )
+                ->andWhere('fr.final_rate >= :low AND fr.final_rate <= :hig')
+                ->setParameter('low', $price_lowest)
+                ->setParameter('hig', $price_highest);
         }
 
         return $qb
