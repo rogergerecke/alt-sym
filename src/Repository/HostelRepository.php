@@ -21,11 +21,17 @@ class HostelRepository extends ServiceEntityRepository
      * @var RegionsRepository
      */
     private $regionsRepository;
+    /**
+     * @var mixed
+     */
+    private $maxDistanceToSee;
 
     public function __construct(ManagerRegistry $registry, RegionsRepository $regionsRepository)
     {
         parent::__construct($registry, Hostel::class);
         $this->regionsRepository = $regionsRepository;
+        
+        $this->maxDistanceToSee = $this->buildMaxDistanceToSee();
     }
 
 
@@ -103,8 +109,14 @@ class HostelRepository extends ServiceEntityRepository
 
         // add query for the distance to see filter
         if ($filter['see_distance']) {
+            // split request
             $see_distance = explode(';', $filter['see_distance'], 2);
+            // cheaper than 1 is not supported by form type
             $distance_lowest = $see_distance[0];
+            if ($distance_lowest == '1') {
+                $distance_lowest = '0.1';
+            }
+
             $distance_highest = $see_distance[1];
 
             $qb
@@ -124,7 +136,7 @@ class HostelRepository extends ServiceEntityRepository
                 )
                 ->andWhere('hc.isHandicappedAccessible = 1');
         }
-
+// todo bread service filter ???
         // add bread service query filter
         if (isset($filter['bread_service'])) {
             $qb
@@ -249,5 +261,32 @@ class HostelRepository extends ServiceEntityRepository
         $this->regions_name = $regions_name;
 
         return $this;
+    }
+
+    ##########################################
+    #
+    # For Search Form
+    #
+    ##########################################
+
+    protected function buildMaxDistanceToSee()
+    {
+        $qb = $this->createQueryBuilder('mds');
+
+        $qb
+            ->select('mds.distance_to_see')
+            ->where('mds.status = 1')
+            ->orderBy('mds.distance_to_see', 'DESC');
+
+        $max = $qb
+            ->getQuery()
+            ->getResult();
+
+        return $max[0]['distance_to_see'];
+    }
+
+    public function getMaxDistanceToSee()
+    {
+        return $this->maxDistanceToSee;
     }
 }
