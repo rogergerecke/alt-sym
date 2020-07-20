@@ -101,6 +101,18 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('hig', $price_highest);
         }
 
+        // add query for the distance to see filter
+        if ($filter['see_distance']) {
+            $see_distance = explode(';', $filter['see_distance'], 2);
+            $distance_lowest = $see_distance[0];
+            $distance_highest = $see_distance[1];
+
+            $qb
+                ->andWhere('h.distance_to_see >= :dlow AND h.distance_to_see <= :dhig')
+                ->setParameter('dlow', $distance_lowest)
+                ->setParameter('dhig', $distance_highest);
+        }
+
         return $qb
             ->orderBy('h.status', 'DESC')
             ->getQuery()
