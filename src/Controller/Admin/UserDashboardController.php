@@ -5,8 +5,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Events;
 use App\Entity\Hostel;
-use App\Entity\RoomTypes;
 use App\Entity\HostelGallery;
+use App\Entity\RoomTypes;
 use App\Entity\User;
 use App\Repository\HostelRepository;
 use App\Repository\StatisticsRepository;
@@ -19,10 +19,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
-use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,7 +33,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class UserDashboardController this class contain the
  * ground configuration for the user aria include right
  * handling and main menu build
- *
+ * @IsGranted("ROLE_USER")
  * @package App\Controller\Admin
  */
 class UserDashboardController extends AbstractDashboardController
@@ -165,6 +165,15 @@ class UserDashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
+        // bug in EasyAdmin right handling dosn't works correct
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash(
+                'danger',
+                'Sie sind noch als Admin angemeldet Loggen Sie sich aus um sich als normaler Benutzer anzumelden'
+            );
+
+            return $this->redirectToRoute('admin');
+        }
 
         // get all statistics for the owned hostels for the dashboard
         $statistics = null;
@@ -219,7 +228,7 @@ class UserDashboardController extends AbstractDashboardController
         SystemOptionsService $options,
         $product = ''
     ) {
-print_r($this->createEditUrl($this->user_id));
+
         // if upgrade request submit handle it and inform the admin about it
         if ($product) {
             // set the status from the user to wants upgrade
@@ -271,158 +280,18 @@ print_r($this->createEditUrl($this->user_id));
         );
     }
 
-
     /**
-     * @return Dashboard
+     * Build the User-Profil Edit Url for the admin
+     * @param $id
+     * @return CrudUrlBuilder
      */
-    public function configureDashboard(): Dashboard
+    protected function createEditUrl($id): string
     {
-        return Dashboard::new()
-            ->setTitle('Benutzer Bereich');
-    }
-
-
-    /**
-     * Configure the crud global for all
-     * loaded crud from here user-permission ROLE_USER
-     *
-     * @return Crud
-     */
-    public function configureCrud(): Crud
-    {
-        return Crud::new()
-            ->setDateFormat('dd.MM.yyyy')
-            ->setEntityPermission('ROLE_USER');
-    }
-
-
-    public function configureMenuItems(): iterable
-    {
-
-        // its not premium user show upgrade message
-        if (!in_array('premium_account', $this->user_privileges)) {
-            yield MenuItem::linktoRoute('Upgrade to Premium', 'fa fa-star', 'user_upgrade')
-                ->setCssClass('bg-success text-white pl-2');
-        }
-
-        yield MenuItem::linktoDashboard('Startseite', 'fa fa-home');
-
-        /* HOSTEL MENU > only show with the right user privileges */
-        $check = ['free_account', 'base_account', 'premium_account',];
-        if ($this->isUserHavePrivileges($check)) {
-            // Create the Hostel:Menu
-            if ($this->userHaveHostel) {
-                yield MenuItem::section('Meine Unterkunft');
-                // add the hostels to menu
-                foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
-
-                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
-                        ->setAction('edit')
-                        ->setEntityId($userHostel->getId());
-                }
-            }
-
-            if (!$this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)->setAction('new');
-            }
-
-            // have the user hostel so he cant add rooms and images for the hostel
-            // todo filter by user
-            if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
-                    ->setQueryParameter('filterField', 'hostel_id')
-                    ->setQueryParameter('filter',4);
-                yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
-            }
-        }
-
-
-        /* Media section */
-      /*  yield MenuItem::section('Media-Einstellung', 'fa fa-image');
-        yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
-            ->setLinkTarget('_blank')
-            ->setQueryParameter('instance', 'user');*/
-
-        /* Marketing section */
-        yield MenuItem::section('Marketing-Einstellung');
-        yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
-
-        /* The Leisure Menu Offer Point */
-        if ($this->isUserHavePrivileges(['leisure_offer'])) {
-            yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
-        }
-
-        /* Information section */
-        yield MenuItem::section('Hilfe & Information');
-        yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
-        yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
-        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
-        yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
-        yield MenuItem::linktoRoute('Datenschutz', 'fa fa-question', 'static_site_privacy');
-        yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
-    }
-
-
-    /**
-     * Create the ordinary user menu top
-     * right corner
-     * @param UserInterface $user
-     * @return UserMenu
-     */
-    public function configureUserMenu(UserInterface $user): UserMenu
-    {
-        // menu build print_r($user);
-        return UserMenu::new()
-            // use the given $user object to get the user name
-            ->setName($user->getName())
-            // use this method if you don't want to display the name of the user
-            ->displayUserName(true)
-
-            // you can return an URL with the avatar image
-            /* ->setAvatarUrl('https://...')*/
-            /* ->setAvatarUrl($user->getProfileImageUrl())*/
-            // use this method if you don't want to display the user image
-            ->displayUserAvatar(true)
-            // you can also pass an email address to use gravatar's service
-            ->setGravatarEmail($user->getEmail())
-
-            // you can use any type of menu item, except submenus
-            ->addMenuItems(
-                [
-                    MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
-                        ->setAction('detail')
-                        ->setEntityId($this->user_id),
-                    MenuItem::section('--------------------'),
-                    MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
-                ]
-            );
-    }
-
-    ######################################
-    #
-    #
-    # Helper function
-    #
-    #
-    #######################################
-
-    /**
-     * Check the user have the privileges
-     * for menu options
-     *
-     * @param array $privileges
-     * @return bool
-     */
-    protected function isUserHavePrivileges(array $privileges): bool
-    {
-        foreach ($privileges as $privilege) {
-            if (in_array($privilege, $this->user_privileges)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->crudUrlGenerator->build()
+            ->setDashboard(AdminDashboardController::class)
+            ->setController(AdminUserCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($id);
     }
 
     /**
@@ -464,16 +333,152 @@ print_r($this->createEditUrl($this->user_id));
     }
 
     /**
-     * Build the User-Profil Edit Url for the admin
-     * @param $id
-     * @return CrudUrlBuilder
+     * @return Dashboard
      */
-    protected function createEditUrl($id): string
+    public function configureDashboard(): Dashboard
     {
-        return $this->crudUrlGenerator->build()
-            ->setDashboard(AdminDashboardController::class)
-            ->setController(AdminUserCrudController::class)
-            ->setAction(Action::EDIT)
-            ->setEntityId($id);
+        return Dashboard::new()
+            ->setTitle('Benutzer Bereich');
+    }
+
+    /**
+     * Configure the crud global for all
+     * loaded crud from here user-permission ROLE_USER
+     *
+     * @return Crud
+     */
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->setDateFormat('dd.MM.yyyy')
+            ->setEntityPermission('ROLE_USER');
+    }
+
+    ######################################
+    #
+    #
+    # Helper function
+    #
+    #
+    #######################################
+
+    public function configureMenuItems(): iterable
+    {
+
+        // its not premium user show upgrade message
+        if (!in_array('premium_account', $this->user_privileges)) {
+            yield MenuItem::linktoRoute('Upgrade to Premium', 'fa fa-star', 'user_upgrade')
+                ->setCssClass('bg-success text-white pl-2');
+        }
+
+        yield MenuItem::linktoDashboard('Startseite', 'fa fa-home');
+
+        /* HOSTEL MENU > only show with the right user privileges */
+        $check = ['free_account', 'base_account', 'premium_account',];
+        if ($this->isUserHavePrivileges($check)) {
+            // Create the Hostel:Menu
+            if ($this->userHaveHostel) {
+                yield MenuItem::section('Meine Unterkunft');
+                // add the hostels to menu
+                foreach ($this->user_hostels as $userHostel) {
+                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
+
+                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
+                        ->setAction('edit')
+                        ->setEntityId($userHostel->getId());
+                }
+            }
+
+            if (!$this->userHaveHostel) {
+                yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)->setAction('new');
+            }
+
+            // have the user hostel so he cant add rooms and images for the hostel
+            // todo filter by user
+            if ($this->userHaveHostel) {
+                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
+                    ->setQueryParameter('filterField', 'hostel_id')
+                    ->setQueryParameter('filter', 4);
+                yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
+            }
+        }
+
+
+        /* Media section */
+        /*  yield MenuItem::section('Media-Einstellung', 'fa fa-image');
+          yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
+              ->setLinkTarget('_blank')
+              ->setQueryParameter('instance', 'user');*/
+
+        /* Marketing section */
+        yield MenuItem::section('Marketing-Einstellung');
+        yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
+
+        /* The Leisure Menu Offer Point */
+        if ($this->isUserHavePrivileges(['leisure_offer'])) {
+            yield MenuItem::linkToCrud('Freizeitangebot', 'fa fa-glass-cheers', Events::class);
+        }
+
+        /* Information section */
+        yield MenuItem::section('Hilfe & Information');
+        yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
+        yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
+        yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
+        yield MenuItem::linktoRoute('Datenschutz', 'fa fa-question', 'static_site_privacy');
+        yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
+    }
+
+    /**
+     * Check the user have the privileges
+     * for menu options
+     *
+     * @param array $privileges
+     * @return bool
+     */
+    protected function isUserHavePrivileges(array $privileges): bool
+    {
+        foreach ($privileges as $privilege) {
+            if (in_array($privilege, $this->user_privileges)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Create the ordinary user menu top
+     * right corner
+     * @param UserInterface $user
+     * @return UserMenu
+     */
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        // menu build print_r($user);
+        return UserMenu::new()
+            // use the given $user object to get the user name
+            ->setName($user->getName())
+            // use this method if you don't want to display the name of the user
+            ->displayUserName(true)
+
+            // you can return an URL with the avatar image
+            /* ->setAvatarUrl('https://...')*/
+            /* ->setAvatarUrl($user->getProfileImageUrl())*/
+            // use this method if you don't want to display the user image
+            ->displayUserAvatar(true)
+            // you can also pass an email address to use gravatar's service
+            ->setGravatarEmail($user->getEmail())
+
+            // you can use any type of menu item, except submenus
+            ->addMenuItems(
+                [
+                    MenuItem::linkToCrud('Mein Konto', 'fa fa-id-card', User::class)
+                        ->setAction('detail')
+                        ->setEntityId($this->user_id),
+                    MenuItem::section('--------------------'),
+                    MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
+                ]
+            );
     }
 }
