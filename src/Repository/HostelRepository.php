@@ -25,28 +25,95 @@ class HostelRepository extends ServiceEntityRepository
      * @var mixed
      */
     private $maxDistanceToSee;
+    private $maxPrice;
+    private $minPrice;
 
     public function __construct(ManagerRegistry $registry, RegionsRepository $regionsRepository)
     {
         parent::__construct($registry, Hostel::class);
+
         $this->regionsRepository = $regionsRepository;
-        
         $this->maxDistanceToSee = $this->buildMaxDistanceToSee();
+        $this->buildPriceRange();
     }
 
+    ##########################################
+    #
+    # Helper function For SearchHostelType
+    #
+    ##########################################
 
     /**
-     * The complex hostel search function
+     * Build the maximal distance to the see for
+     * the range slider search form filter
+     *
+     * @return mixed
+     */
+    protected function buildMaxDistanceToSee()
+    {
+        $qb = $this->createQueryBuilder('mds');
+
+        $qb
+            ->select('mds.distance_to_see')
+            ->where('mds.status = 1')
+            ->orderBy('mds.distance_to_see', 'DESC');
+
+        $max = $qb
+            ->getQuery()
+            ->getResult();
+
+        return $max[0]['distance_to_see'];
+    }
+
+    /**
+     * Build the maximal price for the
+     * range slider search form filter
+     *
+     * @return mixed
+     */
+    protected function buildPriceRange()
+    {
+        $qb = $this->createQueryBuilder('mp');
+
+        $qb
+            ->select('rt.final_rate')
+            ->from('App:RoomTypes', 'rt')
+            /*->where('mp.status = 1')*/
+            ->orderBy('rt.final_rate', 'DESC');
+
+        $max = $qb
+            ->getQuery()
+            ->getResult();
+
+        $this->maxPrice = round($max[0]['final_rate'], 0, PHP_ROUND_HALF_UP) / 100;
+        $this->minPrice = round(array_key_last($max)['final_rate'], 0, PHP_ROUND_HALF_DOWN) / 100;
+
+        return true;
+    }
+
+    ##########################################
+    #
+    # QueryBuilder
+    #
+    ##########################################
+
+    /**
+     * Build the QueryBuilder with the search
+     * form values and ranges $filter
+     *
      * @param array|null $filter
      * @return int|mixed|string
      * @throws \Exception
      */
     public function findHostelsWithFilter(?array $filter)
     {
-        // first idee
-        /* [regions] => 61 [hostel_types] => 4 [quantity_person] => 1 [submit] => [price_range] => 10;80 [see_distance] => 1;5 )*/
         $qb = $this->createQueryBuilder('h');
 
+        ###################
+        #
+        #   Dropdown filter
+        #
+        ###################
         // add the regions filter works by postcode
         if ($filter['regions']) {
             $plz = $this->regionsRepository->findOneBy(['regions_id' => $filter['regions']]);
@@ -76,6 +143,11 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('id', $filter['hostel_types']);
         }
 
+        ###################
+        #
+        #   Range Slider filter
+        #
+        ###################
         // add the query for person filter
         if ($filter['quantity_person']) {
             $qb
@@ -125,6 +197,11 @@ class HostelRepository extends ServiceEntityRepository
                 ->setParameter('dhig', $distance_highest);
         }
 
+        ###################
+        #
+        #   Checkbox filter
+        #
+        ###################
         //add query filter for isHandicappedAccessible
         if (isset($filter['handicap'])) {
             $qb
@@ -136,11 +213,12 @@ class HostelRepository extends ServiceEntityRepository
                 )
                 ->andWhere('hc.isHandicappedAccessible = 1');
         }
-// todo bread service filter ???
+
         // add bread service query filter
         if (isset($filter['bread_service'])) {
             $qb
-                ->andWhere("JSON_SEARCH(h.amenities, 'one', '$.service') = :service")->setParameter('service', 'bread_service');
+                ->andWhere("JSON_SEARCH(h.amenities, 'one', :service) IS NOT NULL ")
+                ->setParameter('service', 'bread_service');
         }
 
         // add meal code filter query
@@ -152,7 +230,8 @@ class HostelRepository extends ServiceEntityRepository
                     'WITH',
                     'h.id = hb.hostel_id'
                 )
-                ->andWhere('hb.meal_code = HB');
+                ->andWhere('hb.meal_code = :code')
+                ->setParameter('code', 'HB');
         }
 
         // add breakfast filter query
@@ -167,12 +246,12 @@ class HostelRepository extends ServiceEntityRepository
                 ->andWhere('bi.breakfast_included = 1');
         }
 
+        // getQuery
         return $qb
             ->orderBy('h.sort', 'DESC')
             ->getQuery()
             ->getResult();
     }
-
 
     /**
      * Find all the hostels for the Start Page Listing
@@ -210,7 +289,6 @@ class HostelRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-
     /**
      * Find all hostel with the $id_array of hostel ids
      *
@@ -244,6 +322,12 @@ class HostelRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    ##########################################
+    #
+    # Getter and Setter
+    #
+    ##########################################
+
     /**
      * @return mixed
      */
@@ -263,30 +347,36 @@ class HostelRepository extends ServiceEntityRepository
         return $this;
     }
 
-    ##########################################
-    #
-    # For Search Form
-    #
-    ##########################################
-
-    protected function buildMaxDistanceToSee()
-    {
-        $qb = $this->createQueryBuilder('mds');
-
-        $qb
-            ->select('mds.distance_to_see')
-            ->where('mds.status = 1')
-            ->orderBy('mds.distance_to_see', 'DESC');
-
-        $max = $qb
-            ->getQuery()
-            ->getResult();
-
-        return $max[0]['distance_to_see'];
-    }
-
+    /**
+     * Return the maximal distance to the see for
+     * the range slider search form filter
+     *
+     * @return mixed
+     */
     public function getMaxDistanceToSee()
     {
         return $this->maxDistanceToSee;
+    }
+
+    /**
+     * Return the maximal price for the
+     * range slider search form filter
+     *
+     * @return mixed
+     */
+    public function getMaxPrice()
+    {
+        return $this->maxPrice;
+    }
+
+    /**
+     * Return the miniimal price for the
+     * range slider search form filter
+     *
+     * @return mixed
+     */
+    public function getMinPrice()
+    {
+        return $this->minPrice;
     }
 }
