@@ -5,11 +5,20 @@ namespace App\Controller\Admin;
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
+use App\Repository\RoomTypesRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -20,7 +29,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -49,6 +60,11 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var AdminMessagesHandler
      */
     private $adminMessagesHandler;
+    /**
+     * @var bool
+     */
+    private $user;
+    private $hostels;
 
     /**
      * RoomTypesCrudController constructor.
@@ -69,11 +85,11 @@ class RoomTypesCrudController extends AbstractCrudController
         $this->adminMessagesHandler = $adminMessagesHandler;
 
         // get the user id from the logged in user
-        if (null !== $this->security->getUser()) {
-            $this->user_id = $this->security->getUser()->getId();
+        if (null !== $security->getUser()) {
+            $this->user = $security->getUser();
+            $this->user_id = $this->user->getId();
+            $this->hostels = $this->user->getHostels();
         }
-
-
     }
 
     /**
@@ -82,6 +98,34 @@ class RoomTypesCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return RoomTypes::class;
+    }
+
+    /**
+     * Modified index builder to show only
+     * rooms for the logged in user on
+     * index table
+     *
+     * @param SearchDto $searchDto
+     * @param EntityDto $entityDto
+     * @param FieldCollection $fields
+     * @param FilterCollection $filters
+     * @return QueryBuilder
+     */
+    public function createIndexQueryBuilder(
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
+
+        $qb = $this->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $alias = $qb->getRootAliases();
+
+        foreach ($this->hostels as $hostel) {
+            $qb->andWhere($alias[0].'.hostel_id = '.$hostel->getId());
+        }
+
+        return $qb;
     }
 
     /**
@@ -267,7 +311,7 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         // Number of units the unique partner reference
-        $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Angebotes')
+        $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Zimmers')
             ->setHelp('Wie oft verfügen Sie von dieser Art des Raumes');
 
         // Numeric size of the unit in square feet or meters
@@ -289,7 +333,7 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         // Number of guests allowed per unit
-        $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste')
+        $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste in diesem Zimmer')
             ->setHelp('Die erlaubte Gästeanzahl für diesen Raum, wichtig für die Suchfunktion');
 
         $number_of_bedrooms = NumberField::new('number_of_bedrooms', 'Anzahl Schlafzimmer');
@@ -356,6 +400,14 @@ class RoomTypesCrudController extends AbstractCrudController
                 break;
         }
     }
+
+   /* public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $entityManager->getRepository(RoomTypesRepository::class)->findBy(['hostel_id'=>4]);
+        parent::persistEntity($entityManager, $entityInstance);
+    }*/
+
+
 
 
 
@@ -460,4 +512,6 @@ class RoomTypesCrudController extends AbstractCrudController
 
         return $options;
     }
+
+
 }

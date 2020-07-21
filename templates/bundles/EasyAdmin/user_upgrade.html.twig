@@ -38,8 +38,8 @@
                                 <li class="text-success">+ Geolocation</li>
                                 <li class="text-success">+ Zimmer Detail Seite</li>
                             </ul>
-                            <input type="submit" name="register[premium_account]" form="register"
-                                   class="btn btn-lg btn-block btn-success" value="Ich bin Experte">
+                            <a href="{{ path('user_upgrade', {product:'premium_account'}) }}"
+                               class="btn btn-lg btn-block btn-success">Ich möchte zum Experten Upgraden</a>
 
                             <!-- Collapse more Information -->
                             <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -81,8 +81,8 @@
                                 <li class="text-danger">ohne Geolocation</li>
                                 <li class="text-danger">ohne Zimmer Detail Seite</li>
                             </ul>
-                            <input type="submit" name="register[base_account]" form="register"
-                                   class="btn btn-lg btn-block btn-primary" value="Sie sind Profi">
+                            <a href="{{ path('user_upgrade', {product:'base_account'}) }}"
+                               class="btn btn-lg btn-block btn-primary">Ich möchte zum Profi Upgraden</a>
 
                             <!-- Collapse more Information -->
                             <button class="btn btn-link" type="button" data-toggle="collapse"

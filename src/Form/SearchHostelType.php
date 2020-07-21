@@ -6,6 +6,7 @@ use App\Entity\AmenitiesTypes;
 use App\Entity\Hostel;
 use App\Entity\Regions;
 use App\Repository\AmenitiesTypesRepository;
+use App\Repository\HostelRepository;
 use App\Repository\RegionsRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -38,11 +39,16 @@ class SearchHostelType extends AbstractType
      * @var AmenitiesTypesRepository
      */
     private $amenitiesTypesRepository;
+    /**
+     * @var HostelRepository
+     */
+    private $hostelRepository;
 
-    public function __construct(RegionsRepository $regions, AmenitiesTypesRepository $amenitiesTypesRepository)
+    public function __construct(RegionsRepository $regions, AmenitiesTypesRepository $amenitiesTypesRepository,HostelRepository $hostelRepository)
     {
         $this->regions = $regions;
         $this->amenitiesTypesRepository = $amenitiesTypesRepository;
+        $this->hostelRepository = $hostelRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -83,9 +89,9 @@ class SearchHostelType extends AbstractType
                         'class'        => 'js-range-slider',
                         'data-type'    => "double",
                         'data-min'     => "1",
-                        'data-max'     => "10",
+                        'data-max'     => $this->hostelRepository->getMaxDistanceToSee(),
                         'data-from'    => "1",
-                        'data-to'      => "10",
+                        'data-to'      => $this->hostelRepository->getMaxDistanceToSee(),
                         'data-postfix' => ' KM',
                     ],
                     'label' => false,
@@ -136,10 +142,10 @@ class SearchHostelType extends AbstractType
                         'class'        => 'js-range-slider',
                         'data-type'    => 'double',
                         'data-step'    => 10,
-                        'data-min'     => '10',
-                        'data-max'     => '350',
-                        'data-from'    => '10',
-                        'data-to'      => '350',
+                        'data-min'     => '0',
+                        'data-max'     => $this->hostelRepository->getMaxPrice(),
+                        'data-from'    => '0',
+                        'data-to'      => $this->hostelRepository->getMaxPrice(),
                         'data-postfix' => ' €',
                     ],
                     'label' => false,

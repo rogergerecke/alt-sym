@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User contain the login data to the backend a user cant have hostels or ads and many more.
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="acount.with.email.exist")
- * 
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -81,6 +81,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isHeWantsUpgrade;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $createAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $run_time;
 
     #
     # Connection to the hostel entity
@@ -276,6 +286,39 @@ class User implements UserInterface
     public function setIsHeWantsUpgrade(?bool $isHeWantsUpgrade): self
     {
         $this->isHeWantsUpgrade = $isHeWantsUpgrade;
+
+        return $this;
+    }
+
+    public function getCreateAt(): ?\DateTimeInterface
+    {
+        return $this->createAt;
+    }
+
+    public function setCreateAt(?\DateTimeInterface $createAt): self
+    {
+        $this->createAt = $createAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * Set a default date by transaction if is empty
+     */
+    public function setCreateAtDefaultValue()
+    {
+        $this->createAt = new \DateTime();
+    }
+
+    public function getRunTime(): ?\DateTimeInterface
+    {
+        return $this->run_time;
+    }
+
+    public function setRunTime(?\DateTimeInterface $run_time): self
+    {
+        $this->run_time = $run_time;
 
         return $this;
     }

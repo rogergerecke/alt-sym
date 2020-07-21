@@ -6,9 +6,8 @@ use App\Entity\Advertising;
 use App\Entity\AmenitiesTypes;
 use App\Entity\Events;
 use App\Entity\Hostel;
+use App\Entity\HostelGallery;
 use App\Entity\Leisure;
-use App\Entity\Media;
-use App\Entity\MediaGallery;
 use App\Entity\Regions;
 use App\Entity\RoomAmenities;
 use App\Entity\RoomAmenitiesDescription;
@@ -17,22 +16,20 @@ use App\Entity\StaticSite;
 use App\Entity\SystemOptions;
 use App\Entity\User;
 use App\Repository\AdminMessageRepository;
+use App\Repository\UserRepository;
+use App\Service\AdminMessagesHandler;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
-
 
 class AdminDashboardController extends AbstractDashboardController
 {
@@ -59,19 +56,35 @@ class AdminDashboardController extends AbstractDashboardController
      * @var AdminMessageRepository
      */
     private $adminMessageRepository;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var User[]
+     */
+    private $user_upgrade;
+    /**
+     * @var AdminMessagesHandler
+     */
+    private $adminMessagesHandler;
 
-    public function __construct(Security $security,AdminMessageRepository $adminMessageRepository)
-    {
+    public function __construct(
+        Security $security,
+        AdminMessageRepository $adminMessageRepository,
+        UserRepository $userRepository,
+        AdminMessagesHandler $adminMessagesHandler
+    ) {
 
         $this->security = $security;
         $this->adminMessageRepository = $adminMessageRepository;
+        $this->userRepository = $userRepository;
+        $this->adminMessagesHandler = $adminMessagesHandler;
 
         // build the user id for the my account link
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
         }
-
-
     }
 
     /**
@@ -83,13 +96,38 @@ class AdminDashboardController extends AbstractDashboardController
         // get the admin messages
         $admin_messages = $this->adminMessageRepository->findAll();
 
+        // get upgrade wishes
+        if ($user_upgrade = $this->userRepository->findBy(['isHeWantsUpgrade' => 1])) {
+            $this->user_upgrade = $user_upgrade;
+        }
+
         return $this->render(
             'bundles/EasyAdmin/start_admin.html.twig',
             [
                 'has_content_subtitle' => false,
-                'admin_messages'=> $admin_messages
+                'admin_messages'       => $admin_messages,
+                'user_upgrade'         => $user_upgrade,
             ]
         );
+    }
+
+
+    /**
+     * Remove a message from the admin message
+     * dashboard center
+     *
+     * @Route("/admin/remove_message/{id}", name="admin_remove_message")
+     * @param $id
+     * @return Response
+     */
+    public function removeMessage($id): Response
+    {
+        $massage = $this->adminMessageRepository->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($massage);
+        $em->flush();
+
+        return new Response('OK');
     }
 
     public function configureDashboard(): Dashboard
@@ -110,7 +148,8 @@ class AdminDashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         /* Link to Homepage */
-        yield MenuItem::linktoRoute('Zur Website', 'fa fa-home', 'index');
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-tachometer-alt');
+        yield MenuItem::linktoRoute('Zur Seite', 'fa fa-home', 'index');
 
         /* Hostel Manager section */
         [
@@ -141,10 +180,9 @@ class AdminDashboardController extends AbstractDashboardController
         /* Media Manager section */
         [
             yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
-            yield MenuItem::linktoRoute('Upload', 'fa fa-upload', 'elfinder')
+            yield MenuItem::linktoRoute('Datei Upload', 'fa fa-upload', 'elfinder')
                 ->setQueryParameter('instance', 'admin'),
-            yield MenuItem::linkToCrud('Dateien', 'fa fa-image', Media::class),
-            yield MenuItem::linkToCrud('Gallery', 'fa fa-images', MediaGallery::class),
+            yield MenuItem::linkToCrud('Gallery bearbeiten', 'fa fa-image', HostelGallery::class),
         ];
 
         /* System Config section */
@@ -196,6 +234,5 @@ class AdminDashboardController extends AbstractDashboardController
                     MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
                 ]
             );
-
     }
 }

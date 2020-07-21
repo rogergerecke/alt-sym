@@ -1,2 +1,3 @@
 doctrine_migrations:
-    dir_name: '%kernel.project_dir%/migrations'
+  migrations_paths:
+    'Application\Migrations': '%kernel.project_dir%/migrations'

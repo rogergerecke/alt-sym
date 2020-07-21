@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Repository\UserPrivilegesTypesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -12,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -21,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminUserCrudController extends AbstractCrudController
 {
@@ -36,7 +40,7 @@ class AdminUserCrudController extends AbstractCrudController
      */
     private $privilegesTypesRepository;
     /**
-     * @var object|\Symfony\Component\Security\Core\User\UserInterface|null
+     * @var object|UserInterface|null
      */
     private $user;
     /**
@@ -76,11 +80,14 @@ class AdminUserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setPageTitle(Crud::PAGE_INDEX, 'Benutzer');
+        return $crud
+            ->setPageTitle(Crud::PAGE_INDEX, 'Benutzer')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Benutzer bearbeiten');
     }
 
     public function configureFields(string $pageName): iterable
     {
+        $id = IntegerField::new('id');
         $email = TextField::new('email');
         $password = TextField::new('password')
             ->setFormType(PasswordType::class)
@@ -89,11 +96,10 @@ class AdminUserCrudController extends AbstractCrudController
             ->setHelp('Wenn das Password nicht geändert werden soll feld leer lassen.');
 
         $partner_id = IntegerField::new('partner_id', 'Kundennummer')
-            ->setHelp('Die Kundennummer sollte man nicht ändern sie wird auf Rechnung verwendet');
+            ->setFormTypeOption('disabled', true);
 
-        $name = TextField::new('name', 'Ganzer Name');
-        $status = BooleanField::new('status', 'Account Online');
-        $id = IntegerField::new('id', 'ID');
+        $name = TextField::new('name', 'Vorname Name');
+        $status = BooleanField::new('status', 'Status On/Off');
 
         /* Create user privileges dropdown*/
         $user_privileges = CollectionField::new('user_privileges', 'Benutzer Rechte')->setHelp(
@@ -103,16 +109,37 @@ class AdminUserCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'entry_options' => [
-                        'choices'  => [
+                        'choices' => [
                             $this->buildUserPrivilegesOptions(),
                         ],
-                        'label'    => false,
+                        'label' => false,
                         'group_by' => 'id',
                     ],
                 ]
             );
 
-        $hostel_name = AssociationField::new('hostels');
+        // have a user made changes on his account
+        $is_user_made_changes = BooleanField::new('is_user_made_changes', 'Änderung?')
+            ->setHelp('Hat der Kunde änderung an diesem Konto vorgenommen?')
+            ->setSortable(true);
+
+        // wont the user a upgrade
+        $is_he_wants_upgrade = BooleanField::new('is_he_wants_upgrade', 'Upgrade?')
+            ->setHelp('Möchte dieser Kunde ein Upgrade machen?')
+            ->setSortable(true);
+
+        $create_at = DateTimeField::new('createAt', 'Registrierung-Datum')
+            ->setFormTypeOption('disabled', true);
+        $run_time = DateTimeField::new('run_time', 'Vertragslaufzeit');
+
+        /* Extras */
+        $hostel_name = AssociationField::new('hostels', 'Unterkunft Counter')
+            ->setHelp('Wie viele Unterkünfte hat er angelegt');
+
+        $panel_user_rights = FormField::addPanel('Benutzer Rechte')->setHelp('Die Rechte des Benutzer-Kontos');
+        $panel_information = FormField::addPanel('Admin Information')->setHelp(
+            'Wenn Sie die Änderung überprüft haben oder das Upgrade durchgeführt wurde entfernen Sie den Hacken damit der Kunde nicht mehr hervorgehoben wird.'
+        );
 
         switch ($pageName) {
             case Crud::PAGE_INDEX:
@@ -121,35 +148,60 @@ class AdminUserCrudController extends AbstractCrudController
                     $email,
                     $partner_id,
                     $name,
-                    $user_privileges,
-                    $hostel_name,
                     $status,
+                    $is_user_made_changes,
+                    $is_he_wants_upgrade,
+                    $create_at,
+                    $run_time,
                 ];
                 break;
             case Crud::PAGE_NEW:
             case Crud::PAGE_EDIT:
                 return [
-                    $name,
                     $partner_id,
+                    $name,
                     $email,
-                    $user_privileges,
                     $password,
+                    $create_at,
+                    $run_time,
+                    $panel_user_rights,
+                    $user_privileges,
                     $status,
+                    $panel_information,
+                    $is_user_made_changes,
+                    $is_he_wants_upgrade,
+
                 ];
                 break;
             case Crud::PAGE_DETAIL:
                 return [
                     $id,
-                    $name,
-                    $user_privileges,
-                    $partner_id,
                     $email,
-                    $password,
+                    $partner_id,
+                    $name,
                     $status,
+                    $is_user_made_changes,
+                    $is_he_wants_upgrade,
+                    $password,
+                    $hostel_name,
                 ];
                 break;
         }
     }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::DELETE)
+            ;
+    }
+
+    ################################################################
+    #
+    # Override Entity
+    #
+    ################################################################
 
     /**
      * Password generation on password entity update over Symfony core

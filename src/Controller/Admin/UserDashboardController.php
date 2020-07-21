@@ -3,32 +3,37 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Advertising;
 use App\Entity\Events;
 use App\Entity\Hostel;
-use App\Entity\Media;
-use App\Entity\MediaGallery;
 use App\Entity\RoomTypes;
 use App\Entity\HostelGallery;
 use App\Entity\User;
 use App\Repository\HostelRepository;
 use App\Repository\StatisticsRepository;
+use App\Repository\UserPrivilegesTypesRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use App\Service\SystemOptionsService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\DashboardControllerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\Component\HttpFoundation\Request;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use Swift_Mailer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class UserDashboardController
+ * Class UserDashboardController this class contain the
+ * ground configuration for the user aria include right
+ * handling and main menu build
+ *
  * @package App\Controller\Admin
  */
 class UserDashboardController extends AbstractDashboardController
@@ -93,6 +98,22 @@ class UserDashboardController extends AbstractDashboardController
      * @var array
      */
     private $statistics;
+    /**
+     * @var CrudUrlBuilder
+     */
+    private $crudUrlBuilder;
+    /**
+     * @var CrudUrlGenerator
+     */
+    private $crudUrlGenerator;
+    /**
+     * @var SystemOptionsService
+     */
+    private $systemOptions;
+    /**
+     * @var Swift_Mailer
+     */
+    private $mailer;
 
 
     /**
@@ -101,18 +122,28 @@ class UserDashboardController extends AbstractDashboardController
      * @param UserRepository $userRepository
      * @param HostelRepository $hostelRepository
      * @param StatisticsRepository $statisticsRepository
+     * @param CrudUrlGenerator $crudUrlGenerator
+     * @param SystemOptionsService $systemOptions
+     * @param Swift_Mailer $mailer
      */
     public function __construct(
         Security $security,
         UserRepository $userRepository,
         HostelRepository $hostelRepository,
-        StatisticsRepository $statisticsRepository
+        StatisticsRepository $statisticsRepository,
+        CrudUrlGenerator $crudUrlGenerator,
+        SystemOptionsService $systemOptions,
+        Swift_Mailer $mailer
     ) {
         // inti vars
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->hostelRepository = $hostelRepository;
         $this->statisticsRepository = $statisticsRepository;
+        $this->crudUrlGenerator = $crudUrlGenerator;
+        $this->systemOptions = $systemOptions;
+        $this->mailer = $mailer;
+
 
         // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
@@ -173,31 +204,77 @@ class UserDashboardController extends AbstractDashboardController
     }
 
     /**
-     * @Route("/user/upgrade/{package}", name="user_upgrade")
+     * The account upgrade message function build the
+     * upgrade link and inform the admin with the right type.
+     * @Route("/user/upgrade/{product}", name="user_upgrade")
      * @param AdminMessagesHandler $adminMessagesHandler
-     * @param string $package
+     * @param UserPrivilegesTypesRepository $privilegesTypesRepository
+     * @param SystemOptionsService $options
+     * @param string $product
      * @return Response
      */
-    public function upgrade(AdminMessagesHandler $adminMessagesHandler, $package = 'free_account')
-    {
-        switch ($package) {
-            case 'base_account':
-                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: base_account');
-                break;
-            case 'premium_account':
-                $adminMessagesHandler->addInfo('Der Benutzer möchte ein Upgrade auf: premium_account');
-                break;
+    public function upgrade(
+        AdminMessagesHandler $adminMessagesHandler,
+        UserPrivilegesTypesRepository $privilegesTypesRepository,
+        SystemOptionsService $options,
+        $product = ''
+    ) {
+print_r($this->createEditUrl($this->user_id));
+        // if upgrade request submit handle it and inform the admin about it
+        if ($product) {
+            // set the status from the user to wants upgrade
+            $user = $this->user_account;
+            $user->setIsHeWantsUpgrade(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // inform admin about upgrade wish
+            $user_privileges_types = $privilegesTypesRepository->findOneBy(['code' => $product]);
+            $user_account_edit_url = $this->createEditUrl($this->user_id);
+            $user_name = $this->user_account->getName();
+
+            $this->addFlash(
+                'success',
+                'Ihre Upgrade anfrage wurde gesendet versendet.  Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
+            );
+
+            $adminMessagesHandler->addInfo(
+                "Der Benutzer möchte ein Upgrade auf: ".$user_privileges_types->getName(),
+                "Kundenkonto Upgrade Wunsch",
+                "Kundenkonto von <a href='".$user_account_edit_url."'>$user_name</a>"
+            );
+
+            // send admin a mail with information about
+
+            $email_template_vars = [
+                'web_site_name'          => $this->systemOptions->getWebSiteName(),
+                'user_account_edit_url'  => $user_account_edit_url,
+                'user_number'            => $this->user_account->getPartnerId(),
+                'user_name'              => $this->user_account->getName(),
+                'user_email'             => $this->user_account->getUsername(),
+                'user_registration_date' => $this->user_account->getCreateAt()->format('d.m.Y'),
+                'upgrade_to_product'     => $user_privileges_types->getName(),
+
+            ];
+            $this->sendUpgradeWishMail($email_template_vars);
         }
 
         return $this->render(
             'bundles/EasyAdmin/user_upgrade.html.twig',
             [
-                'package'      => $package,
-                'user_hostels' => $this->user_hostels,
+                'product'               => $product,
+                'user_hostels'          => $this->user_hostels,
+                'support_email_address' => $options->getSupportEmailAddress(),
+                'support_phone_number'  => $options->getSupportPhoneNumber(),
             ]
         );
     }
 
+
+    /**
+     * @return Dashboard
+     */
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -233,15 +310,14 @@ class UserDashboardController extends AbstractDashboardController
         /* HOSTEL MENU > only show with the right user privileges */
         $check = ['free_account', 'base_account', 'premium_account',];
         if ($this->isUserHavePrivileges($check)) {
-            yield MenuItem::section('Unterkunft-Einstellung', 'fa fa-tasks');
-
             // Create the Hostel:Menu
             if ($this->userHaveHostel) {
-                yield MenuItem::section('Meine Unterkünfte', 'fa fa-hotel');
+                yield MenuItem::section('Meine Unterkunft');
                 // add the hostels to menu
                 foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = substr($userHostel->getHostelName(), 0, 11);
-                    yield MenuItem::linkToCrud('Unterkunft '.$hostel_name, 'fa fa-room', Hostel::class)
+                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
+
+                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
                         ->setAction('edit')
                         ->setEntityId($userHostel->getId());
                 }
@@ -252,21 +328,24 @@ class UserDashboardController extends AbstractDashboardController
             }
 
             // have the user hostel so he cant add rooms and images for the hostel
+            // todo filter by user
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class);
-                yield MenuItem::linkToCrud('Bilder hinzufügen', 'fa fa-image', HostelGallery::class);
+                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
+                    ->setQueryParameter('filterField', 'hostel_id')
+                    ->setQueryParameter('filter',4);
+                yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
             }
         }
 
 
         /* Media section */
-        yield MenuItem::section('Media-Einstellung', 'fa fa-image');
+      /*  yield MenuItem::section('Media-Einstellung', 'fa fa-image');
         yield MenuItem::linktoRoute('Bilder Hochladen', 'fa fa-image', 'elfinder')
             ->setLinkTarget('_blank')
-            ->setQueryParameter('instance', 'user');
+            ->setQueryParameter('instance', 'user');*/
 
         /* Marketing section */
-        yield MenuItem::section('Marketing-Einstellung', 'fa fa-bullhorn');
+        yield MenuItem::section('Marketing-Einstellung');
         yield MenuItem::linkToCrud('Veranstaltung', 'fa fa-glass-cheers', Events::class);
 
         /* The Leisure Menu Offer Point */
@@ -275,7 +354,7 @@ class UserDashboardController extends AbstractDashboardController
         }
 
         /* Information section */
-        yield MenuItem::section('Hilfe & Information', 'fa fa-info-circle');
+        yield MenuItem::section('Hilfe & Information');
         yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
         yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
         yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
@@ -344,5 +423,57 @@ class UserDashboardController extends AbstractDashboardController
         }
 
         return false;
+    }
+
+    /**
+     * Send the Registration mail to the new user
+     * with the dynamic twig templates vars
+     * @param array $email_template_vars
+     */
+    protected function sendUpgradeWishMail(array $email_template_vars): void
+    {
+        // upgrade massage for the system admin
+        // do anything else you need here, like send an email
+        $message = new \Swift_Message('Kundenkonto Upgrade Wunsch bei Altmühlsee');
+
+        // send a copy to
+        if (null !== ($this->systemOptions->getCopiedReviverEmailAddress())) {
+            $message->setCc($this->systemOptions->getCopiedReviverEmailAddress());
+        }
+
+        // if developer mode send mails to the developer
+        if (null !== ($this->systemOptions->getTestEmailAddress())) {
+            $message->setTo($this->systemOptions->getTestEmailAddress());
+        } else {
+            // real receiver email address from configuration
+            $message->setTo($this->systemOptions->getSupportEmailAddress());
+        }
+
+        $message
+            ->setFrom($this->systemOptions->getMailSystemAbsenceAddress())
+            ->setBody(
+                $this->renderView(
+                // Email-Template templates/emails/user_wants_upgrade.html.twig
+                    'emails/user_wants_upgrade.html.twig',
+                    $email_template_vars
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * Build the User-Profil Edit Url for the admin
+     * @param $id
+     * @return CrudUrlBuilder
+     */
+    protected function createEditUrl($id): string
+    {
+        return $this->crudUrlGenerator->build()
+            ->setDashboard(AdminDashboardController::class)
+            ->setController(AdminUserCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($id);
     }
 }
