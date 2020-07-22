@@ -95,28 +95,37 @@
                 <div class="card-body">
                     <p class="pl-2">Sie haben mehre System Nachrichten. System Nachrichten werden vom System erzeugt
                         oder durch Kunden die Ihre Kundendaten verändert haben und die dann überprüft werden müssen.</p>
-                    <!-- Massages List -->
-                    <div class="list-group">
+                    <!-- Message Table -->
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nachricht</th>
+                            <th scope="col">Stufe</th>
+                            <th scope="col">Datum</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Message Row -->
                         {% for adminMassage in admin_messages %}
-                            <!-- Message Item -->
-                            <div class="list-group-item massage-type-{{ adminMassage.type }}">
-                                <!-- Heading -->
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-2">{{ adminMassage.heading }} <span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
-                                    </h5>
-
-                                    <span class="ml-1"><span class="massage-date">{{ adminMassage.dateAdd|date('d.m.Y') }} </span> <a
+                            <tr>
+                                <th scope="row">{{ adminMassage.id }}</th>
+                                <td>
+                                    {{ adminMassage.heading|raw }}
+                                    {{ adminMassage.subHeading|raw }}
+                                    {{ adminMassage.message|raw }}
+                                </td>
+                                <td><span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span></td>
+                                <td>{{ adminMassage.dateAdd|date('d.m.Y') }} </td>
+                                <td><span class="massage-date"><a
                                                 href="{{ path('admin_remove_message', {'id': adminMassage.id}) }}"
                                                 class="delete btn btn-sm btn-danger"> <i
-                                                    class="fa fa-trash-alt"></i></a></span>
-                                </div>
-                                <!-- Sub Heading -->
-                                <h6 class="mb-1 text-muted">{{ adminMassage.subHeading }}</h6>
-                                <!-- Text -->
-                                <p class="mb-2">{{ adminMassage.message|raw }}</p>
-                            </div>
+                                                    class="fa fa-trash-alt"></i></a></span></td>
+                            </tr>
                         {% endfor %}
-                    </div>
+                        </tbody>
+                    </table>
                     <!-- Massages List #END -->
                 </div>
                 <!-- Card Body #END -->
