@@ -14,9 +14,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Exception;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
@@ -92,7 +95,9 @@ class AdminUserCrudController extends AbstractCrudController
             ->setHelp('Wenn das Password nicht geändert werden soll feld leer lassen.');
 
         $partner_id = IntegerField::new('partner_id', 'Kundennummer')
-            ->setFormTypeOption('disabled', true);
+            ->hideOnForm()
+            /*->setFormType(HiddenType::class)*/
+            /*->setFormTypeOption('disabled', true)*/;
 
         $name = TextField::new('name', 'Vorname Name');
         $status = BooleanField::new('status', 'Status On/Off');
@@ -206,6 +211,58 @@ class AdminUserCrudController extends AbstractCrudController
     #
     ################################################################
 
+    /**
+     * Password generation on password entity update over Symfony core
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+
+        // set new password with encoder interface
+        if (method_exists($entityInstance, 'setPassword')) {
+            $clearPassword = trim($this->get('request_stack')->getCurrentRequest()->request->all('User')['password']);
+
+            // if user password not change save the old one
+            if (isset($clearPassword) === true && $clearPassword === '') {
+                $entityInstance->setPassword($this->password);
+            } else {
+                $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
+                $entityInstance->setPassword($encodedPassword);
+            }
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+
+    /**
+     * @param string $entityFqcn
+     * @return User|mixed
+     * @throws Exception
+     */
+    public function createEntity(string $entityFqcn)
+    {
+        $user = new User();
+        $user->setPartnerId(rand(11111, 99999));
+
+
+        // if user password empty generate one
+        if (null !== $clearPassword = isset($this->get('request_stack')->getCurrentRequest()->request->all('User')['password'])) {
+            $clearPassword = trim($clearPassword);
+        }
+        if (isset($clearPassword) === true && $clearPassword === '') {
+            $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $this->generatePassword());
+            $user->setPassword($encodedPassword);
+        } else {
+            $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
+            $user->setPassword($encodedPassword);
+        }
+
+        return $user;
+    }
+
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions
@@ -222,27 +279,12 @@ class AdminUserCrudController extends AbstractCrudController
     #############################
 
     /**
-     * Password generation on password entity update over Symfony core
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
+     * @return string
+     * @throws Exception
      */
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    protected function generatePassword()
     {
 
-
-        // set new password with encoder interface
-        if (method_exists($entityInstance, 'setPassword')) {
-            $clearPassword = trim($this->get('request_stack')->getCurrentRequest()->request->all('User')['password']);
-
-            // if user password not change save the old one
-            if (isset($clearPassword) === true && $clearPassword === '') {
-                $entityInstance->setPassword($this->password);
-            } else {
-                $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
-                $entityInstance->setPassword($encodedPassword);
-            }
-        }
-
-        parent::updateEntity($entityManager, $entityInstance);
+        return random_bytes(32);
     }
 }

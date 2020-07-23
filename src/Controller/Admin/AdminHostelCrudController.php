@@ -87,8 +87,16 @@ class AdminHostelCrudController extends AbstractCrudController
 
         // id fields
         /* $id = IdField::new('id');*/
-        $user_id = IdField::new('user_id')
-            ->setFormTypeOption('disabled', true);
+        $user_id = IntegerField::new('user_id')
+            ->setFormType(ChoiceType::class)
+            ->setFormTypeOptions(
+                [
+                    'choices'  => [
+                        $this->buildUserOptions(),
+                    ],
+                    'group_by' => 'id',
+                ]
+            );
 
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
@@ -262,7 +270,25 @@ class AdminHostelCrudController extends AbstractCrudController
     }
 
 
-    # Helper function protected
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
+
+    protected function buildUserOptions()
+    {
+        $users = $this->userRepository->findAll();
+
+        foreach ($users as $user) {
+            $label = "ID:".$user->getId()." ".$user->getName();
+            $options[$label] = $user->getId();
+        }
+
+        return $options;
+    }
 
     /**
      * Create the option array
