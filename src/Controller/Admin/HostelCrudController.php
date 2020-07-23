@@ -10,7 +10,6 @@ use App\Repository\CountrysRepository;
 use App\Repository\CurrencyRepository;
 use App\Repository\FederalStateRepository;
 use App\Repository\RoomAmenitiesRepository;
-use App\Repository\TestGalleryRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -185,7 +184,8 @@ class HostelCrudController extends AbstractCrudController
 
         // id fields
         $id = IdField::new('id');
-        $user_id = IntegerField::new('user_id')->setFormType(HiddenType::class);
+        $user_id = IntegerField::new('user_id')
+            ->setFormTypeOption('disabled', true);
 
         // data fields
         $hostel_name = TextField::new('hostel_name');
@@ -428,7 +428,7 @@ class HostelCrudController extends AbstractCrudController
 
             // add message to admin log
             $this->adminMessagesHandler->addInfo(
-                "Der Benutzer-ID: $user hat eine neue Unterkunft angelegt.",
+                "Der Benutzer-ID: ".$user->getName()." hat eine neue Unterkunft angelegt.",
                 "Ein Benutzer hat eine neue Unterkunft angelegt."
             );
 

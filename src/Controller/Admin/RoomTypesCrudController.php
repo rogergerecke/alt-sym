@@ -5,17 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
-use App\Repository\RoomTypesRepository;
-use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -26,15 +21,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -65,6 +57,10 @@ class RoomTypesCrudController extends AbstractCrudController
      */
     private $user;
     private $hostels;
+    /**
+     * @var CrudUrlGenerator
+     */
+    private $crudUrlGenerator;
 
     /**
      * RoomTypesCrudController constructor.
@@ -72,17 +68,20 @@ class RoomTypesCrudController extends AbstractCrudController
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
      * @param Security $security
      * @param AdminMessagesHandler $adminMessagesHandler
+     * @param CrudUrlGenerator $crudUrlGenerator
      */
     public function __construct(
         HostelRepository $hostelRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository,
         Security $security,
-        AdminMessagesHandler $adminMessagesHandler
+        AdminMessagesHandler $adminMessagesHandler,
+        CrudUrlGenerator $crudUrlGenerator
     ) {
         $this->hostelRepository = $hostelRepository;
         $this->roomAmenitiesRepository = $roomAmenitiesRepository;
         $this->security = $security;
         $this->adminMessagesHandler = $adminMessagesHandler;
+        $this->crudUrlGenerator = $crudUrlGenerator;
 
         // get the user id from the logged in user
         if (null !== $security->getUser()) {
@@ -90,6 +89,7 @@ class RoomTypesCrudController extends AbstractCrudController
             $this->user_id = $this->user->getId();
             $this->hostels = $this->user->getHostels();
         }
+
     }
 
     /**
@@ -304,6 +304,7 @@ class RoomTypesCrudController extends AbstractCrudController
                             'Holzhütte'      => 'Holzhütte',
                             'Junior Suite'   => 'Junior Suite',
                             'Suite'          => 'Suite',
+                            'Ferienwohnung'  => 'Ferienwohnung',
                         ],
                     ],
                     'group_by' => 'id',
@@ -401,14 +402,11 @@ class RoomTypesCrudController extends AbstractCrudController
         }
     }
 
-   /* public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        $entityManager->getRepository(RoomTypesRepository::class)->findBy(['hostel_id'=>4]);
-        parent::persistEntity($entityManager, $entityInstance);
-    }*/
-
-
-
+    /* public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+     {
+         $entityManager->getRepository(RoomTypesRepository::class)->findBy(['hostel_id'=>4]);
+         parent::persistEntity($entityManager, $entityInstance);
+     }*/
 
 
     ##########################################################
@@ -418,58 +416,7 @@ class RoomTypesCrudController extends AbstractCrudController
     #
     #
     ##########################################################
-
-    /**
-     * If the user make changes on a entity entry
-     * so wee set the new state of Entry
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
-            $entityInstance->setIsUserMadeChanges(true);
-
-            // add message to admin log
-            $this->adminMessagesHandler->addInfo(
-                "Der Benutzer-ID: $this->user_id hat an einem Zimmer einstellung geändert.",
-                "Ein Benutzer hat ein Zimmer bearbeitet."
-            );
-        }
-
-        parent::updateEntity($entityManager, $entityInstance);
-    }
-
-
-    /**
-     * @param string $entityFqcn
-     * @return RoomTypes|mixed
-     */
-    public function createEntity(string $entityFqcn)
-    {
-
-        $room_types = new RoomTypes();
-        $room_types->setIsUserMadeChanges(true);
-
-        // add massage to admin log
-        $this->adminMessagesHandler->addInfo(
-            "Der Benutzer-ID: $this->user_id hat an einem Zimmer angelegt.",
-            "Ein Benutzer hat ein neues Zimmer angelegt."
-        );
-
-        return $room_types;
-    }
-
-
-
-    ##########################################################
-    #
-    #
-    #   Protected Helper Function
-    #
-    #
-    ##########################################################
+//todo add link filter to rooms for admin
 
     /**
      * @return array
@@ -513,5 +460,60 @@ class RoomTypesCrudController extends AbstractCrudController
         return $options;
     }
 
+
+
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
+
+    /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+
+            // add message to admin log
+            $this->adminMessagesHandler->addInfo(
+                "Der Benutzer-ID: $this->user_id hat an einem Zimmer einstellung geändert.",
+                "Ein Benutzer hat ein Zimmer bearbeitet."
+            );
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    /**
+     * @param string $entityFqcn
+     * @return RoomTypes|mixed
+     */
+    public function createEntity(string $entityFqcn)
+    {
+
+        $room_types = new RoomTypes();
+        $room_types->setIsUserMadeChanges(true);
+
+        // add massage to admin log
+        $this->adminMessagesHandler->addInfo(
+            "Der Benutzer-ID: $this->user_id hat an einem Zimmer angelegt.",
+            "Ein Benutzer hat ein neues Zimmer angelegt."
+        );
+
+        return $room_types;
+    }
+
+    protected function createUserRoomsUrl($user_id)
+    {
+
+    }
 
 }
