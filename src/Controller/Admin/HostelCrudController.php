@@ -378,97 +378,13 @@ class HostelCrudController extends AbstractCrudController
         }
     }
 
-    ##########################################
+    ##########################################################
     #
-    # Overwrite Entity
     #
-    ##########################################
-
-    /**
-     * Return a array with the select options
-     * for the federal state selection field
-     *
-     * @return array
-     */
-    protected function buildFederalStateOptions()
-    {
-        $options = [];
-
-        $federalStates = $this->federalStateRepository->findBy(['status' => true], ['sort' => 'ASC']);
-
-        foreach ($federalStates as $federalState) {
-            $options[$federalState->getName()] = $federalState->getCode();
-        }
-
-        return $options;
-    }
-
-    /**
-     * Return a array with the select options
-     * for the currency selection field
-     *
-     * @return array
-     */
-    protected function buildCurrencyOptions()
-    {
-        $options = [];
-
-        $currencies = $this->currencyRepository->findBy(['status' => true], ['sort' => 'ASC']);
-
-        foreach ($currencies as $currency) {
-            $options[$currency->getName()] = $currency->getCode();
-        }
-
-        return $options;
-    }
-
-
-    ##########################################
+    #   Entity Override
     #
-    # Helper function protected
     #
-    ##########################################
-
-    /**
-     * Return a array with the select options
-     * for the room amenities selection field
-     *
-     * @return array
-     */
-    protected function buildRoomAmenitiesOptions()
-    {
-
-        $options = [];
-
-        // get from db
-        $roomAmenities = $this->roomAmenities->getRoomAmenitiesWithDescription();
-
-        // build option array
-        foreach ($roomAmenities as $roomAmenity) {
-            $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
-        }
-
-        return $options;
-    }
-
-    /**
-     * Return a array with the select options
-     * for the amenities types selection field
-     *
-     * @return array
-     */
-    protected function buildAmenitiesTypesOptions()
-    {
-        $options = [];
-
-        $amenities_types = $this->amenitiesTypesRepository->findBy(['status' => true], ['sort' => 'ASC']);
-
-        foreach ($amenities_types as $types) {
-            $options[$types->getName()] = $types->getName();
-        }
-
-        return $options;
-    }
+    ##########################################################
 
     /**
      * If the user make changes on a entity entry
@@ -520,10 +436,97 @@ class HostelCrudController extends AbstractCrudController
         }
     }
 
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
+
+    /**
+     * Return a array with the select options
+     * for the federal state selection field
+     *
+     * @return array
+     */
+    protected function buildFederalStateOptions()
+    {
+        $options = [];
+
+        $federalStates = $this->federalStateRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($federalStates as $federalState) {
+            $options[$federalState->getName()] = $federalState->getCode();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Return a array with the select options
+     * for the currency selection field
+     *
+     * @return array
+     */
+    protected function buildCurrencyOptions()
+    {
+        $options = [];
+
+        $currencies = $this->currencyRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($currencies as $currency) {
+            $options[$currency->getName()] = $currency->getCode();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Return a array with the select options
+     * for the room amenities selection field
+     *
+     * @return array
+     */
+    protected function buildRoomAmenitiesOptions()
+    {
+
+        $options = [];
+
+        // get from db
+        $roomAmenities = $this->roomAmenities->getRoomAmenitiesWithDescription();
+
+        // build option array
+        foreach ($roomAmenities as $roomAmenity) {
+            $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
+        }
+
+        return $options;
+    }
+
+    /**
+     * Return a array with the select options
+     * for the amenities types selection field
+     *
+     * @return array
+     */
+    protected function buildAmenitiesTypesOptions()
+    {
+        $options = [];
+
+        $amenities_types = $this->amenitiesTypesRepository->findBy(['status' => true], ['sort' => 'ASC']);
+
+        foreach ($amenities_types as $types) {
+            $options[$types->getName()] = $types->getName();
+        }
+
+        return $options;
+    }
+
     /**
      * @return mixed
      */
-    protected function getHostels()
+    /*protected function getHostels()
     {
 
         $user = $this->em
@@ -533,5 +536,5 @@ class HostelCrudController extends AbstractCrudController
         $hostels = $user->getHostels();
 
         return $hostels[0]->getPostcode();
-    }
+    }*/
 }

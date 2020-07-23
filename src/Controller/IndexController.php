@@ -41,6 +41,8 @@ class IndexController extends AbstractController
 
     /**
      * @Route("/", name="index")
+     * @param LeisureRepository $leisureRepository
+     * @param EventsRepository $eventsRepository
      * @return Response
      */
     public function index(LeisureRepository $leisureRepository, EventsRepository $eventsRepository)

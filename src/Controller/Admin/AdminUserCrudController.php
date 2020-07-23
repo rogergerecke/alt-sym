@@ -8,9 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -19,9 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -109,10 +105,10 @@ class AdminUserCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'entry_options' => [
-                        'choices' => [
+                        'choices'  => [
                             $this->buildUserPrivilegesOptions(),
                         ],
-                        'label' => false,
+                        'label'    => false,
                         'group_by' => 'id',
                     ],
                 ]
@@ -138,7 +134,8 @@ class AdminUserCrudController extends AbstractCrudController
 
         $panel_user_rights = FormField::addPanel('Benutzer Rechte')->setHelp('Die Rechte des Benutzer-Kontos');
         $panel_information = FormField::addPanel('Admin Information')->setHelp(
-            'Wenn Sie die Änderung überprüft haben oder das Upgrade durchgeführt wurde entfernen Sie den Hacken damit der Kunde nicht mehr hervorgehoben wird.'
+            'Wenn Sie die Änderung überprüft haben oder das Upgrade 
+            durchgeführt wurde entfernen Sie den Hacken damit der Kunde nicht mehr hervorgehoben wird.'
         );
 
         switch ($pageName) {
@@ -189,12 +186,18 @@ class AdminUserCrudController extends AbstractCrudController
         }
     }
 
-    public function configureActions(Actions $actions): Actions
+    protected function buildUserPrivilegesOptions()
     {
-        return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_EDIT, Action::DELETE)
-            ;
+        $options = [];
+
+        $privileges = $this->privilegesTypesRepository->findBy(['status' => true]);
+
+       /* $oneYear = date('Y-m-d', strtotime(date("Y-m-d", mktime())." + 365 day"));*/
+        foreach ($privileges as $privilege) {
+            $options[$privilege->getName()] = $privilege->getCode();
+        }
+
+        return $options;
     }
 
     ################################################################
@@ -202,6 +205,21 @@ class AdminUserCrudController extends AbstractCrudController
     # Override Entity
     #
     ################################################################
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::DELETE);
+    }
+
+
+
+    #############################
+    #
+    # Helper function protected
+    #
+    #############################
 
     /**
      * Password generation on password entity update over Symfony core
@@ -214,11 +232,11 @@ class AdminUserCrudController extends AbstractCrudController
 
         // set new password with encoder interface
         if (method_exists($entityInstance, 'setPassword')) {
-            $clearPassword = $this->get('request_stack')->getCurrentRequest()->request->all('User')['password'];
+            $clearPassword = trim($this->get('request_stack')->getCurrentRequest()->request->all('User')['password']);
 
             // if user password not change save the old one
-            if (empty($clearPassword)) {
-                $entityInstance->setPassword($this->getUser()->getPassword());
+            if (isset($clearPassword) === true && $clearPassword === '') {
+                $entityInstance->setPassword($this->password);
             } else {
                 $encodedPassword = $this->passwordEncoder->encodePassword($this->getUser(), $clearPassword);
                 $entityInstance->setPassword($encodedPassword);
@@ -226,27 +244,5 @@ class AdminUserCrudController extends AbstractCrudController
         }
 
         parent::updateEntity($entityManager, $entityInstance);
-    }
-
-
-
-    #############################
-    #
-    # Helper function protected
-    #
-    #############################
-
-    protected function buildUserPrivilegesOptions()
-    {
-        $options = [];
-
-        $privileges = $this->privilegesTypesRepository->findBy(['status' => true]);
-
-        $oneYear = date('Y-m-d', strtotime(date("Y-m-d", mktime())." + 365 day"));
-        foreach ($privileges as $privilege) {
-            $options[$privilege->getName()] = $privilege->getCode();
-        }
-
-        return $options;
     }
 }
