@@ -37,8 +37,6 @@ class Hostel
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
-     * @Assert\Type(type="integer")
      */
     private $user_id;
 

@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -93,7 +94,7 @@ class AdminRoomTypesCrudController extends AbstractCrudController
 
 
         // The hostel owner id
-        $hostel_id = IntegerField::new('hostel_id', 'Zimmer zu Unterkunft')
+      /*  $hostel_id = IntegerField::new('hostel_id', 'Zimmer zu Unterkunft')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
                 [
@@ -103,9 +104,10 @@ class AdminRoomTypesCrudController extends AbstractCrudController
                     'group_by' => 'id',
                 ]
             )
-            ->setHelp('Wählen Sie die Unterkunft aus für die Sie das Zimmer-Angebot anlegen wohlen');
+            ->setHelp('Wählen Sie die Unterkunft aus für die Sie das Zimmer-Angebot anlegen wohlen');*/
+        $hostel_id = AssociationField::new('hostel');
 
-        // Additional booking fee
+            // Additional booking fee
         $booking_fee = MoneyField::new('booking_fee', 'Zusätzliche Buchungsgebühren')
             ->setCurrency('EUR')
             ->setHelp(

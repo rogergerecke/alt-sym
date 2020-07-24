@@ -11,6 +11,7 @@ use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SelectConfigurator;
@@ -87,7 +88,7 @@ class AdminHostelCrudController extends AbstractCrudController
 
         // id fields
         /* $id = IdField::new('id');*/
-        $user_id = IntegerField::new('user_id')
+      /*  $user_id = IntegerField::new('user_id')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
                 [
@@ -96,7 +97,8 @@ class AdminHostelCrudController extends AbstractCrudController
                     ],
                     'group_by' => 'id',
                 ]
-            );
+            );*/
+        $user_id = AssociationField::new('user');
 
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
@@ -147,7 +149,6 @@ class AdminHostelCrudController extends AbstractCrudController
                 ]
             );
 
-        $room_types = TextField::new('room_types');// todo dropdown array[]
 
         /* amenities choices array */
         $amenities = CollectionField::new('amenities', 'Ausstattung')->setHelp(
