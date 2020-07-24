@@ -267,7 +267,7 @@ class HostelCrudController extends AbstractCrudController
         );
 
         // Extra cost field only by admin editable
-        $sort = TextField::new('sort'); //todo add only by admin over extra pay
+        $sort = IntegerField::new('sort');
         $startpage = BooleanField::new('startpage');
         $toplisting = BooleanField::new('toplisting');
         $top_placement_finished = DateTimeField::new('top_placement_finished');

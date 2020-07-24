@@ -25,7 +25,7 @@ class Hostel
      * One Hostel has many room_types. This is the inverse side.
      * @ORM\OneToMany(targetEntity=RoomTypes::class, mappedBy="hostel")
      */
-    private $room_types;
+    private $rooms;
 
 
     /**
@@ -208,18 +208,18 @@ class Hostel
     #
     public function __construct()
     {
-        $this->room_types = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
     }
 
-    public function getRoomTypes(): Collection
+    public function getRooms(): Collection
     {
-        return $this->room_types;
+        return $this->rooms;
     }
 
 
-    public function setRoomTypes(?RoomTypes $room_types): self
+    public function setRooms(?RoomTypes $rooms): self
     {
-        $this->room_types = $room_types;
+        $this->rooms = $rooms;
 
         return $this;
     }
@@ -444,18 +444,6 @@ class Hostel
 
         return $this;
     }
-
-   /* public function getRoomTypes(): ?string
-    {
-        return $this->room_types;
-    }
-
-    public function setRoomTypes(string $room_types): self
-    {
-        $this->room_types = $room_types;
-
-        return $this;
-    }*/
 
     public function getAmenities(): ?array
     {

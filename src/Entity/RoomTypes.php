@@ -10,11 +10,31 @@ use Doctrine\ORM\Mapping as ORM;
 class RoomTypes
 {
     /**
-     * Many hostels have one user. This is the owning side.
-     * @ORM\ManyToOne(targetEntity=Hostel::class, inversedBy="room_types")
+     * A hostel can have many rooms
+     *
+     * @ORM\ManyToOne(targetEntity=Hostel::class, inversedBy="rooms")
      * @ORM\JoinColumn(name="hostel_id", referencedColumnName="id")
      */
     private $hostel;
+
+    /**
+     * @return mixed
+     */
+    public function getHostel()
+    {
+        return $this->hostel;
+    }
+
+    /**
+     * @param mixed $hostel
+     * @return RoomTypes
+     */
+    public function setHostel($hostel)
+    {
+        $this->hostel = $hostel;
+
+        return $this;
+    }
 
     /**
      * @ORM\Id()

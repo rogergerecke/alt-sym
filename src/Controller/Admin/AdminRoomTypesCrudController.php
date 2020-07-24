@@ -105,13 +105,15 @@ class AdminRoomTypesCrudController extends AbstractCrudController
                 ]
             )
             ->setHelp('Wählen Sie die Unterkunft aus für die Sie das Zimmer-Angebot anlegen wohlen');*/
-        $hostel_id = AssociationField::new('hostel');
+        $hostel_id = AssociationField::new('hostel')
+            ->setCrudController(AdminHostelCrudController::class);
 
             // Additional booking fee
         $booking_fee = MoneyField::new('booking_fee', 'Zusätzliche Buchungsgebühren')
             ->setCurrency('EUR')
             ->setHelp(
-                'Zusätzliche Buchungsgebühren, die die Nutzer dem Werbetreibenden zahlen müssen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Zusätzliche Buchungsgebühren, die die Nutzer dem Werbetreibenden zahlen müssen. 
+                Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // If the breakfast include or not
@@ -139,7 +141,8 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         $final_rate = MoneyField::new('final_rate', 'Endpreis')
             ->setCurrency('EUR')
             ->setHelp(
-                'Der endgültige Preis, den der Benutzer zahlen muss (Rabatte ausgeschlossen). Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
+                'Der endgültige Preis, den der Benutzer zahlen muss (Rabatte ausgeschlossen). 
+                Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
             );
 
         // Is the cancellation of the room order for free
@@ -149,13 +152,16 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         $hotel_fee = MoneyField::new('hotel_fee', 'Hotelgebühr')
             ->setCurrency('EUR')
             ->setHelp(
-                'Zusätzliche Gebühren, die die Benutzer zahlen müssen, um das Hotel zu bezahlen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Zusätzliche Gebühren, die die Benutzer zahlen müssen, 
+                um das Hotel zu bezahlen. Bitte betrachten Sie diese Gebühr 
+                als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // The rate model view for showing exclusive stiling for the offer (Exclusive Offer Banner)
         $rate_type = TextField::new('rate_type')
             ->setHelp(
-                'Gibt an, ob die Rate exklusiv für Mobilgeräte oder als Prämienrate gilt. Wenn nicht angegeben, wird die Rate als STANDARD betrachtet.'
+                'Gibt an, ob die Rate exklusiv für Mobilgeräte oder 
+                als Prämienrate gilt. Wenn nicht angegeben, wird die Rate als STANDARD betrachtet.'
             )->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
                 [
@@ -171,7 +177,8 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         // Local tax for the region
         $local_tax = NumberField::new('local_tax')
             ->setHelp(
-                'Stadtsteuern. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Stadtsteuern. Bitte betrachten Sie diese Gebühr 
+                als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // The meale code for the room price and type standard non all inclusive
@@ -200,7 +207,8 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         $net_rate = MoneyField::new('net_rate', 'Netto Preis')
             ->setCurrency('EUR')
             ->setHelp(
-                'Nettotarif ohne Steuern. Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
+                'Nettotarif ohne Steuern. Bitte betrachten Sie diesen Preis 
+                als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
             );
 
         $payment_type = TextField::new('payment_type', 'Zahlungsmethode');

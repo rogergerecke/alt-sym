@@ -323,7 +323,8 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return "ID:{$this->getId()} {$this->getName()}";
     }
 }
