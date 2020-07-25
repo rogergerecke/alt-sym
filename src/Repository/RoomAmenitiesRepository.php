@@ -39,7 +39,7 @@ class RoomAmenitiesRepository extends ServiceEntityRepository
               r.id = d.ra_id
              AND r.status = 1
              AND d.lang = :lang'
-        )->setParameter('lang',$_lang);
+        )->setParameter('lang', $_lang);
 
         return $query->getResult();
     }

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Hostel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -99,7 +101,8 @@ class HostelRepository extends ServiceEntityRepository
 
     /**
      * Build the QueryBuilder with the search
-     * form values and ranges $filter
+     * form values and ranges $filter for
+     * the hoste view search page
      *
      * @param array|null $filter
      * @return int|mixed|string
@@ -378,5 +381,47 @@ class HostelRepository extends ServiceEntityRepository
     public function getMinPrice()
     {
         return $this->minPrice;
+    }
+
+
+    /**
+     * Return the hostel with room types
+     * for the detail page
+     *
+     * @param $id
+     * @return int|mixed|string
+     */
+    public function findOneByIdJoinedToRoomTypes($id)
+    {
+        $qb = $this->createQueryBuilder('h')
+           ->select('h AS hostel');
+
+        $qb
+            ->where('h.id = :id');
+
+
+        $qb
+            ->innerJoin(
+                'App\Entity\RoomTypes',
+                'rt',
+                'WITH',
+                'h.id = rt.hostel_id'
+            )
+            ->orderBy('rt.final_rate', 'ASC')
+            ->addSelect('rt AS rooms');
+
+        $qb
+            ->innerJoin(
+                'App\Entity\User',
+                'u',
+                'WITH',
+                'h.user_id = u.id'
+            )
+            ->addSelect('u AS user');
+        
+
+        $qb->setParameter('id', $id);
+
+        return $qb->getQuery()->getResult();
     }
 }

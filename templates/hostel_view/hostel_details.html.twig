@@ -21,7 +21,7 @@
 
                 <!-- Hostel Heading -->
                 <h1>{{ hostel.hostelName }}</h1>
-                {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+                {% if 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
                 <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}
                     , {{ hostel.country }} {{ hostel.address }} <a href="#map">die Lage auf Karte anzeigen.</a></small>
                 {% endif %}
@@ -41,14 +41,14 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+                        {% if rooms is not empty and 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
                             {% set r = rooms.0.finalRate / 100 %}
                         ab <b>{{ r|format_currency(rooms.0.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
                         {% endif %}
                     </div>
                     <div class="card-body">
                         <!-- Its Base Account Show This -->
-                        {% if 'base_account' not in hostel.user.userPrivileges or 'premium_account' not in hostel.user.userPrivileges %}
+                        {% if 'base_account' not in user.userPrivileges or 'premium_account' not in user.userPrivileges %}
                             <p>{{ hostel.hostelName }}</p>
                             <p>{{ hostel.address }}</p>
                             <p>{{ hostel.postcode }} {{ hostel.city }}</p>
@@ -65,7 +65,7 @@
                                     class="btn btn-primary btn-sm"><i class="far fa-envelope"></i> Buchungsanfrage</a>
                         </li>
                         <!-- Only for High rate Model -->
-                        {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+                        {% if 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
                             <!-- Webpage Link -->
                             <li class="list-group-item"><a href="{{ hostel.web }}" target="_blank"
                                                            class="btn btn-primary btn-sm"><i
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Hostel Description -->
-        {% if hostel.description is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        {% if hostel.description is not empty and 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
             <hr>
             <h2>Beschreibung</h2>
             <div class="row">
@@ -121,13 +121,13 @@
         {% endif %}
 
         <!-- Hostel Availability -->
-        {% if calendar is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        {% if calendar is not empty and 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
             <h4 id="availability">Belegungsplan</h4>
             {{ include('hostel_view/_availability_calendar.html.twig') }}
         {% endif %}
 
         <!-- Hostel Rooms -->
-        {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        {% if rooms is not empty and 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
             <h4 id="rooms">Zimmer</h4>
             <div class="row">
                 <div class="col-md-12">
@@ -156,7 +156,7 @@
 
 
     <!-- Google Maps Container -->
-    {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+    {% if 'base_account' in user.userPrivileges or 'premium_account' in user.userPrivileges %}
         <div class="container mt-5 mb-5">
             <div class="row">
                 <div class="col-md-12">

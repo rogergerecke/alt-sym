@@ -18,7 +18,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SelectConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -88,17 +87,20 @@ class AdminHostelCrudController extends AbstractCrudController
 
         // id fields
         /* $id = IdField::new('id');*/
-      /*  $user_id = IntegerField::new('user_id')
-            ->setFormType(ChoiceType::class)
-            ->setFormTypeOptions(
-                [
-                    'choices'  => [
-                        $this->buildUserOptions(),
-                    ],
-                    'group_by' => 'id',
-                ]
-            );*/
-        $user_id = AssociationField::new('user');
+        /*  $user_id = IntegerField::new('user_id')
+              ->setFormType(ChoiceType::class)
+              ->setFormTypeOptions(
+                  [
+                      'choices'  => [
+                          $this->buildUserOptions(),
+                      ],
+                      'group_by' => 'id',
+                  ]
+              );*/
+        $user_id = AssociationField::new('user', 'Kunde')
+            ->setHelp('Kunde für den Sie eine Unterkunft anlegen.')
+            ->setRequired(true)
+            ->setCrudController(AdminUserCrudController::class);
 
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
@@ -192,7 +194,7 @@ class AdminHostelCrudController extends AbstractCrudController
         $top_placement_finished = DateTimeField::new('top_placement_finished', 'Ende der Top-Platzierung');
 
         // Hostel on or offline switch
-        $status = BooleanField::new('status');
+        $status = BooleanField::new('status', 'Online');
         $distance_to_see = NumberField::new('distance_to_see', 'Entfernung zum See')->setNumDecimals(2);
 
         $image = TextField::new('image', 'Erstes Bild')
@@ -270,26 +272,13 @@ class AdminHostelCrudController extends AbstractCrudController
         }
     }
 
-
     ##########################################################
     #
     #
-    #   Protected Helper Function
+    #   Entity Override
     #
     #
     ##########################################################
-
-    protected function buildUserOptions()
-    {
-        $users = $this->userRepository->findAll();
-
-        foreach ($users as $user) {
-            $label = "ID:".$user->getId()." ".$user->getName();
-            $options[$label] = $user->getId();
-        }
-
-        return $options;
-    }
 
     /**
      * Create the option array
@@ -307,6 +296,17 @@ class AdminHostelCrudController extends AbstractCrudController
 
         return $options;
     }
+
+
+
+
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
 
     /**
      * Create the option array
@@ -357,6 +357,28 @@ class AdminHostelCrudController extends AbstractCrudController
 
         foreach ($amenities_types as $types) {
             $options[$types->getName()] = $types->getName();
+        }
+
+        return $options;
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        $hostel = new Hostel();
+        $hostel->setStatus(true);
+        $hostel->setSort(100);
+        $hostel->setAmenities(['non_smoking']);
+
+        return $hostel;
+    }
+
+    protected function buildUserOptions()
+    {
+        $users = $this->userRepository->findAll();
+
+        foreach ($users as $user) {
+            $label = "ID:".$user->getId()." ".$user->getName();
+            $options[$label] = $user->getId();
         }
 
         return $options;

@@ -140,6 +140,14 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
         }
     }
 
+    ##########################################################
+    #
+    #
+    #   Entity Override
+    #
+    #
+    ##########################################################
+
 
     /**
      * Set the default status of uploade image
@@ -157,11 +165,14 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
         return $gallery;
     }
 
-    #############################
+
+    ##########################################################
     #
-    # Helper function protected
     #
-    #############################
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
 
     protected function buildHostelChoices()
     {

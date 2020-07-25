@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\RoomAmenitiesDescription;
 use App\Entity\Statistics;
 use App\Form\SearchHostelType;
+use App\Repository\HostelGalleryRepository;
 use App\Repository\HostelRepository;
-use App\Repository\RoomAmenitiesDescriptionRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\RoomTypesRepository;
-use App\Repository\HostelGalleryRepository;
 use App\Service\CalendarService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 /**
  * Class HostelViewController
@@ -132,7 +129,22 @@ class HostelViewController extends AbstractController
     ) {
 
         $hostel = null;
-        $hostel = $hostelRepository->find($id);
+        $hostel = $hostelRepository->findOneByIdJoinedToRoomTypes($id);
+
+        foreach ($hostel as $item) {
+            if (isset($item['rooms'])) {
+                $rooms[] = $item['rooms'];
+            }
+
+            if (isset($item['hostel'])) {
+                $hostel = $item['hostel'];
+            }
+
+            if (isset($item['user'])) {
+                $user = $item['user'];
+            }
+        }
+
         $services = false;
 
         // nothing hostel data exist
@@ -195,18 +207,18 @@ class HostelViewController extends AbstractController
         }
 
         // get rooms data if in database
-        $rooms = null;
-        $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);
-
+        /* $rooms = null;
+         $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);*/
 
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'hostel' => $hostel,
+                'hostel'   => $hostel,
                 'services' => $services,
-                'rooms' => $rooms,
+                'rooms'    => $rooms,
+                'user'     => $user,
                 'calendar' => $calendar->getCalendar(),
-                'gallery' => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
+                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );

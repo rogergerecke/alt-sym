@@ -25,6 +25,11 @@
 
                     return false; // for good measure
                 });
+
+                $('.collapse').on('show.bs.collapse', function () {
+                    $('.collapse.in').collapse('hide');
+                });
+
             });
             // POS_READY the script is inserted in the jQuery's ready function
         });
@@ -101,28 +106,48 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nachricht</th>
-                            <th scope="col">Stufe</th>
-                            <th scope="col">Datum</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Typ</th>
+                            <th scope="col">Vom</th>
+                            <th scope="col">Gelesen</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- Message Row -->
                         {% for adminMassage in admin_messages %}
-                            <tr>
+                            <tr {% if loop.index >= 4 %}class="collapse"{% endif %}>
                                 <th scope="row">{{ adminMassage.id }}</th>
                                 <td>
                                     {{ adminMassage.heading|raw }}
                                     {{ adminMassage.subHeading|raw }}
                                     {{ adminMassage.message|raw }}
                                 </td>
-                                <td><span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span></td>
-                                <td>{{ adminMassage.dateAdd|date('d.m.Y') }} </td>
+                                <td><span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
+                                </td>
+                                <td>{{ adminMassage.dateAdd|date('d.m.Y H:i:s') }} </td>
                                 <td><span class="massage-date"><a
                                                 href="{{ path('admin_remove_message', {'id': adminMassage.id}) }}"
                                                 class="delete btn btn-sm btn-danger"> <i
                                                     class="fa fa-trash-alt"></i></a></span></td>
                             </tr>
+                            {% if loop.index == 3 %}
+                                <tr>
+
+                                    <td>
+
+                                    </td>
+                                    <td class="text-right">
+                                        <p>
+                                                <button class="btn btn-outline-primary" data-toggle="collapse"
+                                                        data-target=".collapse">
+                                                    Mehr
+                                                    anzeigen <i class="fa fa-arrow-down"></i>
+                                                </button></p>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
