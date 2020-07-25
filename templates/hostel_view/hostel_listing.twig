@@ -101,7 +101,7 @@
                                                  aria-labelledby="heading_{{ hostel.id }}"
                                                  data-parent="#accordion_{{ hostel.id }}">
                                                 <div class="card-body">
-                                                    {% for room in hostel.roomTypes %}
+                                                    {% for room in hostel.rooms %}
                                                         <p>
                                                             {% set r = room.finalRate / 100 %}
                                                             {{ room.accommodationType }} ab

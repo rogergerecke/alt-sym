@@ -129,22 +129,7 @@ class HostelViewController extends AbstractController
     ) {
 
         $hostel = null;
-        $hostel = $hostelRepository->findOneByIdJoinedToRoomTypes($id);
-
-        foreach ($hostel as $item) {
-            if (isset($item['rooms'])) {
-                $rooms[] = $item['rooms'];
-            }
-
-            if (isset($item['hostel'])) {
-                $hostel = $item['hostel'];
-            }
-
-            if (isset($item['user'])) {
-                $user = $item['user'];
-            }
-        }
-
+        $hostel = $hostelRepository->find($id);
         $services = false;
 
         // nothing hostel data exist
@@ -207,20 +192,21 @@ class HostelViewController extends AbstractController
         }
 
         // get rooms data if in database
-        /* $rooms = null;
-         $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);*/
+        $rooms = null;
+        $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);
+
 
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'hostel'   => $hostel,
+                'hostel' => $hostel,
                 'services' => $services,
-                'rooms'    => $rooms,
-                'user'     => $user,
+                'rooms' => $rooms,
                 'calendar' => $calendar->getCalendar(),
-                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
+                'gallery' => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );
     }
 }
+

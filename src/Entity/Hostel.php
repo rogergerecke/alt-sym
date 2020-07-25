@@ -445,6 +445,18 @@ class Hostel
         return $this;
     }
 
+   /* public function getRoomTypes(): ?string
+    {
+        return $this->room_types;
+    }
+
+    public function setRoomTypes(string $room_types): self
+    {
+        $this->room_types = $room_types;
+
+        return $this;
+    }*/
+
     public function getAmenities(): ?array
     {
         return $this->amenities;
@@ -612,4 +624,17 @@ class Hostel
 
         return $this;
     }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link https://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    public function __toString()
+    {
+        return "ID:".$this->getId()." ".substr($this->getHostelName(),0,20)."...";
+    }
+
+
 }

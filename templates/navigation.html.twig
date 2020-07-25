@@ -21,7 +21,7 @@
             </li>
             <!-- Notice link -->
             <li class="nav-item">
-               <a class="nav-link {% if app.request.get('_route') == 'notice' %}active{% endif %}" href="{{ path('notice') }}">Merkzettel {% if app.session.get('notice') is not empty %}<span class="badge badge-pill badge-success">{{ app.session.get('notice')|length }}</span>{% endif %}</a>
+               <a class="nav-link {% if app.request.get('_route') == 'notice' %}active{% endif %}" href="{{ path('notice') }}">Merkzettel <span class="badge badge-pill badge-success" id="counter">{% if app.session.get('notice') is not empty %}{{ app.session.get('notice')|length }}{% else %}0{% endif %}</span></a>
             </li>
 
             <!-- Sub Dropdown -->
