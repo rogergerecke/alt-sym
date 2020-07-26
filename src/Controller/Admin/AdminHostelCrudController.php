@@ -84,19 +84,7 @@ class AdminHostelCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
-        // id fields
-        /* $id = IdField::new('id');*/
-        /*  $user_id = IntegerField::new('user_id')
-              ->setFormType(ChoiceType::class)
-              ->setFormTypeOptions(
-                  [
-                      'choices'  => [
-                          $this->buildUserOptions(),
-                      ],
-                      'group_by' => 'id',
-                  ]
-              );*/
+        // The user field build the association to the hostels
         $user_id = AssociationField::new('user', 'Kunde')
             ->setHelp('Kunde für den Sie eine Unterkunft anlegen.')
             ->setRequired(true)
@@ -370,17 +358,5 @@ class AdminHostelCrudController extends AbstractCrudController
         $hostel->setAmenities(['non_smoking']);
 
         return $hostel;
-    }
-
-    protected function buildUserOptions()
-    {
-        $users = $this->userRepository->findAll();
-
-        foreach ($users as $user) {
-            $label = "ID:".$user->getId()." ".$user->getName();
-            $options[$label] = $user->getId();
-        }
-
-        return $options;
     }
 }

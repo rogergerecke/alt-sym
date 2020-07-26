@@ -10,20 +10,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -61,6 +64,10 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var CrudUrlGenerator
      */
     private $crudUrlGenerator;
+    /**
+     * @var AdminContextProvider
+     */
+    private $adminContextProvider;
 
     /**
      * RoomTypesCrudController constructor.
@@ -69,13 +76,15 @@ class RoomTypesCrudController extends AbstractCrudController
      * @param Security $security
      * @param AdminMessagesHandler $adminMessagesHandler
      * @param CrudUrlGenerator $crudUrlGenerator
+     * @param AdminContextProvider $adminContextProvider
      */
     public function __construct(
         HostelRepository $hostelRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository,
         Security $security,
         AdminMessagesHandler $adminMessagesHandler,
-        CrudUrlGenerator $crudUrlGenerator
+        CrudUrlGenerator $crudUrlGenerator,
+        AdminContextProvider $adminContextProvider
     ) {
         $this->hostelRepository = $hostelRepository;
         $this->roomAmenitiesRepository = $roomAmenitiesRepository;
@@ -90,6 +99,7 @@ class RoomTypesCrudController extends AbstractCrudController
             $this->hostels = $this->user->getHostels();
         }
 
+        $this->adminContextProvider = $adminContextProvider;
     }
 
     /**
@@ -99,6 +109,13 @@ class RoomTypesCrudController extends AbstractCrudController
     {
         return RoomTypes::class;
     }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle(Crud::PAGE_NEW, 'Zimmer anlegen');
+    }
+
 
     /**
      * Modified index builder to show only
@@ -120,32 +137,33 @@ class RoomTypesCrudController extends AbstractCrudController
 
         $qb = $this->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $alias = $qb->getRootAliases();
-
         foreach ($this->hostels as $hostel) {
-            $qb->andWhere($alias[0].'.hostel_id = '.$hostel->getId());
+            $qb->orWhere($alias[0].'.hostel_id = '.$hostel->getId());
         }
 
         return $qb;
     }
 
     /**
+     * Configure the fields to show for the
+     * user in the backend
+     *
      * @param string $pageName
      * @return iterable
      */
     public function configureFields(string $pageName): iterable
     {
-
-        $id = IdField::new('id');
-
-        // The hostel owner id
-        $hostel_id = IntegerField::new('hostel_id', 'Zimmer zu Unterkunft')
-            ->setFormType(ChoiceType::class)
+        $required_panel =  FormField::addPanel('Mindestangaben');
+        $extended_panel =  FormField::addPanel('Zusatzangaben')
+            ->setHelp('Um so mehr Angaben Sie machen um so besser wird Ihr Angebot bei Google angezeigt.');
+        // The hostel field build the association to the rooms
+        $hostel_id = AssociationField::new('hostel')
             ->setFormTypeOptions(
                 [
-                    'choices'  => [
-                        $this->getHostelData(),
-                    ],
-                    'group_by' => 'id',
+                    'query_builder' => function (HostelRepository $hr) {
+                        return $hr->createQueryBuilder('h')
+                            ->andWhere("h.user_id = $this->user_id");
+                    },
                 ]
             )
             ->setHelp('Hostel auswählen zu dem ein Zimmer angelegt werden soll');
@@ -154,7 +172,9 @@ class RoomTypesCrudController extends AbstractCrudController
         $booking_fee = MoneyField::new('booking_fee', 'Zusätzliche Buchungsgebühren')
             ->setCurrency('EUR')
             ->setHelp(
-                'Zusätzliche Buchungsgebühren, die die Nutzer dem Werbetreibenden zahlen müssen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Zusätzliche Buchungsgebühren, die die Nutzer dem Werbetreibenden 
+                zahlen müssen. Bitte betrachten Sie diese Gebühr als durchschnittliche 
+                Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // If the breakfast include or not
@@ -182,7 +202,8 @@ class RoomTypesCrudController extends AbstractCrudController
         $final_rate = MoneyField::new('final_rate', 'Endpreis')
             ->setCurrency('EUR')
             ->setHelp(
-                'Der endgültige Preis, den der Benutzer zahlen muss (Rabatte ausgeschlossen). Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
+                'Der endgültige Preis, den der Benutzer zahlen muss (Rabatte ausgeschlossen). 
+                Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
             );
 
         // Is the cancellation of the room order for free
@@ -192,13 +213,15 @@ class RoomTypesCrudController extends AbstractCrudController
         $hotel_fee = MoneyField::new('hotel_fee', 'Hotelgebühr')
             ->setCurrency('EUR')
             ->setHelp(
-                'Zusätzliche Gebühren, die die Benutzer zahlen müssen, um das Hotel zu bezahlen. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Zusätzliche Gebühren, die die Benutzer zahlen müssen, um das Hotel zu bezahlen. 
+                Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // The rate model view for showing exclusive stiling for the offer (Exclusive Offer Banner)
         $rate_type = TextField::new('rate_type')
             ->setHelp(
-                'Gibt an, ob die Rate exklusiv für Mobilgeräte oder als Prämienrate gilt. Wenn nicht angegeben, wird die Rate als STANDARD betrachtet.'
+                'Gibt an, ob die Rate exklusiv für Mobilgeräte oder als Prämienrate gilt. 
+                Wenn nicht angegeben, wird die Rate als STANDARD betrachtet.'
             )->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
                 [
@@ -214,7 +237,8 @@ class RoomTypesCrudController extends AbstractCrudController
         // Local tax for the region
         $local_tax = NumberField::new('local_tax')
             ->setHelp(
-                'Stadtsteuern. Bitte betrachten Sie diese Gebühr als durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
+                'Stadtsteuern. Bitte betrachten Sie diese Gebühr als 
+                durchschnittliche Gebühr pro Tag für den gesamten Aufenthalt.'
             );
 
         // The meale code for the room price and type standard non all inclusive
@@ -243,10 +267,16 @@ class RoomTypesCrudController extends AbstractCrudController
         $net_rate = MoneyField::new('net_rate', 'Netto Preis')
             ->setCurrency('EUR')
             ->setHelp(
-                'Nettotarif ohne Steuern. Bitte betrachten Sie diesen Preis als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
+                'Nettotarif ohne Steuern. Bitte betrachten Sie diesen Preis 
+                als Durchschnittspreis pro Tag für den gesamten Aufenthalt.'
             );
 
-        $payment_type = TextField::new('payment_type', 'Zahlungsmethode');
+        $payment_type = TextField::new('payment_type', 'Zahlungsmethode')
+            ->setFormTypeOptions(
+                [
+                'data'=> 'Vorkasse bei Ankunft',
+                ]
+            );
 
         // Have we a resort fee for this room
         $resort_fee = MoneyField::new('resort_fee', 'Kurtaxe pro Tag')
@@ -270,7 +300,12 @@ class RoomTypesCrudController extends AbstractCrudController
             );
 
         $room_code = TextField::new('room_code', 'Zimmernummer / Stellplatznummer')
-            ->setHelp('Die Zimmernummer oder Stellplatznummer bei Camping');
+            ->setHelp('Die Zimmernummer oder Stellplatznummer bei Camping')
+            ->setFormTypeOptions(
+                [
+                    'data'=> 'EG',
+                ]
+            );
 
         $service_charge = MoneyField::new('service_charge', 'Servicegebühr')
             ->setCurrency('EUR');
@@ -283,6 +318,7 @@ class RoomTypesCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'empty_data' => '19.00',
+                    'data'=> '19.00',
                 ]
             );
 
@@ -366,26 +402,29 @@ class RoomTypesCrudController extends AbstractCrudController
             case Crud::PAGE_EDIT:
             case Crud::PAGE_NEW:
                 return [
-                    $name,
+                    $required_panel,
                     $hostel_id,
-                    $booking_fee,
+                    $name,
                     $currency,
                     $vat,
-                    $discounts,
                     $final_rate,
+                    $payment_type,
+                    $meal_code,
+                    $accommodation_type,
+                    $room_code,
+
+                    $extended_panel,
+                    $booking_fee,
+                    $discounts,
                     $hotel_fee,
                     $rate_type,
                     $local_tax,
                     $net_rate,
-                    $payment_type,
                     $resort_fee,
                     $room_amenities,
-                    $room_code,
                     $service_charge,
                     $url,
                     $landing_page_url,
-                    $meal_code,
-                    $accommodation_type,
                     $breakfast_included,
                     $free_cancellation,
                     $is_handicapped_accessible,
@@ -402,70 +441,11 @@ class RoomTypesCrudController extends AbstractCrudController
         }
     }
 
-    /* public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
-     {
-         $entityManager->getRepository(RoomTypesRepository::class)->findBy(['hostel_id'=>4]);
-         parent::persistEntity($entityManager, $entityInstance);
-     }*/
-
 
     ##########################################################
     #
     #
     #   Entity Override
-    #
-    #
-    ##########################################################
-//todo add link filter to rooms for admin
-
-    /**
-     * @return array
-     */
-    protected function getHostelData()
-    {
-        $hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id]);
-
-        $option = null;
-
-        foreach ($hostels as $hostel) {
-            $name = 'ID: '.$hostel->getId().', '.stripslashes($hostel->getHostelName());
-            $option[$name] = $hostel->getId();
-        }
-
-        if ($option === null) {
-            $this->addFlash('danger', 'Sie haben Noch kein Hostel angelegt');
-        }
-
-
-        return $option;
-    }
-
-    /**
-     * Create the option array
-     * @return array
-     */
-    protected function buildRoomAmenitiesOptions()
-    {
-
-        $options = [];
-
-        // get from db
-        $roomAmenities = $this->roomAmenitiesRepository->getRoomAmenitiesWithDescription();
-
-        // build option array
-        foreach ($roomAmenities as $roomAmenity) {
-            $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
-        }
-
-        return $options;
-    }
-
-
-
-    ##########################################################
-    #
-    #
-    #   Protected Helper Function
     #
     #
     ##########################################################
@@ -504,16 +484,53 @@ class RoomTypesCrudController extends AbstractCrudController
 
         // add massage to admin log
         $this->adminMessagesHandler->addInfo(
-            "Der Benutzer-ID: $this->user_id hat an einem Zimmer angelegt.",
-            "Ein Benutzer hat ein neues Zimmer angelegt."
+            "Das angelegte Zimmer <a href='".$this->createUserRoomsUrl()."' class='btn btn-sm btn-warning'>prüfen</a>.",
+            "Ein Benutzer hat ein neues Zimmer angelegt.",
+            "Benutzer: ".$this->user->getName().""
         );
 
         return $room_types;
     }
 
-    protected function createUserRoomsUrl($user_id)
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
+
+
+    /**
+     * Create the option array
+     * @return array
+     */
+    protected function buildRoomAmenitiesOptions()
     {
 
+        $options = [];
+
+        // get from db
+        $roomAmenities = $this->roomAmenitiesRepository->getRoomAmenitiesWithDescription();
+
+        // build option array
+        foreach ($roomAmenities as $roomAmenity) {
+            $options[$roomAmenity[0]->getName()] = $roomAmenity['name'];
+        }
+
+        return $options;
+    }
+
+    protected function createUserRoomsUrl()
+    {
+        $url = $this->crudUrlGenerator->build()
+            ->setDashboard(AdminDashboardController::class)
+            ->setController(AdminRoomTypesCrudController::class)
+            ->setAction(Action::DETAIL)
+            ->setEntityId($this->adminContextProvider->getContext()->getEntity()->getPrimaryKeyValue())
+            ->generateUrl();
+
+        return $url;
     }
 
 }

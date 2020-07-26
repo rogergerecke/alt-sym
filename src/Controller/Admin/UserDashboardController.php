@@ -144,14 +144,12 @@ class UserDashboardController extends AbstractDashboardController
         $this->systemOptions = $systemOptions;
         $this->mailer = $mailer;
 
-
         // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
             $this->user_account = $this->userRepository->find($this->user_id);
             $this->user_privileges = $this->user_account->getUserPrivileges();
         }
-
 
         // check if user have hostel than get all ids for menu building
         if ($hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id])) {
@@ -245,7 +243,8 @@ class UserDashboardController extends AbstractDashboardController
 
             $this->addFlash(
                 'success',
-                'Ihre Upgrade anfrage wurde gesendet versendet.  Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
+                'Ihre Upgrade anfrage wurde gesendet versendet.  
+                Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
             );
 
             $adminMessagesHandler->addInfo(
@@ -278,58 +277,6 @@ class UserDashboardController extends AbstractDashboardController
                 'support_phone_number'  => $options->getSupportPhoneNumber(),
             ]
         );
-    }
-
-    /**
-     * Build the User-Profil Edit Url for the admin
-     * @param $id
-     * @return CrudUrlBuilder
-     */
-    protected function createEditUrl($id): string
-    {
-        return $this->crudUrlGenerator->build()
-            ->setDashboard(AdminDashboardController::class)
-            ->setController(AdminUserCrudController::class)
-            ->setAction(Action::EDIT)
-            ->setEntityId($id);
-    }
-
-    /**
-     * Send the Registration mail to the new user
-     * with the dynamic twig templates vars
-     * @param array $email_template_vars
-     */
-    protected function sendUpgradeWishMail(array $email_template_vars): void
-    {
-        // upgrade massage for the system admin
-        // do anything else you need here, like send an email
-        $message = new \Swift_Message('Kundenkonto Upgrade Wunsch bei Altmühlsee');
-
-        // send a copy to
-        if (null !== ($this->systemOptions->getCopiedReviverEmailAddress())) {
-            $message->setCc($this->systemOptions->getCopiedReviverEmailAddress());
-        }
-
-        // if developer mode send mails to the developer
-        if (null !== ($this->systemOptions->getTestEmailAddress())) {
-            $message->setTo($this->systemOptions->getTestEmailAddress());
-        } else {
-            // real receiver email address from configuration
-            $message->setTo($this->systemOptions->getSupportEmailAddress());
-        }
-
-        $message
-            ->setFrom($this->systemOptions->getMailSystemAbsenceAddress())
-            ->setBody(
-                $this->renderView(
-                // Email-Template templates/emails/user_wants_upgrade.html.twig
-                    'emails/user_wants_upgrade.html.twig',
-                    $email_template_vars
-                ),
-                'text/html'
-            );
-
-        $this->mailer->send($message);
     }
 
     /**
@@ -381,7 +328,7 @@ class UserDashboardController extends AbstractDashboardController
                 yield MenuItem::section('Meine Unterkunft');
                 // add the hostels to menu
                 foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
+                    $hostel_name = substr($userHostel->getHostelName(), 0, 15).'...';
 
                     yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
                         ->setAction('edit')
@@ -396,9 +343,7 @@ class UserDashboardController extends AbstractDashboardController
             // have the user hostel so he cant add rooms and images for the hostel
             // todo filter by user
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
-                    ->setQueryParameter('filterField', 'hostel_id')
-                    ->setQueryParameter('filter', 4);
+                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class);
                 yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
             }
         }
@@ -429,27 +374,18 @@ class UserDashboardController extends AbstractDashboardController
         yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
     }
 
-    /**
-     * Check the user have the privileges
-     * for menu options
-     *
-     * @param array $privileges
-     * @return bool
-     */
-    protected function isUserHavePrivileges(array $privileges): bool
-    {
-        foreach ($privileges as $privilege) {
-            if (in_array($privilege, $this->user_privileges)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
 
     /**
      * Create the ordinary user menu top
      * right corner
+     *
      * @param UserInterface $user
      * @return UserMenu
      */
@@ -481,4 +417,75 @@ class UserDashboardController extends AbstractDashboardController
                 ]
             );
     }
+
+    /**
+     * Build the User-Profil Edit Url for the admin
+     * @param $id
+     * @return CrudUrlBuilder
+     */
+    protected function createEditUrl($id): string
+    {
+        return $this->crudUrlGenerator->build()
+            ->setDashboard(AdminDashboardController::class)
+            ->setController(AdminUserCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($id);
+    }
+
+    /**
+     * Check the user have the privileges
+     * for menu options
+     *
+     * @param array $privileges
+     * @return bool
+     */
+    protected function isUserHavePrivileges(array $privileges): bool
+    {
+        foreach ($privileges as $privilege) {
+            if (in_array($privilege, $this->user_privileges)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Send the Registration mail to the new user
+     * with the dynamic twig templates vars
+     * @param array $email_template_vars
+     */
+    protected function sendUpgradeWishMail(array $email_template_vars): void
+    {
+        // upgrade massage for the system admin
+        // do anything else you need here, like send an email
+        $message = new \Swift_Message('Kundenkonto Upgrade Wunsch bei Altmühlsee');
+
+        // send a copy to
+        if (null !== ($this->systemOptions->getCopiedReviverEmailAddress())) {
+            $message->setCc($this->systemOptions->getCopiedReviverEmailAddress());
+        }
+
+        // if developer mode send mails to the developer
+        if (null !== ($this->systemOptions->getTestEmailAddress())) {
+            $message->setTo($this->systemOptions->getTestEmailAddress());
+        } else {
+            // real receiver email address from configuration
+            $message->setTo($this->systemOptions->getSupportEmailAddress());
+        }
+
+        $message
+            ->setFrom($this->systemOptions->getMailSystemAbsenceAddress())
+            ->setBody(
+                $this->renderView(
+                // Email-Template templates/emails/user_wants_upgrade.html.twig
+                    'emails/user_wants_upgrade.html.twig',
+                    $email_template_vars
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
+    }
+
 }

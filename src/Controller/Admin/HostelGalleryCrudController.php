@@ -76,7 +76,7 @@ class HostelGalleryCrudController extends AbstractCrudController
         $alias = $qb->getRootAliases();
 
         foreach ($this->hostels as $hostel) {
-            $qb->andWhere($alias[0].'.hostel_id = '.$hostel->getId());
+            $qb->orWhere($alias[0].'.hostel_id = '.$hostel->getId());
         }
 
         return $qb;
@@ -95,7 +95,7 @@ class HostelGalleryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
 
-        $id = IdField::new('id');
+
         $hostel_id = IntegerField::new('hostel_id', 'Bild von Unterkunft')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
@@ -109,6 +109,7 @@ class HostelGalleryCrudController extends AbstractCrudController
 
                 ]
             );
+
         $name = TextField::new('name', 'Text für Suchmaschiene');
         $image = ImageField::new('image', 'Bild')
             ->setFormType(ElFinderType::class)
