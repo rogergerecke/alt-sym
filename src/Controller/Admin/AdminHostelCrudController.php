@@ -220,6 +220,8 @@ class AdminHostelCrudController extends AbstractCrudController
                     $postcode,
                     $city,
                     $status,
+                    $startpage,
+                    $toplisting,
                 ];
                 break;
             case Crud::PAGE_NEW:

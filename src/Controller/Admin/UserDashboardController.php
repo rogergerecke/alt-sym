@@ -178,6 +178,8 @@ class UserDashboardController extends AbstractDashboardController
         $hostel_listing_views = null;
         $hostel_detail_views = null;
         $hostel_notice = null;
+
+        // have the user hostels return the statistic
         if ($this->userHaveHostel) {
             $statistics = $this->statisticsRepository->findAll();
 

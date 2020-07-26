@@ -120,12 +120,12 @@ class AdminUserCrudController extends AbstractCrudController
             );
 
         // have a user made changes on his account
-        $is_user_made_changes = BooleanField::new('is_user_made_changes', 'Änderung?')
+        $is_user_made_changes = BooleanField::new('isUserMadeChanges', 'Änderung?')
             ->setHelp('Hat der Kunde änderung an diesem Konto vorgenommen?')
             ->setSortable(true);
 
         // wont the user a upgrade
-        $is_he_wants_upgrade = BooleanField::new('is_he_wants_upgrade', 'Upgrade?')
+        $is_he_wants_upgrade = BooleanField::new('isHeWantsUpgrade', 'Upgrade?')
             ->setHelp('Möchte dieser Kunde ein Upgrade machen?')
             ->setSortable(true);
 
@@ -221,7 +221,9 @@ class AdminUserCrudController extends AbstractCrudController
 
         // set new password with encoder interface
         if (method_exists($entityInstance, 'setPassword')) {
-            $clearPassword = trim($this->get('request_stack')->getCurrentRequest()->request->all('User')['password']);
+            if (null !== $clearPassword = isset($this->get('request_stack')->getCurrentRequest()->request->all('User')['password'])) {
+                $clearPassword = trim($clearPassword);
+            }
 
             // if user password not change save the old one
             if (isset($clearPassword) === true && $clearPassword === '') {
@@ -244,7 +246,7 @@ class AdminUserCrudController extends AbstractCrudController
     public function createEntity(string $entityFqcn)
     {
         $user = new User();
-        $user->setPartnerId(rand(11111, 99999));
+        $user->setPartnerId(rand(11111, 99999));// todo change to ramsey/uuid
 
 
         // if user password empty generate one
