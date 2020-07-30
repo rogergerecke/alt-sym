@@ -349,7 +349,7 @@ class RoomTypesCrudController extends AbstractCrudController
 
         // Number of units the unique partner reference
         $number_of_units = IntegerField::new('number_of_units', 'Anzahl dieses Zimmers')
-            ->setHelp('Wie oft verfügen Sie von dieser Art des Raumes');
+            ->setHelp('z.b 5 dann wird im Angebot 5x Doppelzimmer für 49 EUR angezeigt');
 
         // Numeric size of the unit in square feet or meters
         $unit_size = IntegerField::new('unit_size', 'Raum / Platz größe');
@@ -371,7 +371,7 @@ class RoomTypesCrudController extends AbstractCrudController
 
         // Number of guests allowed per unit
         $unit_occupancy = IntegerField::new('unit_occupancy', 'Anzahl Gäste in diesem Zimmer')
-            ->setHelp('Die erlaubte Gästeanzahl für diesen Raum, wichtig für die Suchfunktion');
+            ->setHelp('z.b. 2 dann wird in der Suchfunktion 5 Zimmer x2 also 10 Gäste maximal in der Suche');
 
         $number_of_bedrooms = NumberField::new('number_of_bedrooms', 'Anzahl Schlafzimmer');
         $number_of_bathrooms = NumberField::new('number_of_bathrooms', 'Anzahl Badezimmer');
@@ -412,6 +412,8 @@ class RoomTypesCrudController extends AbstractCrudController
                     $meal_code,
                     $accommodation_type,
                     $room_code,
+                    $number_of_units,
+                    $unit_occupancy,
 
                     $extended_panel,
                     $booking_fee,
@@ -428,10 +430,8 @@ class RoomTypesCrudController extends AbstractCrudController
                     $breakfast_included,
                     $free_cancellation,
                     $is_handicapped_accessible,
-                    $number_of_units,
                     $unit_size,
                     $unit_type,
-                    $unit_occupancy,
                     $number_of_bedrooms,
                     $number_of_bathrooms,
                     $floor_number,
