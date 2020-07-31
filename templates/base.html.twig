@@ -19,27 +19,61 @@
 </head>
 <body id="body">
 <div class="container-fluid">
-    <!-- Top Header Banner -->
-    <div class="bg-dark p-1" id="header-banner">
-        <div class="row">
-            {% if systemoption.supportEmailAddress %}
-            <div class="col-md-6">
-                <div class="text-left text-white pl-2 d-none d-md-block">
-                    <i class="fas fa-envelope"></i>
-                    {{ systemoption.supportEmailAddress }}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <!-- Admin Tool Bar -->
+            <div class="bg-light p-1" id="header-banner">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-left pl-2 text-primary">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <a href="{{ path('admin') }}">Dashboard</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Admin Edit Hostel -->
+                        {% if app.request.get('_route') == 'hostel_details' %}
+                            {% set entiy_id = app.request.get('id') %}
+                            {% set url = ea_url()
+                                .setDashboard('App\\Controller\\Admin\\AdminDashboardController')
+                                .setController('App\\Controller\\Admin\\AdminHostelCrudController')
+                                .setAction('edit')
+                                .setEntityId(entiy_id) %}
+                            <div class="text-right pr-2 text-warning">
+                                <i class="fas fa-edit"></i>
+                                <a href="{{ url }}">Eintrag bearbeiten</a>
+                            </div>
+                        {% endif %}
+                        <!-- Admin Edit Hostel #END -->
+                    </div>
                 </div>
             </div>
-            {% endif %}
-            {% if systemoption.outgoingPortalLink %}
-            <div class="col-md-6">
-                <div class="text-right text-white pr-2">
-                    {{ systemoption.outgoingPortalLink|raw }}
-                </div>
+            <!-- Admin Tool Bar #END -->
+
+        {% endif %}
+    {% else %}
+        <!-- Top Header Banner -->
+        <div class="bg-dark p-1" id="header-banner">
+            <div class="row">
+                {% if systemoption.supportEmailAddress %}
+                    <div class="col-md-6">
+                        <div class="text-left text-white pl-2 d-none d-md-block">
+                            <i class="fas fa-envelope"></i>
+                            {{ systemoption.supportEmailAddress }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if systemoption.outgoingPortalLink %}
+                    <div class="col-md-6">
+                        <div class="text-right text-white pr-2">
+                            {{ systemoption.outgoingPortalLink|raw }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-    </div>
-    <!-- Top Header Banner #END -->
+        <!-- Top Header Banner #END -->
+    {% endif %}
 
     <!-- Navigation -->
     <header class="header">
