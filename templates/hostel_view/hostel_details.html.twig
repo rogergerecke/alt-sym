@@ -22,8 +22,9 @@
                 <!-- Hostel Heading -->
                 <h1>{{ hostel.hostelName }}</h1>
                 {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
-                <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}
-                    , {{ hostel.country }} {{ hostel.address }} <a href="#map">die Lage auf Karte anzeigen.</a></small>
+                    <small class="pb-3"><i class="fa fa-map-marker-alt"></i> {{ hostel.city }}
+                        , {{ hostel.country }} {{ hostel.address }} <a href="#map">die Lage auf Karte
+                            anzeigen.</a></small>
                 {% endif %}
             </div>
         </div>
@@ -32,8 +33,8 @@
                 <!-- Image Slider -->
                 <div class="MagicSlideshow" data-options="selectors: bottom; selectors-style: thumbnails;">
                     {% for image in gallery %}
-                    <img src="{{ image.image }}"
-                         alt="{{ image.name|striptags|raw }}">
+                        <img src="{{ image.image }}"
+                             alt="{{ image.name|striptags|raw }}">
                     {% endfor %}
                 </div>
 
@@ -43,7 +44,7 @@
                     <div class="card-header bg-primary text-white">
                         {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
                             {% set r = rooms.0.finalRate / 100 %}
-                        ab <b>{{ r|format_currency(rooms.0.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
+                            ab <b>{{ r|format_currency(rooms.0.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
                         {% endif %}
                     </div>
                     <div class="card-body">
@@ -121,10 +122,15 @@
         {% endif %}
 
         <!-- Hostel Availability -->
-        {% if calendar is not empty and hostel.occupancy is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
-            <h4 id="availability">Belegungsplan</h4>
-            {{ include('hostel_view/_availability_calendar.html.twig') }}
+        {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+            {% if calendar is not empty %}
+                {% if hostel.occupancy|keys|length > 0 %}
+                    <h4 id="availability">Belegungsplan</h4>
+                    {{ include('hostel_view/_availability_calendar.html.twig') }}
+                {% endif %}
+            {% endif %}
         {% endif %}
+        <!-- Hostel Availability #END -->
 
         <!-- Hostel Rooms -->
         {% if rooms is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
@@ -157,13 +163,13 @@
 
     <!-- Google Maps Container -->
     {% if 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        {% if hostel.latitude is not empty and hostel.longitude is not empty %}
         <div class="container mt-5 mb-5">
             <div class="row">
                 <div class="col-md-12">
                     <div id="map" style="width: 100%; height: 500px">
 
                     </div>
-
                     <!-- Google maps script -->
                     <script>
                         // Initialize and add the map
@@ -185,6 +191,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

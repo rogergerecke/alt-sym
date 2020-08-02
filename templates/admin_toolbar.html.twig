@@ -1,4 +1,4 @@
-<div class="bg-light p-1" id="header-banner">
+<div class="bg-light p-2" id="header-banner">
     <div class="row">
         <div class="col-md-6">
             <div class="text-left pl-3 text-primary">
@@ -15,7 +15,7 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Bearbeiten
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <!-- Admin Edit Hostel -->
                         {% set entiy_id = app.request.get('id') %}
                         {% set url = ea_url()
