@@ -154,19 +154,16 @@ class AdminDashboardController extends AbstractDashboardController
         /* Hostel Manager section */
         [
             yield MenuItem::section('Manager', 'fa fa-house-user'),
-
             yield MenuItem::linkToCrud('Benutzerkonten', 'fa fa-user', User::class)
                 ->setController(AdminUserCrudController::class),
-
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
-
-            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)->setController(
-                AdminRoomTypesCrudController::class
-            ),
-
-            yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)->setController(
-                AdminHostelCrudController::class
+            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)
+                ->setController(AdminRoomTypesCrudController::class),
+            yield MenuItem::linkToCrud('Statistiken', 'fa fa-hotel', Hostel::class)
+                ->setController(AdminHostelCrudController::class),
+            yield MenuItem::linkToCrud('Belegungspläne', 'fa fa-calendar', Hostel::class)
+                ->setController(AdminOccupancyPlanCrudController::class
             ),
         ];
 
