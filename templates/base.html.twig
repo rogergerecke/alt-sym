@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {# todo IMPORTENT remove in production no index #}
-    <meta name="robots" content="noindex, nofollow">
+
+    {% if systemoption.getIndexAllow == 'false' %}
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    {% endif %}
+
     <meta name="description" content="{% block description %}{{ systemoption.webSiteName }}{% endblock %}">
     <title>{% block title %}{{ systemoption.webSiteName }}{% endblock %}</title>
     <!-- Google Fonts -->

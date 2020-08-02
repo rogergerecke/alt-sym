@@ -153,8 +153,8 @@ class RoomTypesCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
-        $required_panel =  FormField::addPanel('Mindestangaben');
-        $extended_panel =  FormField::addPanel('Zusatzangaben')
+        $required_panel = FormField::addPanel('Mindestangaben');
+        $extended_panel = FormField::addPanel('Zusatzangaben')
             ->setHelp('Um so mehr Angaben Sie machen um so besser wird Ihr Angebot bei Google angezeigt.');
         // The hostel field build the association to the rooms
         $hostel_id = AssociationField::new('hostel')
@@ -274,7 +274,7 @@ class RoomTypesCrudController extends AbstractCrudController
         $payment_type = TextField::new('payment_type', 'Zahlungsmethode')
             ->setFormTypeOptions(
                 [
-                'data'=> 'Vorkasse bei Ankunft',
+                    'data' => 'Vorkasse bei Ankunft',
                 ]
             );
 
@@ -303,7 +303,7 @@ class RoomTypesCrudController extends AbstractCrudController
             ->setHelp('Die Zimmernummer oder Stellplatznummer bei Camping')
             ->setFormTypeOptions(
                 [
-                    'data'=> 'EG',
+                    'data' => 'EG',
                 ]
             );
 
@@ -318,7 +318,7 @@ class RoomTypesCrudController extends AbstractCrudController
             ->setFormTypeOptions(
                 [
                     'empty_data' => '19.00',
-                    'data'=> '19.00',
+                    'data'       => '19.00',
                 ]
             );
 
@@ -451,57 +451,6 @@ class RoomTypesCrudController extends AbstractCrudController
     ##########################################################
 
     /**
-     * If the user make changes on a entity entry
-     * so wee set the new state of Entry
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
-            $entityInstance->setIsUserMadeChanges(true);
-
-            // add message to admin log
-            $this->adminMessagesHandler->addInfo(
-                "Der Benutzer-ID: $this->user_id hat an einem Zimmer einstellung geändert.",
-                "Ein Benutzer hat ein Zimmer bearbeitet."
-            );
-        }
-
-        parent::updateEntity($entityManager, $entityInstance);
-    }
-
-    /**
-     * @param string $entityFqcn
-     * @return RoomTypes|mixed
-     */
-    public function createEntity(string $entityFqcn)
-    {
-
-        $room_types = new RoomTypes();
-        $room_types->setIsUserMadeChanges(true);
-
-        // add massage to admin log
-        $this->adminMessagesHandler->addInfo(
-            "Das angelegte Zimmer <a href='".$this->createUserRoomsUrl()."' class='btn btn-sm btn-warning'>prüfen</a>.",
-            "Ein Benutzer hat ein neues Zimmer angelegt.",
-            "Benutzer: ".$this->user->getName().""
-        );
-
-        return $room_types;
-    }
-
-    ##########################################################
-    #
-    #
-    #   Protected Helper Function
-    #
-    #
-    ##########################################################
-
-
-    /**
      * Create the option array
      * @return array
      */
@@ -521,6 +470,38 @@ class RoomTypesCrudController extends AbstractCrudController
         return $options;
     }
 
+    /**
+     * If the user make changes on a entity entry
+     * so wee set the new state of Entry
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
+            $entityInstance->setIsUserMadeChanges(true);
+
+            // add message to admin log
+            $this->adminMessagesHandler->addInfo(
+                "Das geänderte Zimmer <a href='".$this->createUserRoomsUrl(
+                )."' class='btn btn-sm btn-warning'>prüfen</a>.",
+                "Der Benutzer hat ein Zimmer bearbeitet.",
+                "Benutzer: ".$this->user->getName().""
+            );
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
+
     protected function createUserRoomsUrl()
     {
         $url = $this->crudUrlGenerator->build()
@@ -531,6 +512,28 @@ class RoomTypesCrudController extends AbstractCrudController
             ->generateUrl();
 
         return $url;
+    }
+
+    /**
+     * Set base value for new entity and inform the admin
+     *
+     * @param string $entityFqcn
+     * @return RoomTypes|mixed
+     */
+    public function createEntity(string $entityFqcn)
+    {
+
+        $room_types = new RoomTypes();
+        $room_types->setIsUserMadeChanges(true);
+
+        // add massage to admin log
+        $this->adminMessagesHandler->addInfo(
+            "Das angelegte Zimmer <a href='".$this->createUserRoomsUrl()."' class='btn btn-sm btn-warning'>prüfen</a>.",
+            "Ein Benutzer hat ein neues Zimmer angelegt.",
+            "Benutzer: ".$this->user->getName().""
+        );
+
+        return $room_types;
     }
 
 }

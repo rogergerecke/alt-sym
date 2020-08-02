@@ -121,7 +121,7 @@
         {% endif %}
 
         <!-- Hostel Availability -->
-        {% if calendar is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
+        {% if calendar is not empty and hostel.occupancy is not empty and 'base_account' in hostel.user.userPrivileges or 'premium_account' in hostel.user.userPrivileges %}
             <h4 id="availability">Belegungsplan</h4>
             {{ include('hostel_view/_availability_calendar.html.twig') }}
         {% endif %}

@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\HostelGallery;
+use App\Entity\OccupancyPlan;
 use App\Entity\RoomTypes;
 use App\Entity\User;
 use App\Repository\HostelRepository;
@@ -387,15 +388,9 @@ class UserDashboardController extends AbstractDashboardController
         if ($this->isUserHavePrivileges($check)) {
             // Create the Hostel:Menu
             if ($this->userHaveHostel) {
-                yield MenuItem::section('Meine Unterkunft');
-                // add the hostels to menu
-                foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = str_pad(mb_substr($userHostel->getHostelName(), 0, 20), 24, '.');
+                yield MenuItem::section('Manager');
+                yield MenuItem::linkToCrud('Unterkünfte', 'fas fa-hotel', Hostel::class);
 
-                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
-                        ->setAction('edit')
-                        ->setEntityId($userHostel->getId());
-                }
             }
 
             if (!$this->userHaveHostel) {
@@ -407,6 +402,7 @@ class UserDashboardController extends AbstractDashboardController
             if ($this->userHaveHostel) {
                 yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class);
                 yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
+                yield MenuItem::linkToCrud('Belegungsplan', 'fa fa-calendar', OccupancyPlan::class);
             }
         }
 

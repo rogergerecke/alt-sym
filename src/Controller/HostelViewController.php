@@ -114,7 +114,7 @@ class HostelViewController extends AbstractController
      * @param HostelRepository $hostelRepository
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
-     * @param CalendarService $calendar
+     * @param CalendarService $calendarService
      * @param HostelGalleryRepository $hostelGallery
      * @return Response
      * @throws Exception
@@ -124,7 +124,7 @@ class HostelViewController extends AbstractController
         HostelRepository $hostelRepository,
         RoomTypesRepository $roomTypesRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository,
-        CalendarService $calendar,
+        CalendarService $calendarService,
         HostelGalleryRepository $hostelGallery
     ) {
 
@@ -202,7 +202,7 @@ class HostelViewController extends AbstractController
                 'hostel' => $hostel,
                 'services' => $services,
                 'rooms' => $rooms,
-                'calendar' => $calendar->getCalendar(),
+                'calendar' => $calendarService->getCalendar(),
                 'gallery' => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]

@@ -89,7 +89,7 @@
                                     <!-- Rooms For Hostel -->
                                     {% for room in hostel.rooms %}
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row">{{ room.id }}</th>
                                             <td>{{ room.unitOccupancy }} x</td>
                                             <td>{{ room.name }}</td>
                                             <td>{{ room.finalRate }}</td>

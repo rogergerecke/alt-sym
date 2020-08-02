@@ -1,9 +1,26 @@
-<style>.table td{height: 43px}</style>
+<style>.table td {
+        height: 43px
+    }
+
+    .bg-success-light {
+        background-color: rgba(157, 191, 11, 0.6)
+    }
+
+    .bg-warning-light {
+        background-color: rgba(242, 104, 15, 0.6)
+    }
+
+    .bg-danger-light {
+        background-color: rgba(191, 64, 50, 0.7)
+    }
+</style>
 <div class="row">
-{% for month in calendar %}
+    <!-- Year -->
+    {% for year in calendar %}
+        <!-- Month Block -->
         <div class="col-xl-4 col-md-6 col-sm-12 mb-3">
             <div class="card availability-card">
-                <h5 class="mb-2 ml-2 mt-3">{{ month.month }} {{ month.year }}</h5>
+                <h5 class="mb-2 ml-2 mt-3">{{ year.month_name }} {{ year.year }}</h5>
                 <table class="table table-bordered text-center">
                     <thead class="bg-light-blue text-white">
                     <tr>
@@ -17,18 +34,32 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                    {% for week in month.weeks %}
+                    {% for week in year.weeks %}
+                        {# <!-- Week Row --> #}
                         <tr>
                             {% for day in week %}
-                                <td{% if loop.index == 6 or loop.index == 7 %} class="bg-light"{% endif %}>{% if day is not empty %}{{ day }}{% endif %}</td>
+                                {% set style = '' %}
+                                {# set the style color for utilization background #}
+                                {% if loop.index == 6 or loop.index == 7 %}{% set style = 'bg-light' %}{% endif %}
+                                {% for occupancyDate in hostel.occupancy %}
+                                    {# 19.09.2020 <= 02.10.2020 and 31.12.2020 >= 02.10.2020 #}
+                                    {% if occupancyDate.dateFrom|date('Y-m-d') <= day|date('Y-m-d') and occupancyDate.dateTo|date('Y-m-d') >= day|date('Y-m-d') and day is not empty %}
+                                        {% if occupancyDate.utilization == 1 %}{% set style = 'bg-success' %}{% endif %}
+                                        {% if occupancyDate.utilization == 2 %}{% set style = 'bg-warning' %}{% endif %}
+                                        {% if occupancyDate.utilization == 3 %}{% set style = 'bg-danger' %}{% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                <td {% if style is defined and style is not empty %}class="{{ style }}{% if loop.index == 6 or loop.index == 7 %}-light{% endif %}"{% endif %}>
+                                    {% if day is not empty %}{{ day|date('d') }}{% endif %}
+                                </td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
-
                     </tbody>
                 </table>
             </div>
         </div>
-{% endfor %}
+        <!-- Month Block #END -->
+    {% endfor %}
+    <!-- Year #END-->
 </div>
