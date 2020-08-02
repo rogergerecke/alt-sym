@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {% if systemoption.getIndexAllow == 'false' %}
-    <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta name="robots" content="noindex, nofollow, noarchive">
     {% endif %}
 
     <meta name="description" content="{% block description %}{{ systemoption.webSiteName }}{% endblock %}">
@@ -25,34 +25,8 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         {% if is_granted('ROLE_ADMIN') %}
             <!-- Admin Tool Bar -->
-            <div class="bg-light p-1" id="header-banner">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-left pl-2 text-primary">
-                            <i class="fa fa-tachometer-alt"></i>
-                            <a href="{{ path('admin') }}">Dashboard</a>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <!-- Admin Edit Hostel -->
-                        {% if app.request.get('_route') == 'hostel_details' %}
-                            {% set entiy_id = app.request.get('id') %}
-                            {% set url = ea_url()
-                                .setDashboard('App\\Controller\\Admin\\AdminDashboardController')
-                                .setController('App\\Controller\\Admin\\AdminHostelCrudController')
-                                .setAction('edit')
-                                .setEntityId(entiy_id) %}
-                            <div class="text-right pr-2 text-warning">
-                                <i class="fas fa-edit"></i>
-                                <a href="{{ url }}">Eintrag bearbeiten</a>
-                            </div>
-                        {% endif %}
-                        <!-- Admin Edit Hostel #END -->
-                    </div>
-                </div>
-            </div>
+            {{ include('admin_toolbar.html.twig') }}
             <!-- Admin Tool Bar #END -->
-
         {% endif %}
     {% else %}
         <!-- Top Header Banner -->

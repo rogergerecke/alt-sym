@@ -1,0 +1,63 @@
+<div class="bg-light p-1" id="header-banner">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="text-left pl-3 text-primary">
+                <i class="fa fa-tachometer-alt"></i>
+                <a href="{{ path('admin') }}">Dashboard</a>
+            </div>
+        </div>
+
+        <div class="col-md-6 ml-md-auto text-right">
+            <!-- Edit Hostel Detail -->
+            {% if app.request.get('_route') == 'hostel_details' %}
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Bearbeiten
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <!-- Admin Edit Hostel -->
+                        {% set entiy_id = app.request.get('id') %}
+                        {% set url = ea_url()
+                            .setDashboard('App\\Controller\\Admin\\AdminDashboardController')
+                            .setController('App\\Controller\\Admin\\AdminHostelCrudController')
+                            .setAction('edit')
+                            .setEntityId(entiy_id) %}
+
+                        <a class="dropdown-item text-warning text-decoration-none"
+                           href="{{ url }}"><i class="fas fa-hotel"></i> Unterkunft bearbeiten</a>
+                        <a class="dropdown-item text-warning text-decoration-none"
+                           href="{{ url }}#Hostel_description"><i class="fas fa-edit"></i> Text
+                            bearbeiten</a>
+                        <!-- Admin Edit Hostel #END -->
+
+
+                        <!-- Edit Hostel Images -->
+                        <div class="dropdown-divider pb-2"></div>
+                        <h6 class="dropdown-header text-success">Bilder</h6>
+                        {% if gallery is not empty %}
+                        {% for image in gallery %}
+                            {% set url = ea_url()
+                                .setDashboard('App\\Controller\\Admin\\AdminDashboardController')
+                                .setController('App\\Controller\\Admin\\AdminHostelGalleryCrudController')
+                                .setAction('edit')
+                                .setEntityId(image.id) %}
+                            <a class="dropdown-item" href="{{ url }}">#{{ loop.index }} Bild</a>
+                        {% endfor %}
+                        {% endif %}
+                        {% if gallery is empty %}
+                            {% set url = ea_url()
+                                .setDashboard('App\\Controller\\Admin\\AdminDashboardController')
+                                .setController('App\\Controller\\Admin\\AdminHostelGalleryCrudController')
+                                .setAction('new') %}
+                            <a class="dropdown-item" href="{{ url }}">Bilder hinzufügen</a>
+                        {% endif %}
+                        <!-- Edit Hostel Images #END -->
+
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Edit Hostel Detail #END -->
+        </div>
+    </div>
+</div>
