@@ -36,8 +36,7 @@ class HostelViewController extends AbstractController
     public function listing(
         HostelRepository $hostelRepository,
         Request $request,
-        SessionInterface $session,
-        RoomTypesRepository $roomTypesRepository
+        SessionInterface $session
     ) {
 
         $hostels = null;
@@ -56,9 +55,6 @@ class HostelViewController extends AbstractController
             } else {
                 $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
             }
-
-
-            //return $this->redirectToRoute('hostel_view');
         }
 
 
@@ -68,9 +64,12 @@ class HostelViewController extends AbstractController
             $top_hostels = $hostelRepository->findTopListingHostels();
         }
 
+        ####################################
         #
-        # STATISTICS
+        #   Statistic part session
         #
+        ####################################
+
         // if the first page view update statistics only one time per session
         if (!$session->has('notice_page_view')) {
             $session->set('notice_page_view', true);
@@ -97,11 +96,10 @@ class HostelViewController extends AbstractController
         return $this->render(
             'hostel_view/hostel_listing.twig',
             [
-                'controller_name' => 'HostelViewController',
-                'form'            => $form->createView(),
-                'hostels'         => $hostels,
-                'top_hostels'     => $top_hostels,
-                'header_region'   => $header_region,
+                'form'          => $form->createView(),
+                'hostels'       => $hostels,
+                'top_hostels'   => $top_hostels,
+                'header_region' => $header_region,
             ]
         );
     }
@@ -199,11 +197,11 @@ class HostelViewController extends AbstractController
         return $this->render(
             'hostel_view/hostel_details.html.twig',
             [
-                'hostel' => $hostel,
+                'hostel'   => $hostel,
                 'services' => $services,
-                'rooms' => $rooms,
+                'rooms'    => $rooms,
                 'calendar' => $calendarService->getCalendar(),
-                'gallery' => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
+                'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );

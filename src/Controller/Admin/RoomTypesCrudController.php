@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
+use App\Repository\RoomTypesRepository;
 use App\Service\AdminMessagesHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -12,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -30,6 +33,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -68,6 +73,10 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var AdminContextProvider
      */
     private $adminContextProvider;
+    /**
+     * @var RoomTypesRepository
+     */
+    private $roomTypesRepository;
 
     /**
      * RoomTypesCrudController constructor.
@@ -77,6 +86,7 @@ class RoomTypesCrudController extends AbstractCrudController
      * @param AdminMessagesHandler $adminMessagesHandler
      * @param CrudUrlGenerator $crudUrlGenerator
      * @param AdminContextProvider $adminContextProvider
+     * @param RoomTypesRepository $roomTypesRepository
      */
     public function __construct(
         HostelRepository $hostelRepository,
@@ -84,7 +94,8 @@ class RoomTypesCrudController extends AbstractCrudController
         Security $security,
         AdminMessagesHandler $adminMessagesHandler,
         CrudUrlGenerator $crudUrlGenerator,
-        AdminContextProvider $adminContextProvider
+        AdminContextProvider $adminContextProvider,
+    RoomTypesRepository $roomTypesRepository
     ) {
         $this->hostelRepository = $hostelRepository;
         $this->roomAmenitiesRepository = $roomAmenitiesRepository;
@@ -100,6 +111,7 @@ class RoomTypesCrudController extends AbstractCrudController
         }
 
         $this->adminContextProvider = $adminContextProvider;
+        $this->roomTypesRepository = $roomTypesRepository;
     }
 
     /**
@@ -108,6 +120,93 @@ class RoomTypesCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return RoomTypes::class;
+    }
+
+    /**
+     * Override the edit entity function
+     * to prevent entity id hack by false user
+     *
+     * @param AdminContext $context
+     * @return KeyValueStore|RedirectResponse|Response
+     */
+    public function edit(AdminContext $context)
+    {
+        // get all ids for the user
+        $ids = null;
+        foreach ($this->hostels as $hostel) {
+            if ($hoc = $this->roomTypesRepository->findBy(['hostel_id' => $hostel->getId()])) {
+                foreach ($hoc as $h) {
+                    $ids[] = $h->getId();
+                }
+            }
+        }
+
+        // no ids for user
+        if (!$ids) {
+            $this->addFlash('warning', 'Sie haben noch keine Zimmer angelegt');
+            $this->redirectToRoute('user');
+        }
+
+        // permission denied url entity hack
+        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
+            $this->addFlash('warning', 'Sie dürfen keine Fremden Zimmer bearbeiten');
+            $this->redirectToRoute('user');
+        } else {
+            return parent::edit($context);
+        }
+
+        // return empty object
+        return $this->render(
+            'bundles/EasyAdmin/crazy_horse.html.twig',
+            [
+
+            ]
+        );
+    }
+
+    /**
+     * Override the delete entity function
+     * to prevent entity id hack by false user
+     *
+     * @param AdminContext $context
+     * @return KeyValueStore|RedirectResponse|Response
+     */
+    public function delete(AdminContext $context)
+    {
+        // get all ids for the user
+        $ids = null;
+        foreach ($this->hostels as $hostel) {
+            if ($hoc = $this->roomTypesRepository->findBy(['hostel_id' => $hostel->getId()])) {
+                foreach ($hoc as $h) {
+                    $ids[] = $h->getId();
+                }
+            }
+        }
+
+        // no ids for user
+        if (!$ids) {
+            $this->addFlash(
+                'warning',
+                'Sie haben noch keine Zimmer angelegt, darum können Sie auch keine Löschen'
+            );
+            $this->redirectToRoute('user');
+        }
+
+        // permission denied url entity hack
+        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
+            $this->addFlash('warning', 'Sie dürfen keine Fremden Zimmer löschen');
+            $this->redirectToRoute('user');
+        } else {
+            return parent::delete($context);
+        }
+
+        // return empty object
+        return $this->render(
+            'bundles/EasyAdmin/crazy_horse.html.twig',
+            [
+
+            ]
+        );
     }
 
     public function configureCrud(Crud $crud): Crud

@@ -122,6 +122,15 @@ class AdminDashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
+        // bug in EasyAdmin right handling dosn't works correct
+        if ($this->isGranted('ROLE_USER')) {
+            $this->addFlash(
+                'danger',
+                'Sie sind noch als User angemeldet Loggen Sie sich aus um sich als Admin Benutzer anzumelden'
+            );
+
+            return $this->redirectToRoute('user');
+        }
 
         // get the admin messages
         $admin_messages = $this->adminMessageRepository->findAll();
@@ -233,7 +242,8 @@ class AdminDashboardController extends AbstractDashboardController
         /* Marketing */
         yield MenuItem::section('Werbung', 'fa fa-anchor');
         yield MenuItem::linktoRoute('Statistiken', 'fa fa-chart-area', 'admin_notice_hostel_statistic');
-        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class);
+        yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class)
+            ->setController(AdminEventsCrudController::class);
         yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
         yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
 

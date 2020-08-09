@@ -8,6 +8,7 @@ use App\Repository\AmenitiesTypesRepository;
 use App\Repository\CountrysRepository;
 use App\Repository\CurrencyRepository;
 use App\Repository\FederalStateRepository;
+use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
 use App\Service\AdminMessagesHandler;
@@ -18,6 +19,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -41,6 +44,8 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -108,6 +113,10 @@ class HostelCrudController extends AbstractCrudController
      * @var Swift_Mailer
      */
     private $mailer;
+    /**
+     * @var HostelRepository
+     */
+    private $hostelRepository;
 
     /**
      * HostelCrudController constructor.
@@ -123,6 +132,7 @@ class HostelCrudController extends AbstractCrudController
      * @param CrudUrlGenerator $crudUrlGenerator
      * @param SystemOptionsService $systemOptions
      * @param Swift_Mailer $mailer
+     * @param HostelRepository $hostelRepository
      */
     public function __construct(
         UserRepository $userRepository,
@@ -136,7 +146,8 @@ class HostelCrudController extends AbstractCrudController
         AdminMessagesHandler $adminMessagesHandler,
         CrudUrlGenerator $crudUrlGenerator,
         SystemOptionsService $systemOptions,
-        Swift_Mailer $mailer
+        Swift_Mailer $mailer,
+    HostelRepository $hostelRepository
     ) {
         $this->userRepository = $userRepository;
         $this->roomAmenities = $roomAmenities;
@@ -157,6 +168,7 @@ class HostelCrudController extends AbstractCrudController
         $this->crudUrlGenerator = $crudUrlGenerator;
         $this->systemOptions = $systemOptions;
         $this->mailer = $mailer;
+        $this->hostelRepository = $hostelRepository;
     }
 
     /**
@@ -167,6 +179,85 @@ class HostelCrudController extends AbstractCrudController
         return Hostel::class;
     }
 
+    /**
+     * Override the edit entity function
+     * to prevent entity id hack by false user
+     *
+     * @param AdminContext $context
+     * @return KeyValueStore|RedirectResponse|Response
+     */
+    public function edit(AdminContext $context)
+    {
+        // get all ids for the user
+        $ids = null;
+        if ($hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id])) {
+            foreach ($hostels as $hostel) {
+                $ids[] = $hostel->getId();
+            }
+        }
+
+        // no ids for user
+        if (!$ids) {
+            $this->addFlash('warning', 'Sie haben noch keine Hostels angelegt');
+            $this->redirectToRoute('user');
+        }
+
+        // permission denied url entity hack
+        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
+            $this->addFlash('warning', 'Sie dürfen keine Fremden Hostels bearbeiten');
+            $this->redirectToRoute('user');
+        } else {
+            return parent::edit($context);
+        }
+
+        // return empty object
+        return $this->render(
+            'bundles/EasyAdmin/crazy_horse.html.twig',
+            [
+
+            ]
+        );
+    }
+
+    /**
+     * Override the delete entity function
+     * to prevent entity id hack by false user
+     *
+     * @param AdminContext $context
+     * @return KeyValueStore|RedirectResponse|Response
+     */
+    public function delete(AdminContext $context)
+    {
+        // get all ids for the user
+        $ids = null;
+        if ($hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id])) {
+            foreach ($hostels as $hostel) {
+                $ids[] = $hostel->getId();
+            }
+        }
+
+        // no ids for user
+        if (!$ids) {
+            $this->addFlash('warning', 'Sie haben noch keine Hostels angelegt, darum können Sie auch keine Löschen');
+            $this->redirectToRoute('user');
+        }
+
+        // permission denied url entity hack
+        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
+            $this->addFlash('warning', 'Sie dürfen keine Fremden Hostels löschen');
+            $this->redirectToRoute('user');
+        } else {
+            return parent::delete($context);
+        }
+
+        // return empty object
+        return $this->render(
+            'bundles/EasyAdmin/crazy_horse.html.twig',
+            [
+
+            ]
+        );
+    }
 
     /**
      * Modified index builder to show only

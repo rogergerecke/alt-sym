@@ -93,21 +93,24 @@
             <div class="card" id="admin-massages-card">
                 <!-- Card Header -->
                 <div class="card-header">
-                    <h5>Nachrichten</h5>
-                    <span class="badge badge-pill badge-primary float-right">{{ admin_messages|length }}</span>
+                    <h5>Benachrichtigung <span class="badge badge-pill badge-primary">{{ admin_messages|length }}</span></h5>
+                    {% if admin_messages|length > 3 %}
+                    <div class="float-right">
+                        <button class="btn btn-link" data-toggle="collapse"
+                                data-target=".collapse">Alle anzeigen
+                    </button>
+                    </div>
+                    {% endif %}
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <p class="pl-2">Sie haben mehre System Nachrichten. System Nachrichten werden vom System erzeugt
-                        oder durch Kunden die Ihre Kundendaten verändert haben und die dann überprüft werden müssen.</p>
                     <!-- Message Table -->
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nachricht</th>
-                            <th scope="col">Typ</th>
-                            <th scope="col">Vom</th>
+                            <th scope="col">Datum</th>
                             <th scope="col">Gelesen</th>
                         </tr>
                         </thead>
@@ -115,13 +118,12 @@
                         <!-- Message Row -->
                         {% for adminMassage in admin_messages %}
                             <tr {% if loop.index >= 4 %}class="collapse"{% endif %}>
-                                <th scope="row">{{ adminMassage.id }}</th>
+                                <th scope="row" class="bg-{{ adminMassage.type }} text-white">
+                                    {{ adminMassage.type }}</th>
                                 <td>
                                     {{ adminMassage.heading|raw }}
                                     {{ adminMassage.subHeading|raw }}
                                     {{ adminMassage.message|raw }}
-                                </td>
-                                <td><span class="badge badge-{{ adminMassage.type }}">{{ adminMassage.type }}</span>
                                 </td>
                                 <td>{{ adminMassage.dateAdd|date('d.m.Y H:i:s') }} </td>
                                 <td><span class="massage-date"><a
@@ -129,25 +131,6 @@
                                                 class="delete btn btn-sm btn-danger"> <i
                                                     class="fa fa-trash-alt"></i></a></span></td>
                             </tr>
-                            {% if loop.index == 3 %}
-                                <tr>
-
-                                    <td>
-
-                                    </td>
-                                    <td class="text-right">
-                                        <p>
-                                                <button class="btn btn-outline-primary" data-toggle="collapse"
-                                                        data-target=".collapse">
-                                                    Mehr
-                                                    anzeigen <i class="fa fa-arrow-down"></i>
-                                                </button></p>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -242,12 +225,29 @@
                      <p class="card-text">1x Anfrage zum Account Upgrade</p>
                  </div>
              </div>
-         </div>#}
+         </div> #}
     </div>
 
     <!-- Information Section -->
     <h1 class="h3 mb-4 border-bottom pb-2">Informationen</h1>
     <div class="row">
+
+        <div class="col-md-6">
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h5>Richtige Funktion der Gastgeber-Suche</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Damit die Gastgeber-Suche richtige ergebnisse liefert müssen natürlich auch die Angaben der
+                        Unterkünfte korrekt und vollständig sein.  Eine suche auf null funktioniert eben nicht.
+                    </p>
+                    <p>Merke:</p>
+                    <p>Eine Gastgeber-Suche mit Gästeanzahl kann ja nur funktionieren wenn der Gastgeber auch ein Zimmer hat mit einer eingetragen Gästeanzahl.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">

@@ -32,41 +32,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class EventsCrudController
  * @package App\Controller\Admin
  */
-class EventsCrudController extends AbstractCrudController
+class AdminEventsCrudController extends AbstractCrudController
 {
-    /**
-     * @var UserInterface|null
-     */
-    private $user;
-    /**
-     * @var
-     */
-    private $user_id;
-    /**
-     * @var Security
-     */
-    private $security;
-    /**
-     * @var EventsRepository
-     */
-    private $eventsRepository;
-
-    /**
-     * EventsCrudController constructor.
-     * @param Security $security
-     * @param EventsRepository $eventsRepository
-     */
-    public function __construct(Security $security, EventsRepository $eventsRepository)
-    {
-        $this->security = $security;
-
-        // get the user id from the logged in user
-        if (null !== $this->security->getUser()) {
-            $this->user = $this->security->getUser();
-            $this->user_id = $this->security->getUser()->getId();
-        }
-        $this->eventsRepository = $eventsRepository;
-    }
 
     /**
      * @return string
@@ -76,111 +43,7 @@ class EventsCrudController extends AbstractCrudController
         return Events::class;
     }
 
-    /**
-     * Override the edit entity function
-     * to prevent entity id hack by false user
-     *
-     * @param AdminContext $context
-     * @return KeyValueStore|RedirectResponse|Response
-     */
-    public function edit(AdminContext $context)
-    {
-        // get all ids for the user
-        $ids = null;
-        if ($events = $this->eventsRepository->findBy(['user_id' => $this->user_id])) {
-            foreach ($events as $event) {
-                $ids[] = $event->getId();
-            }
-        }
 
-        // no ids for user
-        if (!$ids) {
-            $this->addFlash('warning', 'Sie haben noch keine Events angelegt');
-            $this->redirectToRoute('user');
-        }
-
-        // permission denied url entity hack
-        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
-            $this->addFlash('warning', 'Sie dürfen keine Fremden Events bearbeiten');
-            $this->redirectToRoute('user');
-        } else {
-            return parent::edit($context);
-        }
-
-        // return empty object
-        return $this->render(
-            'bundles/EasyAdmin/crazy_horse.html.twig',
-            [
-
-            ]
-        );
-    }
-
-    /**
-     * Override the delete entity function
-     * to prevent entity id hack by false user
-     *
-     * @param AdminContext $context
-     * @return KeyValueStore|RedirectResponse|Response
-     */
-    public function delete(AdminContext $context)
-    {
-        // get all ids for the user
-        $ids = null;
-        if ($events = $this->eventsRepository->findBy(['user_id' => $this->user_id])) {
-            foreach ($events as $event) {
-                $ids[] = $event->getId();
-            }
-        }
-
-        // no ids for user
-        if (!$ids) {
-            $this->addFlash('warning', 'Sie haben noch keine Events angelegt, darum können Sie auch keine Löschen');
-            $this->redirectToRoute('user');
-        }
-
-        // permission denied url entity hack
-        if (!in_array($context->getEntity()->getPrimaryKeyValue(), $ids)) {
-            $this->addFlash('warning', 'Sie dürfen keine Fremden Events löschen');
-            $this->redirectToRoute('user');
-        } else {
-            return parent::delete($context);
-        }
-
-        // return empty object
-        return $this->render(
-            'bundles/EasyAdmin/crazy_horse.html.twig',
-            [
-
-            ]
-        );
-    }
-
-
-    /**
-     * Modified index builder to show only
-     * events for the logged in user on
-     * index table
-     *
-     * @param SearchDto $searchDto
-     * @param EntityDto $entityDto
-     * @param FieldCollection $fields
-     * @param FilterCollection $filters
-     * @return QueryBuilder
-     */
-    public function createIndexQueryBuilder(
-        SearchDto $searchDto,
-        EntityDto $entityDto,
-        FieldCollection $fields,
-        FilterCollection $filters
-    ): QueryBuilder {
-
-        $qb = $this->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $alias = $qb->getRootAliases();
-        $qb->andWhere($alias[0].'.user_id = '.$this->user_id);
-
-        return $qb;
-    }
 
     /**
      * @param Crud $crud
@@ -277,39 +140,4 @@ class EventsCrudController extends AbstractCrudController
         }
     }
 
-    /**
-     * If the user make changes on a entity entry
-     * so wee set the new state of Entry
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        if (method_exists($entityInstance, 'setIsUserMadeChanges')) {
-            $entityInstance->setIsUserMadeChanges(true);
-        }
-
-        parent::updateEntity($entityManager, $entityInstance);
-    }
-
-    /**
-     *
-     * Create a new event with
-     * the id from the logged in user
-     * a user cant create many event's
-     *
-     * @param string $entityFqcn
-     * @return Events|mixed
-     */
-    public function createEntity(string $entityFqcn)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $events = new Events();
-        $events->setUserId((int)$user->getId());
-        $events->setIsUserMadeChanges(true);
-
-        return $events;
-    }
 }
