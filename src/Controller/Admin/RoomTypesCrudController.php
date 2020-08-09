@@ -193,7 +193,6 @@ class RoomTypesCrudController extends AbstractCrudController
                 ]
             );
 
-        // todo discount
         // Discount array field for additional discounts for this room
         $discounts = ArrayField::new('discounts', 'Rabat Array')
             ->setHelp('Liste der auf den Preis anwendbaren Rabatte');
@@ -386,13 +385,12 @@ class RoomTypesCrudController extends AbstractCrudController
             case Crud::PAGE_INDEX:
                 return [
                     $hostel_id,
-                    $currency,
-                    $vat,
+                    $name,
                     $discounts,
+                    $currency,
                     $final_rate,
-                    $net_rate,
                     $payment_type,
-                    $url,
+                    $landing_page_url,
                     $meal_code,
                 ];
                 break;

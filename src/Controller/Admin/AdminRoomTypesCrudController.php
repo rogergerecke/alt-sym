@@ -435,7 +435,8 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         return $crud
             ->setPageTitle(Crud::PAGE_NEW, 'Zimmer anlegen')
             ->setPageTitle(Crud::PAGE_EDIT, 'Zimmer bearbeiten')
-            ->setPageTitle(Crud::PAGE_INDEX, 'Zimmer der Unterkünfte');
+            ->setPageTitle(Crud::PAGE_INDEX, 'Zimmer der Unterkünfte')
+            ->setDefaultSort(['isUserMadeChanges' => 'DESC']);
     }
 
 
@@ -613,6 +614,7 @@ class AdminRoomTypesCrudController extends AbstractCrudController
                 ]
             );
 
+        $is_user_made_changes = BooleanField::new('is_user_made_changes', 'Veränderung');
         $name = TextField::new('name', 'Angebots Name');
         $is_handicapped_accessible = BooleanField::new('is_handicapped_accessible', 'Barrierefrei');
 
@@ -687,6 +689,7 @@ class AdminRoomTypesCrudController extends AbstractCrudController
                     $payment_type,
                     $url,
                     $meal_code,
+                    $is_user_made_changes
                 ];
                 break;
             case Crud::PAGE_DETAIL:
@@ -709,6 +712,7 @@ class AdminRoomTypesCrudController extends AbstractCrudController
                     $unit_occupancy,
 
                     $extended_panel,
+                    $is_user_made_changes,
                     $booking_fee,
                     $discounts,
                     $hotel_fee,
