@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\SelectConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -84,23 +85,14 @@ class AdminHostelCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
-        // id fields
-        /* $id = IdField::new('id');*/
-        /*  $user_id = IntegerField::new('user_id')
-              ->setFormType(ChoiceType::class)
-              ->setFormTypeOptions(
-                  [
-                      'choices'  => [
-                          $this->buildUserOptions(),
-                      ],
-                      'group_by' => 'id',
-                  ]
-              );*/
-        $user_id = AssociationField::new('user', 'Kunde')
+        // The user field build the association to the hostels
+        $id = IdField::new('id');
+        $user_id = AssociationField::new('user', 'Benutzerprofil')
             ->setHelp('Kunde für den Sie eine Unterkunft anlegen.')
             ->setRequired(true)
-            ->setCrudController(AdminUserCrudController::class);
+            ->setCrudController(AdminUserCrudController::class)
+            ->setSortable(false)
+        ;
 
         // data fields
         $hostel_name = TextField::new('hostel_name', 'Name');
@@ -225,6 +217,7 @@ class AdminHostelCrudController extends AbstractCrudController
             case Crud::PAGE_INDEX:
             case Crud::PAGE_DETAIL:
                 return [
+                    $id,
                     $user_id,
                     $hostel_name,
                     $preview_image,
@@ -232,6 +225,8 @@ class AdminHostelCrudController extends AbstractCrudController
                     $postcode,
                     $city,
                     $status,
+                    $startpage,
+                    $toplisting,
                 ];
                 break;
             case Crud::PAGE_NEW:
@@ -370,17 +365,5 @@ class AdminHostelCrudController extends AbstractCrudController
         $hostel->setAmenities(['non_smoking']);
 
         return $hostel;
-    }
-
-    protected function buildUserOptions()
-    {
-        $users = $this->userRepository->findAll();
-
-        foreach ($users as $user) {
-            $label = "ID:".$user->getId()." ".$user->getName();
-            $options[$label] = $user->getId();
-        }
-
-        return $options;
     }
 }

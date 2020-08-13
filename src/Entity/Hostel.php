@@ -27,6 +27,12 @@ class Hostel
      */
     private $rooms;
 
+    /**
+     * One Hostel has many occupancy. This is the inverse side.
+     * @ORM\OneToMany(targetEntity=OccupancyPlan::class, mappedBy="hostel")
+     */
+    private $occupancy;
+
 
     /**
      * @ORM\Id()
@@ -209,6 +215,7 @@ class Hostel
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->occupancy = new ArrayCollection();
     }
 
     public function getRooms(): Collection
@@ -223,6 +230,27 @@ class Hostel
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getOccupancy(): Collection
+    {
+        return $this->occupancy;
+    }
+
+    /**
+     * @param OccupancyPlan|null $occupancy
+     * @return Hostel
+     */
+    public function setOccupancy(?OccupancyPlan $occupancy): self
+    {
+        $this->occupancy = $occupancy;
+
+        return $this;
+    }
+
+
 ###########
     public function getId(): ?int
     {
@@ -445,6 +473,18 @@ class Hostel
         return $this;
     }
 
+   /* public function getRoomTypes(): ?string
+    {
+        return $this->room_types;
+    }
+
+    public function setRoomTypes(string $room_types): self
+    {
+        $this->room_types = $room_types;
+
+        return $this;
+    }*/
+
     public function getAmenities(): ?array
     {
         return $this->amenities;
@@ -612,4 +652,17 @@ class Hostel
 
         return $this;
     }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link https://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    public function __toString()
+    {
+        return "ID:".$this->getId()." ".substr($this->getHostelName(),0,20)."...";
+    }
+
+
 }

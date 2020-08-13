@@ -36,8 +36,7 @@ class HostelViewController extends AbstractController
     public function listing(
         HostelRepository $hostelRepository,
         Request $request,
-        SessionInterface $session,
-        RoomTypesRepository $roomTypesRepository
+        SessionInterface $session
     ) {
 
         $hostels = null;
@@ -56,9 +55,6 @@ class HostelViewController extends AbstractController
             } else {
                 $this->addFlash('info', 'Leider ergab ihre Suche keine ergebnisse');
             }
-
-
-            //return $this->redirectToRoute('hostel_view');
         }
 
 
@@ -68,9 +64,12 @@ class HostelViewController extends AbstractController
             $top_hostels = $hostelRepository->findTopListingHostels();
         }
 
+        ####################################
         #
-        # STATISTICS
+        #   Statistic part session
         #
+        ####################################
+
         // if the first page view update statistics only one time per session
         if (!$session->has('notice_page_view')) {
             $session->set('notice_page_view', true);
@@ -97,11 +96,10 @@ class HostelViewController extends AbstractController
         return $this->render(
             'hostel_view/hostel_listing.twig',
             [
-                'controller_name' => 'HostelViewController',
-                'form'            => $form->createView(),
-                'hostels'         => $hostels,
-                'top_hostels'     => $top_hostels,
-                'header_region'   => $header_region,
+                'form'          => $form->createView(),
+                'hostels'       => $hostels,
+                'top_hostels'   => $top_hostels,
+                'header_region' => $header_region,
             ]
         );
     }
@@ -114,7 +112,7 @@ class HostelViewController extends AbstractController
      * @param HostelRepository $hostelRepository
      * @param RoomTypesRepository $roomTypesRepository
      * @param RoomAmenitiesRepository $roomAmenitiesRepository
-     * @param CalendarService $calendar
+     * @param CalendarService $calendarService
      * @param HostelGalleryRepository $hostelGallery
      * @return Response
      * @throws Exception
@@ -124,27 +122,12 @@ class HostelViewController extends AbstractController
         HostelRepository $hostelRepository,
         RoomTypesRepository $roomTypesRepository,
         RoomAmenitiesRepository $roomAmenitiesRepository,
-        CalendarService $calendar,
+        CalendarService $calendarService,
         HostelGalleryRepository $hostelGallery
     ) {
 
         $hostel = null;
-        $hostel = $hostelRepository->findOneByIdJoinedToRoomTypes($id);
-
-        foreach ($hostel as $item) {
-            if (isset($item['rooms'])) {
-                $rooms[] = $item['rooms'];
-            }
-
-            if (isset($item['hostel'])) {
-                $hostel = $item['hostel'];
-            }
-
-            if (isset($item['user'])) {
-                $user = $item['user'];
-            }
-        }
-
+        $hostel = $hostelRepository->find($id);
         $services = false;
 
         // nothing hostel data exist
@@ -207,8 +190,9 @@ class HostelViewController extends AbstractController
         }
 
         // get rooms data if in database
-        /* $rooms = null;
-         $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);*/
+        $rooms = null;
+        $rooms = $roomTypesRepository->findBy(['hostel_id' => $id], ['final_rate' => 'ASC']);
+
 
         return $this->render(
             'hostel_view/hostel_details.html.twig',
@@ -216,11 +200,11 @@ class HostelViewController extends AbstractController
                 'hostel'   => $hostel,
                 'services' => $services,
                 'rooms'    => $rooms,
-                'user'     => $user,
-                'calendar' => $calendar->getCalendar(),
+                'calendar' => $calendarService->getCalendar(),
                 'gallery'  => $hostelGallery->findBy(['hostel_id' => $id, 'status' => 1], ['sort' => 'ASC']),
 
             ]
         );
     }
 }
+

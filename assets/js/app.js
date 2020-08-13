@@ -10,7 +10,7 @@ require('@google/markerclustererplus');
 require('imagesloaded')
 var jQueryBridget = require('jquery-bridget');
 var Masonry = require('masonry-layout');
-jQueryBridget( 'masonry', Masonry, jQuery );
+jQueryBridget('masonry', Masonry, jQuery);
 
 jQuery(function ($) {
     $(window).on('load', function () {
@@ -46,12 +46,18 @@ jQuery(function ($) {
 
             // must save the link before ajax
             let link = $(this);
+            let counter = $('a.nav-link').find('#counter');
+
             $.ajax({
                 url: $(this).attr('href'),
+                dataType: 'json',
                 success: function (response) {
-                    link.attr('href', response)
+                    link.attr('href', response.url)
+                    counter.html(response.counter)
                 }
             });
+            // add the notice counter value
+            $(counter).add('#counter', counter)
 
             return false; // for good measure
         });
@@ -81,7 +87,6 @@ jQuery(function ($) {
             gutter: 15,
             percentPosition: true
         });
-
 
 
     });

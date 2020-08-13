@@ -1,12 +1,17 @@
-{# templates/emails/registration.html.twig #}
-<h3>Es wurde ein neuer Unterkunfts-Eintrag angelegt</h3>
+{# templates/emails/new_hostel_entry.html.twig #}
+<h3>Ein kunde hat eine neue Unterkunft angelegt</h3>
 
-Hallo! Es wurde ein neuer Unterkunfts-Eintrag angelegt und muss bearbeitet werden.
+Der Kunde {{ user_name }} hat eine neue Unterkunft angelegt.
+Diese sollten Sie <a href="{{ user_hostel_edit_url }}">hier</a> prüfen wenn alles in Ordnung ist nicht vergessen den Status auf Online zu stellen.
 
 {# example, assuming you have a route named "login" #}
 Zum Login, gehen Sie auf: <a href="{{ url('admin') }}">Admin-Bereich</a>.
 
 Danke!
 
-{# Makes an absolute URL to the /images/logo.png file #}
-<img src="{{ absolute_url(asset('images/logo.png')) }}">
+
+<h4>Weitere Information</h4>
+Kunden-Nummer: {{ user_number }}<br>
+Name: {{ user_name }}<br>
+E-Mail: {{ user_email }}<br>
+Mitglied-Seit: {{ user_registration_date }}<br>

@@ -101,21 +101,35 @@
                                                  aria-labelledby="heading_{{ hostel.id }}"
                                                  data-parent="#accordion_{{ hostel.id }}">
                                                 <div class="card-body">
-                                                    {% for room in hostel.roomTypes %}
-                                                        <p>
-                                                            {% set r = room.finalRate / 100 %}
-                                                            {{ room.accommodationType }} ab
-                                                            <b>{{ r|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
-                                                        </p>
-                                                    {% endfor %}
-                                                    <p>{{ hostel.address }}</p>
-                                                    <p>{{ hostel.address }} {{ hostel.city }}</p>
-                                                    <p>Tel.:
-                                                        <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a>
-                                                    </p>
-                                                    <p>Fax.: {{ hostel.fax }}</p>
-                                                    <p><a href="{{ path('hostel_details',{'id':hostel.id}) }}">Detail's
-                                                            anzeigen</a></p>
+                                                  <div class="row">
+                                                      <div class="col-md-12">
+                                                          <ul class="list-unstyled">
+                                                              {% for room in hostel.rooms|sort((a, b) => a.finalRate <=> b.finalRate) %}
+                                                                  <li class="mb-2 border-bottom">
+                                                                      {% set r = room.finalRate / 100 %}
+                                                                      {{ room.accommodationType }} ab
+                                                                      <b>{{ r|format_currency(room.currency, {rounding_mode: 'floor'}) }}</b>/Nacht
+                                                                      <br>
+                                                                      <span>{{ room.unitSize }} {{ room.unitType }} {{ room.name }}</span>
+                                                                  </li>
+                                                              {% endfor %}
+                                                          </ul>
+
+                                                      </div>
+                                                  </div>
+                                                   <div class="row bg-white border border-primary p-2">
+                                                       <div class="col-md-12">
+                                                           <span class="h6">Kontakt</span>
+                                                          <ul class="list-unstyled">
+                                                              <li>{{ hostel.hostelName }}</li>
+                                                              <li>{{ hostel.address }}</li>
+                                                              <li>{{ hostel.postcode }} {{ hostel.city }}</li>
+                                                              <li>Tel.: <a href="tel:{{ hostel.phone|replace({'0':+49}) }}">{{ hostel.phone }}</a></li>
+                                                              {% if hostel.fax is not empty %}<li>Fax.: {{ hostel.fax }}</li>{% endif %}
+                                                              <li>Email: {{ hostel.email }}</li>
+                                                          </ul>
+                                                       </div>
+                                                   </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -134,7 +148,7 @@
                         </div>
                     {% endif %}
                 {% else %}
-                    <p>Nothing to show</p>
+                    <p>Keine Unterkünfte in dieser Variante gefunden.</p>
                 {% endfor %}
             </div>
         </div>

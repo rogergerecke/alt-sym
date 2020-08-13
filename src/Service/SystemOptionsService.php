@@ -109,10 +109,21 @@ final class SystemOptionsService
     /**
      * Full html a href tag for the outgoing link
      * to the other portal brombachsee in template
+     *
      * @return SystemOptions
      */
     public function getOutgoingPortalLink()
     {
         return $this->getByKey('OUTGOING_PORTAL_LINK');
+    }
+
+    /**
+     * If the index allow for search robots
+     *
+     * @return SystemOptions
+     */
+    public function getIndexAllow()
+    {
+        return $this->getByKey('INDEX_ALLOW');
     }
 }

@@ -101,8 +101,6 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
-        $id = IdField::new('id');
         $hostel_id = IntegerField::new('hostel_id', 'Bild von Unterkunft')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(

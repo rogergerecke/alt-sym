@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Hostel;
 use App\Entity\Statistics;
 use App\Repository\HostelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class NoticeController extends AbstractController
 {
     const NOTICE_SESSION_KEY = 'notice';
-
-    // TODO add statistic counter for id
 
     /**
      * Index for showing the notice hostel
@@ -54,24 +51,25 @@ class NoticeController extends AbstractController
      */
     public function add(int $id, Request $request)
     {
-
-        // get session instance
         $session = $request->getSession();
 
+        // !exist session create the first key so we can add ids
         if (!$session->has(self::NOTICE_SESSION_KEY)) {
             $session->set(self::NOTICE_SESSION_KEY, [$id]);
         }
 
-        // if id not set add the new id to session
+        $array = null;
+
+        // handle session save and statistic
+        // check if the id is not set before we insert to prevent doable
         if (!in_array($id, $session->get(self::NOTICE_SESSION_KEY))) {
             $array = $session->get(self::NOTICE_SESSION_KEY);
             $array[] = $id;
 
-            //set id to session
+            // save new hostel id in session
             $session->set(self::NOTICE_SESSION_KEY, $array);
 
-            // write to the hostel statistik /performance killer customer want it
-            // build em for statistic counter
+            // write the notice action to the statistic for the hostel
             $em = $this->getDoctrine()->getManager();
             $hostel_statistic = $em->getRepository(Statistics::class)->findOneBy(['hostel_id' => $id]);
 
@@ -93,8 +91,17 @@ class NoticeController extends AbstractController
         }
 
 
-        // response for the ajax handle the new a:href
-        return new Response('/notice/remove/'.$id);
+        // response for the ajax handle the new a:href and counter
+        $counter = '0';
+        if (!empty($array)) {
+            $counter =  count($session->get(self::NOTICE_SESSION_KEY));
+        }
+        return $this->json(
+            [
+            'url'     => '/notice/remove/'.$id,
+            'counter' => $counter,
+            ]
+        );
     }
 
     /**
@@ -123,7 +130,16 @@ class NoticeController extends AbstractController
             $session->set(self::NOTICE_SESSION_KEY, $notice_ids);
         }
 
-        // response for the ajax handle the new a:href
-        return new Response('/notice/add/'.$id);
+        // response for the ajax handle the new a:href and counter
+        $counter = '0';
+        if (!empty($notice_ids)) {
+            $counter =  count($session->get(self::NOTICE_SESSION_KEY));
+        }
+        return $this->json(
+            [
+                'url'     => '/notice/add/'.$id,
+                'counter' => $counter,
+            ]
+        );
     }
 }

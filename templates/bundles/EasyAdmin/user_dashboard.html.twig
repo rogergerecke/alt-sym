@@ -23,8 +23,107 @@
     <!-- Dashboard Aria -->
     <h1 class="h3 mb-4 border-bottom pb-2">Dashboard</h1>
 
-    <!-- Monthly Statistic -->
     <div class="row">
+
+        <!-- User Hostel Table -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">{{ user_hostels|length }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Straße</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for hostel in user_hostels %}
+                            <tr>
+                                <th scope="row">{{ hostel.id }}</th>
+                                <td>{{ hostel.hostelName }}</td>
+                                <td>{{ hostel.address }}</td>
+                                {% set url = ea_url()
+                                    .setController('App\\Controller\\User\\HostelCrudController')
+                                    .setAction('edit')
+                                    .setEntityId(hostel.id) %}
+                                <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>
+                                        Bearbeiten</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- User Hostel Table #END -->
+
+        <!-- User Room Types Tables -->
+        <div class="col-md-7">
+            <div class="row">
+                {% for hostel in user_hostels %}
+                    <div class="col-md-12 mb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><u>{{ hostel.hostelName }}</u>: <span
+                                            class="badge badge-pill badge-primary">Zimmer {{ hostel.rooms|length }}</span></h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Stück</th>
+                                        <th scope="col">Angebots Name</th>
+                                        <th scope="col">Preis</th>
+                                        <th scope="col">Zimmernummer</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- Rooms For Hostel -->
+                                    {% for room in hostel.rooms %}
+                                        <tr>
+                                            <th scope="row">{{ room.id }}</th>
+                                            <td>{{ room.unitOccupancy }} x</td>
+                                            <td>{{ room.name }}</td>
+                                            <td>{{ room.finalRate }}</td>
+                                            <td>{{ room.floorNumber }}</td>
+                                            <td>
+                                                {# generate room edit url #}
+                                                {% set url = ea_url()
+                                                    .setController('App\\Controller\\User\\RoomTypesCrudController')
+                                                    .setAction('edit')
+                                                    .setEntityId(room.id) %}
+                                                <div class="btn-group">
+                                                    <a href="{{ url }}" class="btn btn-sm btn-outline-primary"><i
+                                                                class="fa fa-edit"></i> Bearbeiten</a>
+                                                    <a href="{{ path('hostel_details',{'id':room.hostelId}) }}"
+                                                       class="btn btn-sm btn-outline-secondary"><i
+                                                                class="fa fa-hand-holding-medical"></i> Website</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- User Room Types Tables #END -->
+
+    </div><!-- # first row -->
+
+    <!-- Monthly Statistic -->
+    <div class="row mt-5">
         <!-- Bar Chart -->
         <div class="col-md-6">
             <div class="card">
@@ -95,99 +194,25 @@
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <div class="card">
-                        <div class="card-header"><h5>Aufrufe der Gastgeber Übersicht</h5></div>
-                        <div class="card-body h4"><b>Gesamt:</b> <span class="text-success">{{ hostel_listing_views }}</span></div>
+                        <div class="card-body">
+                            <p class="h4 text-warning">{{ hostel_listing_views }}</p>
+                            <p class="h5 text-muted">Aufrufe der Gastgeber Übersicht</p>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header"><h5>Ihre Unterkunft wurde sich gemerkt</h5></div>
-                        <div class="card-body h4"><b>Gesamt:</b> <span class="text-success">{{ hostel_notice }}</span></div>
+                        <div class="card-body">
+                            <p class="h4 text-success">{{ hostel_notice }}</p>
+                            <p class="h5 text-muted">Wurde sich Ihre Unterkunft gemerkt</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Small Stat #END -->
+    </div><!-- # row -->
 
-        <div class="col-md-3">
-            <!-- Your Hostel -->
-            <div class="card">
-                <div class="card-header">
-                    <h5>Ihre Unterkünfte <span class="badge badge-pill badge-primary">{{ user_hostels|length }}</span></h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Straße</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for hostel in user_hostels %}
-                        <tr>
-                            <th scope="row">{{ hostel.id }}</th>
-                            <td>{{ hostel.hostelName }}</td>
-                            <td>{{ hostel.address }}</td>
-                            {% set url = ea_url()
-                                .setController('App\\Controller\\Admin\\HostelCrudController')
-                                .setAction('edit')
-                                .setEntityId(hostel.id) %}
-                            <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Bearbeiten</a></td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <div class="col-md-3">
-        <!-- Your Rooms -->
-        <div class="card">
-            <div class="card-header">
-                <h5>Ihre Zimmer <span class="badge badge-pill badge-primary">3</span></h5>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td><a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Edit</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <p class="card-text">1x Anfrage zum Account Upgrade</p>
-            </div>
-        </div>
-    </div>
-    </div>
 
     <!-- Second row -->
     <div class="row">

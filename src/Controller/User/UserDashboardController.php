@@ -1,11 +1,12 @@
 <?php
 
 
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\HostelGallery;
+use App\Entity\OccupancyPlan;
 use App\Entity\RoomTypes;
 use App\Entity\User;
 use App\Repository\HostelRepository;
@@ -144,14 +145,12 @@ class UserDashboardController extends AbstractDashboardController
         $this->systemOptions = $systemOptions;
         $this->mailer = $mailer;
 
-
         // if logged in get the logged in user id and account data
         if (null !== $this->security->getUser()) {
             $this->user_id = $this->security->getUser()->getId();
             $this->user_account = $this->userRepository->find($this->user_id);
             $this->user_privileges = $this->user_account->getUserPrivileges();
         }
-
 
         // check if user have hostel than get all ids for menu building
         if ($hostels = $this->hostelRepository->findBy(['user_id' => $this->user_id])) {
@@ -180,6 +179,8 @@ class UserDashboardController extends AbstractDashboardController
         $hostel_listing_views = null;
         $hostel_detail_views = null;
         $hostel_notice = null;
+
+        // have the user hostels return the statistic
         if ($this->userHaveHostel) {
             $statistics = $this->statisticsRepository->findAll();
 
@@ -245,7 +246,8 @@ class UserDashboardController extends AbstractDashboardController
 
             $this->addFlash(
                 'success',
-                'Ihre Upgrade anfrage wurde gesendet versendet.  Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
+                'Ihre Upgrade anfrage wurde gesendet versendet.  
+                Frau Albrecht meldet sich innerhalb von 24 Stunden bei Ihnen.'
             );
 
             $adminMessagesHandler->addInfo(
@@ -332,6 +334,14 @@ class UserDashboardController extends AbstractDashboardController
         $this->mailer->send($message);
     }
 
+    ######################################
+    #
+    #
+    # Helper function
+    #
+    #
+    #######################################
+
     /**
      * @return Dashboard
      */
@@ -340,6 +350,14 @@ class UserDashboardController extends AbstractDashboardController
         return Dashboard::new()
             ->setTitle('Benutzer Bereich');
     }
+
+    ##########################################################
+    #
+    #
+    #   Protected Helper Function
+    #
+    #
+    ##########################################################
 
     /**
      * Configure the crud global for all
@@ -353,14 +371,6 @@ class UserDashboardController extends AbstractDashboardController
             ->setDateFormat('dd.MM.yyyy')
             ->setEntityPermission('ROLE_USER');
     }
-
-    ######################################
-    #
-    #
-    # Helper function
-    #
-    #
-    #######################################
 
     public function configureMenuItems(): iterable
     {
@@ -378,15 +388,9 @@ class UserDashboardController extends AbstractDashboardController
         if ($this->isUserHavePrivileges($check)) {
             // Create the Hostel:Menu
             if ($this->userHaveHostel) {
-                yield MenuItem::section('Meine Unterkunft');
-                // add the hostels to menu
-                foreach ($this->user_hostels as $userHostel) {
-                    $hostel_name = substr($userHostel->getHostelName(), 0, 11).'...';
+                yield MenuItem::section('Manager');
+                yield MenuItem::linkToCrud('Unterkünfte', 'fas fa-hotel', Hostel::class);
 
-                    yield MenuItem::linkToCrud($hostel_name, 'fas fa-hotel', Hostel::class)
-                        ->setAction('edit')
-                        ->setEntityId($userHostel->getId());
-                }
             }
 
             if (!$this->userHaveHostel) {
@@ -396,10 +400,9 @@ class UserDashboardController extends AbstractDashboardController
             // have the user hostel so he cant add rooms and images for the hostel
             // todo filter by user
             if ($this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
-                    ->setQueryParameter('filterField', 'hostel_id')
-                    ->setQueryParameter('filter', 4);
+                yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class);
                 yield MenuItem::linkToCrud('Bilder', 'fa fa-image', HostelGallery::class);
+                yield MenuItem::linkToCrud('Belegungsplan', 'fa fa-calendar', OccupancyPlan::class);
             }
         }
 
@@ -421,9 +424,9 @@ class UserDashboardController extends AbstractDashboardController
 
         /* Information section */
         yield MenuItem::section('Hilfe & Information');
-        yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
-        yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
-        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
+        //yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
+        //yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'user_upgrade');
         yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
         yield MenuItem::linktoRoute('Datenschutz', 'fa fa-question', 'static_site_privacy');
         yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
@@ -450,6 +453,7 @@ class UserDashboardController extends AbstractDashboardController
     /**
      * Create the ordinary user menu top
      * right corner
+     *
      * @param UserInterface $user
      * @return UserMenu
      */
@@ -481,4 +485,5 @@ class UserDashboardController extends AbstractDashboardController
                 ]
             );
     }
+
 }

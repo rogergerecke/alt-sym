@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {# todo IMPORTENT remove in production no index #}
-    <meta name="robots" content="noindex, nofollow">
+
+    {% if systemoption.getIndexAllow == 'false' %}
+        <meta name="robots" content="noindex, nofollow, noarchive">
+    {% endif %}
+
     <meta name="description" content="{% block description %}{{ systemoption.webSiteName }}{% endblock %}">
     <title>{% block title %}{{ systemoption.webSiteName }}{% endblock %}</title>
     <!-- Google Fonts -->
@@ -19,27 +22,35 @@
 </head>
 <body id="body">
 <div class="container-fluid">
-    <!-- Top Header Banner -->
-    <div class="bg-dark p-1" id="header-banner">
-        <div class="row">
-            {% if systemoption.supportEmailAddress %}
-            <div class="col-md-6">
-                <div class="text-left text-white pl-2 d-none d-md-block">
-                    <i class="fas fa-envelope"></i>
-                    {{ systemoption.supportEmailAddress }}
-                </div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <!-- Admin Tool Bar -->
+            {{ include('admin_toolbar.html.twig') }}
+            <!-- Admin Tool Bar #END -->
+        {% endif %}
+    {% else %}
+        <!-- Top Header Banner -->
+        <div class="bg-dark p-1" id="header-banner">
+            <div class="row">
+                {% if systemoption.supportEmailAddress %}
+                    <div class="col-md-6">
+                        <div class="text-left text-white pl-2 d-none d-md-block">
+                            <i class="fas fa-envelope"></i>
+                            {{ systemoption.supportEmailAddress }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if systemoption.outgoingPortalLink %}
+                    <div class="col-md-6">
+                        <div class="text-right text-white pr-2">
+                            {{ systemoption.outgoingPortalLink|raw }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% if systemoption.outgoingPortalLink %}
-            <div class="col-md-6">
-                <div class="text-right text-white pr-2">
-                    {{ systemoption.outgoingPortalLink|raw }}
-                </div>
-            </div>
-            {% endif %}
         </div>
-    </div>
-    <!-- Top Header Banner #END -->
+        <!-- Top Header Banner #END -->
+    {% endif %}
 
     <!-- Navigation -->
     <header class="header">

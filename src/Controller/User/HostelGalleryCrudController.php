@@ -1,46 +1,45 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use App\Entity\HostelGallery;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\FilterConfigDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\FilterDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use FM\ElfinderBundle\Form\Type\ElFinderType;
-
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class HostelGalleryCrudController
+ * @package App\Controller\Admin
+ */
 class HostelGalleryCrudController extends AbstractCrudController
 {
-    private $hostels;
     /**
-     * @var FilterConfiguratorInterface
+     * @var
      */
-    private $filter;
+    private $hostels;
+
     /**
      * @var UserInterface|null
      */
     private $user;
 
+    /**
+     * HostelGalleryCrudController constructor.
+     * @param Security $security
+     */
     public function __construct(Security $security)
     {
         if (null !== $security->getUser()) {
@@ -49,6 +48,9 @@ class HostelGalleryCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return HostelGallery::class;
@@ -76,12 +78,16 @@ class HostelGalleryCrudController extends AbstractCrudController
         $alias = $qb->getRootAliases();
 
         foreach ($this->hostels as $hostel) {
-            $qb->andWhere($alias[0].'.hostel_id = '.$hostel->getId());
+            $qb->orWhere($alias[0].'.hostel_id = '.$hostel->getId());
         }
 
         return $qb;
     }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
 
@@ -92,10 +98,14 @@ class HostelGalleryCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
-        $id = IdField::new('id');
+
         $hostel_id = IntegerField::new('hostel_id', 'Bild von Unterkunft')
             ->setFormType(ChoiceType::class)
             ->setFormTypeOptions(
@@ -109,7 +119,8 @@ class HostelGalleryCrudController extends AbstractCrudController
 
                 ]
             );
-        $name = TextField::new('name', 'Text für Suchmaschiene');
+
+        $name = TextField::new('name', 'Text für Suchmaschine');
         $image = ImageField::new('image', 'Bild')
             ->setFormType(ElFinderType::class)
             ->setFormTypeOptions(['instance' => 'hostel', 'enable' => true])
@@ -120,12 +131,10 @@ class HostelGalleryCrudController extends AbstractCrudController
             case Crud::PAGE_INDEX:
             case Crud::PAGE_DETAIL:
                 return [
-                    $id,
-                    $name,
                     $image,
+                    $name,
                     $status,
                 ];
-                break;
             case Crud::PAGE_NEW:
             case Crud::PAGE_EDIT:
                 return [
@@ -134,10 +143,28 @@ class HostelGalleryCrudController extends AbstractCrudController
                     $image,
                     $status,
                 ];
-                break;
         }
     }
 
+    /**
+     * @return mixed
+     */
+    protected function buildHostelChoices()
+    {
+        $hostel_names = null;
+
+        foreach ($this->hostels as $hostel) {
+            $hostel_names[$hostel->getHostelName()] = $hostel->getId();
+        }
+
+        return $hostel_names;
+    }
+
+    #############################
+    #
+    # Helper function protected
+    #
+    #############################
 
     /**
      * Set the default status of uploade image
@@ -153,20 +180,5 @@ class HostelGalleryCrudController extends AbstractCrudController
         $gallery->setStatus(true);
 
         return $gallery;
-    }
-
-    #############################
-    #
-    # Helper function protected
-    #
-    #############################
-
-    protected function buildHostelChoices()
-    {
-        foreach ($this->hostels as $hostel) {
-            $hostel_names[$hostel->getHostelName()] = $hostel->getId();
-        }
-
-        return $hostel_names;
     }
 }
