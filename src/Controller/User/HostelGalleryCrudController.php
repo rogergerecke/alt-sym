@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use App\Entity\HostelGallery;
 use Doctrine\ORM\QueryBuilder;

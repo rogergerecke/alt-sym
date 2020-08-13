@@ -49,7 +49,7 @@
                                 <td>{{ hostel.hostelName }}</td>
                                 <td>{{ hostel.address }}</td>
                                 {% set url = ea_url()
-                                    .setController('App\\Controller\\Admin\\HostelCrudController')
+                                    .setController('App\\Controller\\User\\HostelCrudController')
                                     .setAction('edit')
                                     .setEntityId(hostel.id) %}
                                 <td><a href="{{ url }}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>
@@ -97,7 +97,7 @@
                                             <td>
                                                 {# generate room edit url #}
                                                 {% set url = ea_url()
-                                                    .setController('App\\Controller\\Admin\\RoomTypesCrudController')
+                                                    .setController('App\\Controller\\User\\RoomTypesCrudController')
                                                     .setAction('edit')
                                                     .setEntityId(room.id) %}
                                                 <div class="btn-group">

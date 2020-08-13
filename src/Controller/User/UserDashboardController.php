@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use App\Entity\Events;
 use App\Entity\Hostel;
@@ -424,9 +424,9 @@ class UserDashboardController extends AbstractDashboardController
 
         /* Information section */
         yield MenuItem::section('Hilfe & Information');
-        yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
-        yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
-        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'static_site_entry');
+        //yield MenuItem::linktoRoute('Werbung', 'fa fa-question', 'static_site_contact');
+        //yield MenuItem::linkToUrl('Anleitung Bild bearbeiten ', 'fa fa-question', '/');
+        yield MenuItem::linktoRoute('Preise', 'fa fa-question', 'user_upgrade');
         yield MenuItem::linktoRoute('Impressum', 'fa fa-question', 'static_site_imprint');
         yield MenuItem::linktoRoute('Datenschutz', 'fa fa-question', 'static_site_privacy');
         yield MenuItem::linktoRoute('Kontakt', 'fa fa-question', 'static_site_contact');
