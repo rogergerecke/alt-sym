@@ -123,14 +123,14 @@ class AdminDashboardController extends AbstractDashboardController
     public function index(): Response
     {
         // bug in EasyAdmin right handling dosn't works correct
-        if ($this->isGranted('ROLE_USER')) {
-            $this->addFlash(
-                'danger',
-                'Sie sind noch als User angemeldet Loggen Sie sich aus um sich als Admin Benutzer anzumelden'
-            );
-
-            return $this->redirectToRoute('user');
-        }
+//        if ($this->isGranted('ROLE_USER')) {
+//            $this->addFlash(
+//                'danger',
+//                'Sie sind noch als User angemeldet Loggen Sie sich aus um sich als Admin Benutzer anzumelden'
+//            );
+//
+//            return $this->redirectToRoute('user');
+//        }
 
         // get the admin messages
         $admin_messages = $this->adminMessageRepository->findAll();
@@ -250,25 +250,44 @@ class AdminDashboardController extends AbstractDashboardController
 
         /* Media Manager section */
         [
-            yield MenuItem::section('Media Manager', 'fa fa-photo-video'),
-            yield MenuItem::linktoRoute('Datei Upload', 'fa fa-upload', 'elfinder')
+            yield MenuItem::section('Dateimanager', 'fa fa-photo-video'),
+            yield MenuItem::linktoRoute('Datei hochladen', 'fa fa-upload', 'elfinder')
                 ->setQueryParameter('instance', 'admin'),
-            yield MenuItem::linkToCrud('Gallery bearbeiten', 'fa fa-image', HostelGallery::class)
+            yield MenuItem::linkToCrud('Unterkunft Gallery', 'fa fa-image', HostelGallery::class)
                 ->setController(AdminHostelGalleryCrudController::class),
         ];
 
         /* System Config section */
-        yield MenuItem::section('System', 'fa fa-desktop');
-        yield MenuItem::linkToCrud('Einstellung', 'fa fa-fan', SystemOptions::class);
-        yield MenuItem::linkToCrud('Seiten', 'fa fa-columns', StaticSite::class);
-        yield MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class);
-        yield MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class);
-        yield MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class);
+        yield MenuItem::section('Einstellung', 'fa fa-desktop');
+
+        yield MenuItem::subMenu('Inhaltsseiten', 'fa fa-desktop')
+            ->setSubItems(
+                [
+                    MenuItem::linkToCrud('Impressum', 'fa fa-columns', StaticSite::class)->setEntityId(1),
+                    MenuItem::linkToCrud('Datenschutzerklärung', 'fa fa-columns', StaticSite::class)->setEntityId(3),
+                    MenuItem::linkToCrud('Kontakt', 'fa fa-columns', StaticSite::class)->setEntityId(6),
+                    MenuItem::linkToCrud('Inserat', 'fa fa-columns', StaticSite::class)->setEntityId(7),
+                    MenuItem::linkToCrud('Cookie Richtlinie', 'fa fa-columns', StaticSite::class)->setEntityId(11)
+                ]
+            );
+
+        yield MenuItem::subMenu('Hostel-Option', 'fa fa-desktop')
+            ->setSubItems(
+                [
+                    MenuItem::linkToCrud('Unterkunftstypen', 'fa fa-caravan', AmenitiesTypes::class),
+                    MenuItem::linkToCrud('Orte', 'fa fa-globe', Regions::class),
+                    MenuItem::linkToCrud('Zimmerausstattung ', 'fa fa-caravan', RoomAmenities::class),
+                ]
+            );
+
+        yield MenuItem::linkToCrud('Seiten Liste', 'fa fa-columns', StaticSite::class);
         yield MenuItem::subMenu('Mehrsprachigkeit', 'fa fa-language')->setSubItems(
             [
                 MenuItem::linkToCrud('Zimmerausstattung', 'fa fa-spell-check', RoomAmenitiesDescription::class),
             ]
         );
+
+        yield MenuItem::linkToCrud('System Variablen', 'fa fa-fan', SystemOptions::class);
     }
 
 
