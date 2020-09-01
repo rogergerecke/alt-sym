@@ -102,7 +102,7 @@ class RegistrationController extends AbstractController
         #########################################################################################
 
         if (null !== $request->request->all('register')) {
-            switch (key($request->request->all('register'))) {
+            switch (key($request->request->all('product'))) {
                 case 'free_account':
                     $this->product_text = 'für null Euro';
                     $this->product = 'free_account';

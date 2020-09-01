@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -140,4 +141,21 @@ class AdminEventsCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * Create a new Events with
+     * the id from the logged in user
+     * a user cant have many Event's
+     *
+     * @param string $entityFqcn
+     * @return Events|mixed
+     */
+    public function createEntity(string $entityFqcn)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $events = new Events();
+        $events->setUserId((int)$user->getId());
+
+        return $events;
+    }
 }

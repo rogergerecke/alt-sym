@@ -2,6 +2,8 @@
 
 namespace App\Controller\User;
 
+use App\Controller\Admin\AdminDashboardController;
+use App\Controller\Admin\AdminHostelCrudController;
 use App\Entity\Hostel;
 use App\Entity\RoomAmenities;
 use App\Repository\AmenitiesTypesRepository;
@@ -53,7 +55,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class HostelCrudController
- * @package App\Controller\Admin
+ * @package App\Controller\User
  */
 class HostelCrudController extends AbstractCrudController
 {
@@ -147,7 +149,7 @@ class HostelCrudController extends AbstractCrudController
         CrudUrlGenerator $crudUrlGenerator,
         SystemOptionsService $systemOptions,
         Swift_Mailer $mailer,
-    HostelRepository $hostelRepository
+        HostelRepository $hostelRepository
     ) {
         $this->userRepository = $userRepository;
         $this->roomAmenities = $roomAmenities;

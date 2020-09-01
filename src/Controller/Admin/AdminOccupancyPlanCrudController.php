@@ -7,7 +7,10 @@ use App\Repository\HostelRepository;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -27,11 +30,43 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AdminOccupancyPlanCrudController extends AbstractCrudController
 {
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return OccupancyPlan::class;
     }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle(Crud::PAGE_INDEX, 'Belegungsplan')
+            ->setPageTitle(Crud::PAGE_NEW, 'Belegungsplan');
+    }
+
+    /**
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Belegungsplan erstellen');
+            });
+    }
+
+
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 
@@ -39,7 +74,7 @@ class AdminOccupancyPlanCrudController extends AbstractCrudController
 
         // build the hostel selection filed load hostels from user
         $hostel_id = AssociationField::new('hostel', 'Unterkunft')
-            ->setHelp('Hostel auswählen zu dem ein Belegungsplan angelegt werden soll');
+            ->setHelp('Bitte wählen Sie die Unterkunft aus zu der ein Belegungsplan angelegt werden soll');
 
         $date_from = DateField::new('date_from', 'Von');
         $date_to = DateField::new('date_to', 'Bis');

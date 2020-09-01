@@ -24,4 +24,5 @@ class RestaurantCrudController extends AbstractCrudController
         return self::$entityFqcn;
     }
 
+
 }

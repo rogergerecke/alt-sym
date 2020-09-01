@@ -32,9 +32,11 @@
                         <div class="card-body">
                             <!-- Event Description -->
                             <p> {{ event.short_description }}</p>
-                            <a href="{{ path('event_details',{'id':event.id}) }}.ics"
-                               class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">Mehr
-                                Info</a>
+                            <a href="{{ path('event_details',{'id':event.id}) }}"
+                               class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">Details</a>
+
+                            <a href="{{ path('event_details_ical',{'id':event.id}) }}"
+                               class="btn btn-{{ cycle(['yellow', 'green','red','purple'], loop.index0) }}">iCalendar</a>
                         </div>
                     </div>
                 </div>

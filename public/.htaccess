@@ -65,3 +65,13 @@ DirectoryIndex index.php
     </IfModule>
 </IfModule>
 AddType text/calendar .ics
+
+#AuthUserFile "/usr/www/users/rogerg/altmuehlsee/public/.htpasswd"
+#AuthName "Realm"
+#AuthType Basic
+#require valid-user
+
+#AuthUserFile "/usr/www/users/altmuewg/new/.htpasswd"
+#AuthName "Realm"
+#AuthType Basic
+#require valid-user

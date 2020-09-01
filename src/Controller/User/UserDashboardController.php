@@ -3,6 +3,8 @@
 
 namespace App\Controller\User;
 
+use App\Controller\Admin\AdminDashboardController;
+use App\Controller\Admin\AdminUserCrudController;
 use App\Entity\Events;
 use App\Entity\Hostel;
 use App\Entity\HostelGallery;
@@ -394,7 +396,9 @@ class UserDashboardController extends AbstractDashboardController
             }
 
             if (!$this->userHaveHostel) {
-                yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)->setAction('new');
+                yield MenuItem::linkToCrud('Unterkunft Erstellen', 'fa fa-hotel', Hostel::class)
+                    ->setAction('new')
+                ->setController(HostelCrudController::class);
             }
 
             // have the user hostel so he cant add rooms and images for the hostel

@@ -31,7 +31,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class OccupancyPlanCrudController extends AbstractCrudController
 {
+    /**
+     * @var
+     */
     private $hostels;
+    /**
+     * @var
+     */
     private $user_id;
     /**
      * @var UserInterface|null
@@ -46,6 +52,11 @@ class OccupancyPlanCrudController extends AbstractCrudController
      */
     private $occupancyPlanRepository;
 
+    /**
+     * OccupancyPlanCrudController constructor.
+     * @param Security $security
+     * @param OccupancyPlanRepository $occupancyPlanRepository
+     */
     public function __construct(Security $security, OccupancyPlanRepository $occupancyPlanRepository)
     {
         $this->security = $security;
@@ -58,6 +69,9 @@ class OccupancyPlanCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return OccupancyPlan::class;
@@ -177,6 +191,10 @@ class OccupancyPlanCrudController extends AbstractCrudController
         return $qb;
     }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
 

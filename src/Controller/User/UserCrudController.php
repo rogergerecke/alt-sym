@@ -53,6 +53,9 @@ class UserCrudController extends AbstractCrudController
      */
     private $crudUrlGenerator;
 
+    /**
+     * @var string|null
+     */
     private $password;
 
     /**
@@ -137,6 +140,20 @@ class UserCrudController extends AbstractCrudController
 
         return parent::edit($context);
     }
+
+    /**
+     * @param AdminContext $context
+     * @return KeyValueStore|RedirectResponse|Response|void
+     */
+    public function delete(AdminContext $context)
+    {
+        $this->addFlash(
+            'warning',
+            'Sie können kein Konto löschen bitte wenden Sie sich an den Support.'
+        );
+        $this->redirectToRoute('user');
+    }
+
 
     /**
      * @param string $pageName

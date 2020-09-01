@@ -233,7 +233,7 @@ class AdminDashboardController extends AbstractDashboardController
                 ->setController(AdminUserCrudController::class),
             yield MenuItem::linkToCrud('Unterkünfte', 'fa fa-hotel', Hostel::class)
                 ->setController(AdminHostelCrudController::class),
-            yield MenuItem::linkToCrud('Zimmer hinzufügen', 'fa fa-hotel', RoomTypes::class)
+            yield MenuItem::linkToCrud('Zimmer', 'fa fa-hotel', RoomTypes::class)
                 ->setController(AdminRoomTypesCrudController::class),
             yield MenuItem::linkToCrud('Belegungspläne', 'fa fa-calendar', Hostel::class)
                 ->setController(AdminOccupancyPlanCrudController::class),
@@ -241,11 +241,11 @@ class AdminDashboardController extends AbstractDashboardController
 
         /* Marketing */
         yield MenuItem::section('Werbung', 'fa fa-anchor');
-        yield MenuItem::linktoRoute('Statistiken', 'fa fa-chart-area', 'admin_notice_hostel_statistic');
         yield MenuItem::linkToCrud('Veranstaltungen', 'fa fa-glass-cheers', Events::class)
             ->setController(AdminEventsCrudController::class);
         yield MenuItem::linkToCrud('Freizeitangebote', 'fa fa-spa', Leisure::class);
         yield MenuItem::linkToCrud('Werbebanner', 'fa fa-ad', Advertising::class);
+        yield MenuItem::linktoRoute('Statistiken', 'fa fa-chart-area', 'admin_notice_hostel_statistic');
 
 
         /* Media Manager section */
@@ -263,11 +263,24 @@ class AdminDashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Inhaltsseiten', 'fa fa-desktop')
             ->setSubItems(
                 [
-                    MenuItem::linkToCrud('Impressum', 'fa fa-columns', StaticSite::class)->setEntityId(1),
-                    MenuItem::linkToCrud('Datenschutzerklärung', 'fa fa-columns', StaticSite::class)->setEntityId(3),
-                    MenuItem::linkToCrud('Kontakt', 'fa fa-columns', StaticSite::class)->setEntityId(6),
-                    MenuItem::linkToCrud('Inserat', 'fa fa-columns', StaticSite::class)->setEntityId(7),
-                    MenuItem::linkToCrud('Cookie Richtlinie', 'fa fa-columns', StaticSite::class)->setEntityId(11)
+                    MenuItem::linkToCrud('Startseite', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(2)
+                        ->setAction('edit'),
+                    MenuItem::linkToCrud('Impressum', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(1)
+                        ->setAction('edit'),
+                    MenuItem::linkToCrud('Datenschutzerklärung', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(3)
+                        ->setAction('edit'),
+                    MenuItem::linkToCrud('Kontakt', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(6)
+                        ->setAction('edit'),
+                    MenuItem::linkToCrud('Inserat', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(7)
+                        ->setAction('edit'),
+                    MenuItem::linkToCrud('Cookie Richtlinie', 'fa fa-columns', StaticSite::class)
+                        ->setEntityId(11)
+                        ->setAction('edit'),
                 ]
             );
 

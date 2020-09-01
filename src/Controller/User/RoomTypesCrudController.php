@@ -2,6 +2,8 @@
 
 namespace App\Controller\User;
 
+use App\Controller\Admin\AdminDashboardController;
+use App\Controller\Admin\AdminRoomTypesCrudController;
 use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
@@ -55,6 +57,9 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var Security
      */
     private $security;
+    /**
+     * @var
+     */
     private $user_id;
     /**
      * @var AdminMessagesHandler
@@ -64,6 +69,9 @@ class RoomTypesCrudController extends AbstractCrudController
      * @var bool
      */
     private $user;
+    /**
+     * @var
+     */
     private $hostels;
     /**
      * @var CrudUrlGenerator
@@ -95,7 +103,7 @@ class RoomTypesCrudController extends AbstractCrudController
         AdminMessagesHandler $adminMessagesHandler,
         CrudUrlGenerator $crudUrlGenerator,
         AdminContextProvider $adminContextProvider,
-    RoomTypesRepository $roomTypesRepository
+        RoomTypesRepository $roomTypesRepository
     ) {
         $this->hostelRepository = $hostelRepository;
         $this->roomAmenitiesRepository = $roomAmenitiesRepository;
@@ -209,6 +217,10 @@ class RoomTypesCrudController extends AbstractCrudController
         );
     }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -599,6 +611,9 @@ class RoomTypesCrudController extends AbstractCrudController
     #
     ##########################################################
 
+    /**
+     * @return string
+     */
     protected function createUserRoomsUrl()
     {
         $url = $this->crudUrlGenerator->build()
@@ -632,5 +647,4 @@ class RoomTypesCrudController extends AbstractCrudController
 
         return $room_types;
     }
-
 }
