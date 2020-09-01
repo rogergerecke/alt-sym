@@ -25,8 +25,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class AdminUserCrudController
+ * @package App\Controller\Admin
+ */
 class AdminUserCrudController extends AbstractCrudController
 {
+    /**
+     * @var string
+     */
     public static $entityFqcn = User::class;
 
     /**
@@ -71,12 +78,19 @@ class AdminUserCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return self::$entityFqcn;
     }
 
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -84,6 +98,26 @@ class AdminUserCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_EDIT, 'Benutzer bearbeiten');
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Benutzer erstellen');
+            })
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::DELETE);
+    }
+
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         $id = IntegerField::new('id');
@@ -191,6 +225,9 @@ class AdminUserCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * @return array
+     */
     protected function buildUserPrivilegesOptions()
     {
         $options = [];
@@ -263,15 +300,6 @@ class AdminUserCrudController extends AbstractCrudController
 
         return $user;
     }
-
-
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_EDIT, Action::DELETE);
-    }
-
 
 
     #############################

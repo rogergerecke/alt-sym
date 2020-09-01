@@ -333,6 +333,8 @@ use App\Entity\RoomTypes;
 use App\Repository\HostelRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Service\AdminMessagesHandler;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -370,6 +372,9 @@ class AdminRoomTypesCrudController extends AbstractCrudController
      * @var Security
      */
     private $security;
+    /**
+     * @var
+     */
     private $user_id;
     /**
      * @var AdminMessagesHandler
@@ -379,6 +384,9 @@ class AdminRoomTypesCrudController extends AbstractCrudController
      * @var bool
      */
     private $user;
+    /**
+     * @var
+     */
     private $hostels;
     /**
      * @var CrudUrlGenerator
@@ -430,6 +438,24 @@ class AdminRoomTypesCrudController extends AbstractCrudController
         return RoomTypes::class;
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Zimmer anlegen');
+            });
+    }
+
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud

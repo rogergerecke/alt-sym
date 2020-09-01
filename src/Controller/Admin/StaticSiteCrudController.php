@@ -17,10 +17,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 
+/**
+ * Class StaticSiteCrudController
+ * @package App\Controller\Admin
+ */
 class StaticSiteCrudController extends AbstractCrudController
 {
+    /**
+     * @var string
+     */
     public static $entityFqcn = StaticSite::class;
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -33,6 +44,10 @@ class StaticSiteCrudController extends AbstractCrudController
             );
     }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         $heading = TextField::new('heading', 'Überschrift');
@@ -61,6 +76,11 @@ class StaticSiteCrudController extends AbstractCrudController
         }
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
     public function configureActions(Actions $actions): Actions
     {
         $deleteSite = Action::new('drop', 'Löschen', 'fas fa-delete')
@@ -75,10 +95,16 @@ class StaticSiteCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_DETAIL, 'delete')
             ->add(Crud::PAGE_INDEX, 'detail')
             ->add(Crud::PAGE_INDEX, $deleteSite)
-            ->add(Crud::PAGE_DETAIL, $deleteSite);
+            ->add(Crud::PAGE_DETAIL, $deleteSite)
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Inhaltsseite erstellen');
+            });
     }
 
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return self::$entityFqcn;

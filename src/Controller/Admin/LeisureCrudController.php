@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Leisure;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -24,6 +27,19 @@ class LeisureCrudController extends AbstractCrudController
         return Leisure::class;
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Freizeitangebot erstellen');
+            });
+    }
 
     /**
      * @param string $pageName

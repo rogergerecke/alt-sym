@@ -3,24 +3,49 @@
 namespace App\Controller\Admin;
 
 use App\Entity\SystemOptions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Class SystemOptionsCrudController
+ * @package App\Controller\Admin
+ */
 class SystemOptionsCrudController extends AbstractCrudController
 {
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return SystemOptions::class;
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Systemvariable erstellen');
+            });
+    }
+
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -29,6 +54,12 @@ class SystemOptionsCrudController extends AbstractCrudController
             ->setHelp('index', 'Nehmen Sie hier nur Einstellung vor wenn Sie wissen was Sie tun.');
     }
 
+    /**
+     * @param EntityDto $entityDto
+     * @param KeyValueStore $formOptions
+     * @param AdminContext $context
+     * @return FormInterface
+     */
     public function createEditForm(
         EntityDto $entityDto,
         KeyValueStore $formOptions,
@@ -38,13 +69,23 @@ class SystemOptionsCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name', 'Erklärender Name')->setHelp('Der Name der Variable zum verständnis was Ihre Aufgabe ist.'),
-            TextareaField::new('description', 'Beschreibung')->setHelp('Eine Beschreibung der Variable und was Ihre aufgabe ist.'),
-            TextField::new('var_name', 'Var-Name')->setHelp('Der eigentliche Variable Name der im System dann verfügbar ist in GROSSBUCHSTABEN_UND_UNTERSTRICHEN'),
-            TextField::new('value', 'Var-Value')->setHelp('Der wert der Variable')
+            TextField::new('name', 'Erklärender Name')
+                ->setHelp('Der Name der Variable zum verständnis was Ihre Aufgabe ist.'),
+            TextareaField::new('description', 'Beschreibung')
+                ->setHelp('Eine Beschreibung der Variable und was Ihre aufgabe ist.'),
+            TextField::new('var_name', 'Var-Name')
+                ->setHelp(
+                    'Der eigentliche Variable Name der im System dann verfügbar ist in GROSSBUCHSTABEN_UND_UNTERSTRICHEN'
+                ),
+            TextField::new('value', 'Var-Value')
+                ->setHelp('Der wert der Variable'),
         ];
     }
 }

@@ -50,6 +50,7 @@ class AdminOccupancyPlanCrudController extends AbstractCrudController
     }
 
     /**
+     * Modify the action button text and icon
      * @param Actions $actions
      * @return Actions
      */

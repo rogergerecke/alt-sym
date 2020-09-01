@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Regions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -18,13 +20,27 @@ class RegionsCrudController extends AbstractCrudController
         return $crud;
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Region anlegen');
+            });
+    }
+
     public function configureFields(string $pageName): iterable
     {
         // create fields
         $regions_id = IntegerField::new('regions_id');
         $name = TextField::new('name');
-        $zipcode = IntegerField::new('zipcode','PLZ');
-        $status = BooleanField::new('status','On / Off');
+        $zipcode = IntegerField::new('zipcode', 'PLZ');
+        $status = BooleanField::new('status', 'On / Off');
 
         // output fields by page
         if (Crud::PAGE_INDEX === $pageName) {

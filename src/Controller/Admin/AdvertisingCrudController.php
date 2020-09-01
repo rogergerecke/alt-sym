@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Advertising;
 use App\Entity\Hostel;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -33,6 +35,20 @@ class AdvertisingCrudController extends AbstractCrudController
     }
 
     /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Werbung anlegen');
+            });
+    }
+
+    /**
      * @param Crud $crud
      * @return Crud
      */
@@ -42,7 +58,6 @@ class AdvertisingCrudController extends AbstractCrudController
             ->addFormTheme('@FMElfinderBundle/Form/elfinder_widget.html.twig')
             ->setPageTitle(Crud::PAGE_EDIT, 'Banner Werbung')
             ->setHelp(Crud::PAGE_EDIT, 'Werbebanner bearbeiten');
-
     }
 
 
@@ -112,5 +127,4 @@ class AdvertisingCrudController extends AbstractCrudController
 
         return $advertising;
     }
-
 }

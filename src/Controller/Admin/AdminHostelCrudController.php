@@ -9,6 +9,8 @@ use App\Repository\CurrencyRepository;
 use App\Repository\FederalStateRepository;
 use App\Repository\RoomAmenitiesRepository;
 use App\Repository\UserRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -29,6 +31,10 @@ use FM\ElfinderBundle\Form\Type\ElFinderType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * Class AdminHostelCrudController
+ * @package App\Controller\Admin
+ */
 class AdminHostelCrudController extends AbstractCrudController
 {
     /**
@@ -52,6 +58,14 @@ class AdminHostelCrudController extends AbstractCrudController
      */
     private $amenitiesTypesRepository;
 
+    /**
+     * AdminHostelCrudController constructor.
+     * @param UserRepository $userRepository
+     * @param RoomAmenitiesRepository $roomAmenities
+     * @param CurrencyRepository $currencyRepository
+     * @param FederalStateRepository $federalStateRepository
+     * @param AmenitiesTypesRepository $amenitiesTypesRepository
+     */
     public function __construct(
         UserRepository $userRepository,
         RoomAmenitiesRepository $roomAmenities,
@@ -66,11 +80,18 @@ class AdminHostelCrudController extends AbstractCrudController
         $this->amenitiesTypesRepository = $amenitiesTypesRepository;
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Hostel::class;
     }
 
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -82,7 +103,24 @@ class AdminHostelCrudController extends AbstractCrudController
             ->setDefaultSort(['status' => 'DESC']);
     }
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Unterkunft erstellen');
+            });
+    }
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         // The user field build the association to the hostels
@@ -357,6 +395,10 @@ class AdminHostelCrudController extends AbstractCrudController
         return $options;
     }
 
+    /**
+     * @param string $entityFqcn
+     * @return Hostel|mixed
+     */
     public function createEntity(string $entityFqcn)
     {
         $hostel = new Hostel();

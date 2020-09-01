@@ -7,6 +7,8 @@ use App\Repository\HostelRepository;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -30,8 +32,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class AdminHostelGalleryCrudController
+ * @package App\Controller\Admin
+ */
 class AdminHostelGalleryCrudController extends AbstractCrudController
 {
+    /**
+     * @var
+     */
     private $hostels;
     /**
      * @var FilterConfiguratorInterface
@@ -56,6 +65,9 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
         $this->hostelRepository = $hostelRepository;
     }
 
+    /**
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return HostelGallery::class;
@@ -89,6 +101,24 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
         return $qb;
     }*/
 
+    /**
+     * Modify the action button text and icon
+     * @param Actions $actions
+     * @return Actions
+     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // rewrite the Action button text
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Bilder Gallery erstellen');
+            });
+    }
+
+    /**
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
 
@@ -99,6 +129,10 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
     }
 
 
+    /**
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         $hostel_id = IntegerField::new('hostel_id', 'Bild von Unterkunft')
@@ -172,6 +206,9 @@ class AdminHostelGalleryCrudController extends AbstractCrudController
     #
     ##########################################################
 
+    /**
+     * @return mixed
+     */
     protected function buildHostelChoices()
     {
         if (null !== $this->hostels = $this->hostelRepository->findAll()) {
